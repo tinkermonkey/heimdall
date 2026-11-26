@@ -18,8 +18,8 @@ User interface components, screens, and user experience elements.
 | ------------------------- | ----- |
 | Elements                  | 128   |
 | Intra-Layer Relationships | 323   |
-| Inter-Layer Relationships | 595   |
-| Inbound Relationships     | 321   |
+| Inter-Layer Relationships | 915   |
+| Inbound Relationships     | 641   |
 | Outbound Relationships    | 274   |
 
 **Cross-Layer References**:
@@ -191,6 +191,39 @@ flowchart TB
 
 | Relationship ID                                            | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer   | Predicate    | Cardinality  | Strength |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-aggregatelayer-a-cross-layer-cell-toggles-the-layer-pair-filter-a-diagonal-cell-or-56bd1c22` | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-aggregatelayer-draws-one-heat-cell-per-non-empty-layer-pair`                                 | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-aggregatelayer-on-layer-cell-select-replaces-the-default-filter-and-focus-toggles`           | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-aggregatelayer-symmetric-adds-both-directions-into-the-upper-triangle`                       | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-aggregatelayer-visual-dark-canvas-heat-map-with-an-active-pair`                              | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-aggregatelayer-visual-light-canvas-symmetric-heat-map-with-a-focused-layer`                  | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-cell-click-selects-the-link-source`                                                          | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-draws-one-cell-per-link-and-one-header-button-per-node`                                      | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-grid-semantics-symmetric-cells-holding-both-directions-say-so`                               | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-grid-semantics-the-cells-form-a-grid-with-row-and-column-headers-the-drawing-98466b8c`       | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-header-click-and-keyboard-select-a-node-clicking-again-clears-it`                            | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-keyboard-cells-focus-stays-in-the-grid-the-drawn-cell-shows-the-ring-and-the-74b0fc0c`       | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-keyboard-cells-one-tab-stop-for-the-cells-arrows-move-enter-selects`                         | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-on-cell-select-gets-the-drawn-link-and-every-link-in-the-f20ec09e`  | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-ordercluster-puts-each-community-on-adjacent-rows-the-1e77a9db`     | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-visual-light-canvas-cluster-order`                                  | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-selection-follows-cross-layer-links-per-the-follow-setting`                                  | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-symmetric-clicking-a-cell-holding-both-directions-selects-its-drawn-link-source`             | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-symmetric-merges-both-directions-into-one-cell-above-the-diagonal`                           | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-symmetric-on-link-select-receives-the-drawn-link-and-both-links-of-a-merged-cell`            | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-symmetric-visual-light-canvas-symmetric-with-a-selection`                                    | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-a-cell-in-the-last-visible-column-renders`                                    | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-a-focused-cell-keeps-focus-its-ring-and-its-indices-while-the-55a10509`       | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-a-selected-link-id-set-from-outside-scrolls-its-cell-into-view`               | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-in-a-fixed-height-explorer-the-matrix-is-the-only-scroll-area-and-a09aa20b`   | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-keyboard-focus-survives-scrolling-arrows-move-past-the-window-row-4a5df257`   | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-labels-stay-aligned-with-the-cells-while-scrolling-both-axes`                 | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-past-the-threshold-only-the-window-renders-and-the-dom-stays-bounded`         | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-the-grid-states-the-full-size-the-rendered-window-carries-its-row-238d3463`   | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-visual-dark-canvas-virtualized-and-scrolled`                                  | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-virtualization-visual-light-canvas-virtualized-and-scrolled`                                 | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-visual-dark-canvas-with-a-followed-selection`                                                | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.adjacency-matrix-visual-light-canvas-with-every-predicate-code`                                               | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears`                                        | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-a-bundle-expanded-through-the-expanded-prop-gets-a-collapse-that-re-44d61a7d`        | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record`           | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
@@ -200,9 +233,6 @@ flowchart TB
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-expanded`                                              | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now`                                                       | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.heatmap`                                                               | `ux`         | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.line-chart`                                                            | `ux`         | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.status-timeline`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels`                       | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids`                         | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label`                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
@@ -260,6 +290,296 @@ flowchart TB
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units`               | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline`                                    | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32`   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown`                                        | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id`                                       | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548` | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put`                          | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first`                                                              | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear`                                                      | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node`                                    | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-follow-changes-the-reach`                                                                           | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit`                    | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects`                              | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-link-click-selects-its-source`                                                                      | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning`                                             | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis`                                                                     | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label`                                         | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection`                                             | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection`                                                                   | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1`                                                          | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer`                                                           | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-displays-status-indicator-when-provided`                                  | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-falls-back-to-initials-when-image-fails`                                  | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-image-is-displayed-when-src-is-provided`                                  | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-produces-deterministic-colors-for-same-name`                              | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-produces-different-colors-for-different-names`                            | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-renders-with-accessibility-attributes`                                    | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-renders-with-initials-for-various-names`                                  | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-respects-color-override-prop`                                             | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-sets-aria-hidden-for-decorative-mode`                                     | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-supports-all-sizes`                                                       | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-avatar-component-avatar-supports-different-shapes-circle-and-rounded`                             | `ux.librarycomponent.avatar`                                                                | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-accessibility-attributes-in-month-view`                                       | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-agenda-view-dark-canvas-snapshot`                                             | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-agenda-view-light-canvas-snapshot`                                            | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-date-selection-changes-focused-date`                                          | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-day-view-dark-canvas-snapshot`                                                | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-day-view-light-canvas-snapshot`                                               | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-event-selection-in-month-view`                                                | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-keyboard-navigation-in-month-view`                                            | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-keyboard-navigation-pgup-pgdn-in-month-view`                                  | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-mini-calendar-selection`                                                      | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-month-view-dark-canvas-snapshot`                                              | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-month-view-light-canvas-snapshot`                                             | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-navigation-buttons-have-accessible-labels`                                    | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-today-navigation-button`                                                      | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-week-view-dark-canvas-snapshot`                                               | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-calendar-components-week-view-light-canvas-snapshot`                                              | `ux.librarycomponent.calendar`                                                              | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `ux.librarycomponent.heatmap`                                                               | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`                            | `ux.librarycomponent.line-chart`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`                              | `ux.librarycomponent.status-timeline`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`                        | `ux.librarycomponent.status-timeline`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-diff-viewer-components-dark-canvas-full-page-snapshot-covers-empty-small-overflow-63b1ace2`       | `ux.librarycomponent.diff-viewer`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-diff-viewer-components-hash-set-diff-collapse-expand-interaction`                                 | `ux.librarycomponent.diff-viewer`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-diff-viewer-components-light-canvas-full-page-snapshot-covers-empty-small-overflow-72616cee`      | `ux.librarycomponent.diff-viewer`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-diff-viewer-components-side-by-side-diff-gutter-labels-are-visually-hidden`                       | `ux.librarycomponent.diff-viewer`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-display-updates-selected-count-in-trigger-536ed848`       | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-multiple-selections-allowed`                              | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-unselecting-works-correctly`                              | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-closes-panel-when-clicking-outside`                                     | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-dark-canvas-visual-snapshot-of-checkbox-mode-dark`                      | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-dark-canvas-visual-snapshot-of-radio-mode-dark`                         | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-displays-checkbox-items`                                                | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-displays-section-with-title`                                            | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-arrow-down-navigates-to-next-item-in-checkbox-mode`            | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-arrow-down-navigates-to-next-item-in-radio-mode`               | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-enter-selects-radio-option-and-closes-panel`                   | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-enter-toggles-checkbox-selection`                              | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-escape-closes-panel-and-returns-focus-to-trigger`              | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-space-selects-radio-option-and-closes-panel`                   | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-space-toggles-checkbox-selection`                              | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-tab-navigates-forward-through-items-in-checkbox-mode`          | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-tab-navigates-forward-through-items-in-radio-mode`             | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-opens-panel-when-trigger-is-clicked`                                    | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-radio-mode-only-one-selection-allowed`                                  | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-radio-mode-selection-changes-update-trigger-summary`                    | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-renders-trigger-button`                                                 | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-visual-snapshot-of-checkbox-mode`                                       | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-filter-dropdown-component-visual-snapshot-of-radio-mode`                                          | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-dark-canvas-inspector-panel-full-page-dark-snapshot`            | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-accessibility-semantic-structure`               | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-head-displays-all-required-elements`            | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-renders-with-head-content`                      | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-scrolls-independently`                          | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-section-renders-with-title-and-count`           | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-sections-have-borders`                          | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-visual-regression-full-page`                    | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-with-section-actions-renders-buttons`           | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-with-version-pill-renders-version`              | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-displays-key-value-pairs`                                | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-keys-are-styled-correctly`                               | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-with-long-values-breaks-properly`                        | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-announce-card-moves`                                  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-have-live-region-for-announcements`                   | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-have-proper-aria-attributes-on-cards`                 | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-card-selection-should-clear-selection-when-clicking-clear-button`          | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-card-selection-should-focus-card-with-tab-key-and-space`                   | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-keyboard-navigation-should-support-escape-to-cancel-drag`                  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-keyboard-navigation-should-support-tab-navigation-between-cards`           | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-pointer-reordering-within-a-column-dragging-down-drops-the-card-c67b132d`  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-pointer-reordering-within-a-column-dragging-up-drops-the-card-in-053366e2` | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-blocked-banner-on-blocked-cd6bb9c1`    | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-done-styling-strikethrough-a6e6d9d1`   | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-status-color-dots-in-column-a95562bf`  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-all-columns-with-headers-cb9c2a35`      | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-cards-with-context-title-and-ada09ef5`  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-independent-scrollable-columns`         | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-show-empty-column-placeholder`                 | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-show-wip-limit-warning-when-cards-dd8d7b68`    | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-blocked-card-in-dark-b968d35f`  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-default-state-in-dark-885ed38e` | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-done-cards-in-dark-248e8486`    | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-empty-column-state-in-1c7bce46` | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-selected-card-in-dark-312a44b8` | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-blocked-card-state`            | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-default-state-b15c344d`        | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-done-cards-state`              | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-empty-column-state`            | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-state-with-selected-0fd08b4f`  | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-wip-limit-warning-d16dcc06`    | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-be-focusable-for-interactive-nodes-via-19531e3f`      | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-have-aria-currentstep-on-head-node-in-multi-97cef293` | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-have-aria-currentstep-on-head-node`                   | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-not-be-focusable-for-non-interactive-nodes`           | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-not-have-aria-current-on-non-head-nodes`              | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-keeps-the-amber-head-and-canvas-surface-nodes-f202cd80`  | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-should-apply-head-class-to-first-node`                   | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-should-not-apply-head-class-to-non-first-nodes`          | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-apply-interactive-class-to-clickable-dcd7e70a`    | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-be-focusable-and-keyboard-accessible-on-0674a408` | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-not-set-tab-index-on-non-interactive-16926a0b`    | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-set-tab-index-on-interactive-nodes`               | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-support-click-on-interactive-node-6aaee98a`       | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-support-space-key-on-interactive-node`            | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-display-labels-inside-nodes`                   | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-handle-empty-nodes-array`                      | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-aria-label-on-container`                  | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-nodes-with-rolelistitem`                  | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-proper-structure-with-rolelist`           | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-not-render-arrows-for-single-node`             | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-arrows-between-nodes`                   | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-icons-when-provided`                    | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-nodes-with-labels`                      | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-visual-regression-dark-canvas-dark-canvas-snapshot`                        | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-visual-regression-light-canvas-light-canvas-snapshot`                      | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-wrapping-behavior-should-have-wrap-class-when-wrap-prop-is-true`           | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-lineage-rail-component-wrapping-behavior-should-not-have-wrap-class-when-wrap-prop-is-c3dc57ec`   | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-grid-fallback-rendering-should-fill-entire-canvas-area-with-grid`            | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-grid-fallback-rendering-should-render-grid-pattern-without-tiles`            | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-heatmap-should-use-emerald-color-by-default`                    | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-should-display-legend-for-heatmap-mode`                         | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-should-render-heatmap-points-with-gradient-colors`              | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-initial-fit-heatmap-mode-frames-every-point`                                 | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-initial-fit-pins-mode-frames-every-pin-and-reports-a-centre-ddfac696`        | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-initial-fit-track-mode-frames-the-track`                                     | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-initial-fit-wheel-zoom-at-the-centre-keeps-the-view-centre-and-05270f1c`     | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pan-and-zoom-arrow-keys-should-pan`                                          | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pan-and-zoom-plus-minus-keys-should-zoom`                                    | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pins-mode-clicking-pin-should-show-popover-with-details`                     | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pins-mode-escape-key-should-close-popover`                                   | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pins-mode-pin-should-have-aria-label-with-coordinates-and-timestamp`         | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pins-mode-pulse-animation-should-be-suppressed-under-prefers-4842035f`       | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pins-mode-selected-pin-should-display-pulse-animation`                       | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-pins-mode-should-render-all-pins-as-buttons`                                 | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-canvas-should-be-keyboard-accessible-with-cf025b42`   | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-canvas-should-have-application-role`                  | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-pins-should-be-buttons-with-proper-semantics`         | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-scale-bar-scale-bar-label-should-display-current-zoom-level`                 | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-scale-bar-should-show-scale-bar-when-enabled`                                | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-track-mode-should-display-legend-for-track-mode`                             | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-track-mode-should-render-track-as-dashed-cyan-polyline`                      | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-grid-only-state-in-dark-a80971cf` | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-heatmap-mode-in-dark-332bd9df`    | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-pins-mode-in-dark-canvas`         | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-pins-mode-with-selected-6eec1db7` | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-track-mode-in-dark-380050fd`      | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-default-grid-only-state`         | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-heatmap-mode-state`              | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-pins-mode-state`                 | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-pins-mode-with-36de1483`         | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-track-mode-state`                | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark`            | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks`               | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f`  | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar`                   | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5`      | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3`     | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar`         | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8`     | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978`  | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand`                     | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand`                                      | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave`                | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19`   | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand`                               | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane`                | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position`                           | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container`                            | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks`                                                  | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3`      | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned`               | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label`                         | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot`                                       | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot`                                      | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-aws-x-ray-trace-renders-in-dark-canvas`                                              | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-aws-x-ray-trace-renders-with-the-fault-span-selected-light`                          | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-collapsed-subtree-renders-without-a-selection`                                       | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-interactions-clicking-a-tree-row-opens-repopulates-the-detail-panel`                 | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-interactions-escape-closes-the-detail-panel-and-the-close-button-also-works`         | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-interactions-expanding-a-collapsed-node-reveals-its-children`                        | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-interactions-keyboard-arrow-down-moves-the-selection`                                | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-interactions-long-attribute-keys-values-truncate-no-overlap-with-a-hover-35742fa3`   | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-otlp-trace-renders-in-dark-canvas`                                                   | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-trace-viewer-otlp-trace-renders-with-the-error-span-selected-light`                               | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-aria-listbox-semantics-are-applied`                                    | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-arrow-down-at-last-entry-does-not-navigate`                            | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-arrow-down-key-navigates-to-next-version`                              | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-arrow-up-at-first-entry-does-not-navigate`                             | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-arrow-up-key-navigates-to-previous-version`                            | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-click-selection-updates-on-select-callback`                            | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-dark-canvas-snapshot`                                                  | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-diff-stats-render-for-entries-with-stats`                              | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-empty-state-renders-when-no-entries-provided`                          | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-head-badge-renders-for-entries-with-head-flag`                         | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-light-canvas-snapshot`                                                 | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-multiple-entries-show-connector-rail`                                  | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-oldest-first-order-reverses-entry-order`                               | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-read-only-mode-no-on-select-is-not-interactive`                        | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-selected-entry-has-aria-selected-attribute`                            | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-selected-entry-has-head-dot-indicator-when-marked-as-head`             | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-single-entry-does-not-show-connector-rail`                             | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-transition-indicator-renders-for-entries-with-transition`              | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-version-timeline-component-visual-selection-state-changes-on-click`                               | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-dark-canvas-visual-snapshot-of-workspace-switcher-dialog-dark`          | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-call-on-pick-recent-when-recent-workspace-is-clicked`            | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-backdrop-is-clicked`                                  | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-open-tile-is-clicked`                                 | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-x-button-is-clicked`                                  | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-recent-workspaces-list`                                  | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-three-action-tiles`                                      | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-title`                                                   | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-not-be-visible-when-is-open-is-false`                            | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-should-render-when-is-open-is-true`                                     | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.integration-workspace-switcher-dialog-visual-snapshot-of-workspace-switcher-dialog`                           | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-a-controlled-camera-is-never-fitted`                                              | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-a-default-camera-zoom-over-the-preset-is-kept-no-fit`                             | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-at-docs-width-870px-every-plane-title-of-the-13-sits-inside-the-scene-4477cf87`   | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-data-that-loads-after-mount-takes-the-preset-gap-and-is-fitted-with-no-1c98b609`  | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-every-preset-then-fit-keeps-all-13-planes-inside-the-scene`                       | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-mounting-at-preset-fits-the-13-layer-stack-and-reports-it`                        | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-13-layers-frame-picking-a-preset-on-13-layers-frames-it`                                          | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-a-camera-preset-animates-to-it-ref-methods-move-the-camera`                                       | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-are-held-interactions-only-report`                                    | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-that-take-every-report-follow-each-frame`                             | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-a-controlled-parent-that-echoes-reports-late-still-lets-a-preset-finish`                          | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-a-drag-right-after-exiting-focus-still-lets-the-planes-close`                                     | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-a-layer-focus-right-after-a-preset-keeps-the-preset-turning`                                      | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-after-an-orbit-enter-on-a-node-label-still-selects-it`                                            | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-an-asynchronous-layout-lands-on-the-same-positions-as-the-synchronous-one`                        | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-an-orbit-fades-and-clears-labels-frame-by-frame-without-a-react-commit`                           | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-clicking-a-node-selects-it-adds-the-drill-through-column-and-clicking-again-clears`               | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-dragging-orbits-without-selecting`                                                                | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-draws-a-plane-per-layer-a-disc-and-a-label-button-per-node`                                       | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-full-dr-spec-a-turntable-frame-writes-link-paths-within-one-per-batch-plus-the-reach-81e72c99`    | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-full-dr-spec-an-orbit-drag-re-renders-a-fixed-few-times-not-once-per-move`                        | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-full-dr-spec-draws-every-layer-node-and-link-of-the-13-layer-spec`                                | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-full-dr-spec-preset-tween-frames-paint-without-re-rendering-the-react-tree`                       | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-full-dr-spec-turntable-frames-paint-without-re-rendering-the-react-tree`                          | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-keyboard-arrows-move-between-nodes-and-layers-enter-selects-escape-clears`                        | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-labels-behind-planes-a-focused-layer-reads-clearly-the-planes-dimmed-around-it-fade-no-5c4a61fc`  | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-labels-behind-planes-profile-view-almost-side-on-nothing-sits-behind-a-plane`                     | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-labels-behind-planes-stack-preset-labels-under-a-nearer-plane-fade-the-top-layer-stays-30a19309`  | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-labels-behind-planes-the-selection-its-reach-and-the-hovered-node-are-never-faded`                | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-labels-behind-planes-top-view-is-the-x-ray-no-label-fades`                                        | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-pills-follow-the-camera-a-wheel-zoom-places-the-pills-again-with-no-parent-re-render`             | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-pills-follow-the-camera-an-outside-camera-change-during-a-zoom-stops-it-and-brings-the-55fcaf7b`  | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-pills-follow-the-camera-reduced-motion-a-jump-zoom-by-places-the-pills-again-with-no-ace4b863`    | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-pinch-zooms-clamped-like-the-wheel`                                                               | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-switching-focus-straight-to-another-layer-eases-the-planes-from-where-they-are`                   | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-the-plane-title-focuses-its-layer-clicking-again-exits`                                           | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-the-selections-reach-keeps-a-path-and-arrowhead-per-link-the-rest-stay-batched`                   | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-touch-a-two-finger-touch-pinch-zooms-and-is-not-taken-as-a-page-scroll`                           | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-visual-focused-layer-theme`                                                                       | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-visual-stack-preset-labels-behind-planes-faded-theme`                                             | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-visual-stack-preset-with-a-followed-selection-theme`                                              | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-visual-top-preset-theme`                                                                          | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layer-stack-with-every-predicate-labelled-arrowheads-off-the-reach-are-batched-too`                           | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-a-cell-click-shows-the-link-a-merged-cell-steps-6cc76233`        | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-a-filter-that-removes-the-focused-cell-keeps-focus-in-62f2a548`  | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-escape-closes-the-panel-and-returns-focus-to-the-60f0a0d2`       | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-hiding-the-links-category-drops-the-panel-and-the-70edbb4f`      | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-visual-link-inspector-panel`                                     | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-without-the-inspector-or-with-a-consumer-handler-a-3457ac3e`     | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.adjacency-matrix-view`                                                                                    | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.adjacency-matrix-view`                                                                                    | `ux.librarycomponent.layered-graph-explorer`                                                | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.command-palette`                                                       | `ux`         | `covers`     | many-to-many | medium   |
@@ -964,22 +1284,61 @@ A directed block adjacency matrix of a layered graph. There is one row and one c
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate    | Direction |
-| ----------- | ----------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.adjacency-matrix-view`          | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                     | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`         | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button`                                | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`               | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`              | `composes`   | outbound  |
-| intra-layer | `ux.statepattern.layered-selection-and-reach`               | `uses`       | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls`                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer`                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher`                         | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                  | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-aggregatelayer-a-cross-layer-cell-toggles-the-layer-pair-filter-a-diagonal-cell-or-56bd1c22` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-aggregatelayer-draws-one-heat-cell-per-non-empty-layer-pair`                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-aggregatelayer-on-layer-cell-select-replaces-the-default-filter-and-focus-toggles`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-aggregatelayer-symmetric-adds-both-directions-into-the-upper-triangle`                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-aggregatelayer-visual-dark-canvas-heat-map-with-an-active-pair`                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-aggregatelayer-visual-light-canvas-symmetric-heat-map-with-a-focused-layer`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-cell-click-selects-the-link-source`                                                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-draws-one-cell-per-link-and-one-header-button-per-node`                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-grid-semantics-symmetric-cells-holding-both-directions-say-so`                               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-grid-semantics-the-cells-form-a-grid-with-row-and-column-headers-the-drawing-98466b8c`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-header-click-and-keyboard-select-a-node-clicking-again-clears-it`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-keyboard-cells-focus-stays-in-the-grid-the-drawn-cell-shows-the-ring-and-the-74b0fc0c`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-keyboard-cells-one-tab-stop-for-the-cells-arrows-move-enter-selects`                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-on-cell-select-gets-the-drawn-link-and-every-link-in-the-f20ec09e`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-ordercluster-puts-each-community-on-adjacent-rows-the-1e77a9db`     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-visual-light-canvas-cluster-order`                                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-selection-follows-cross-layer-links-per-the-follow-setting`                                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-symmetric-clicking-a-cell-holding-both-directions-selects-its-drawn-link-source`             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-symmetric-merges-both-directions-into-one-cell-above-the-diagonal`                           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-symmetric-on-link-select-receives-the-drawn-link-and-both-links-of-a-merged-cell`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-symmetric-visual-light-canvas-symmetric-with-a-selection`                                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-a-cell-in-the-last-visible-column-renders`                                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-a-focused-cell-keeps-focus-its-ring-and-its-indices-while-the-55a10509`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-a-selected-link-id-set-from-outside-scrolls-its-cell-into-view`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-in-a-fixed-height-explorer-the-matrix-is-the-only-scroll-area-and-a09aa20b`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-keyboard-focus-survives-scrolling-arrows-move-past-the-window-row-4a5df257`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-labels-stay-aligned-with-the-cells-while-scrolling-both-axes`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-past-the-threshold-only-the-window-renders-and-the-dom-stays-bounded`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-the-grid-states-the-full-size-the-rendered-window-carries-its-row-238d3463`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-visual-dark-canvas-virtualized-and-scrolled`                                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-virtualization-visual-light-canvas-virtualized-and-scrolled`                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-visual-dark-canvas-with-a-followed-selection`                                                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.adjacency-matrix-visual-light-canvas-with-every-predicate-code`                                               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-a-cell-click-shows-the-link-a-merged-cell-steps-6cc76233`        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-a-filter-that-removes-the-focused-cell-keeps-focus-in-62f2a548`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-escape-closes-the-panel-and-returns-focus-to-the-60f0a0d2`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-hiding-the-links-category-drops-the-panel-and-the-70edbb4f`      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-visual-link-inspector-panel`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-without-the-inspector-or-with-a-consumer-handler-a-3457ac3e`     | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.adjacency-matrix-view`                                                                                    | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells`                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                                                                                                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                                                                        | `composes`   | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`                                                                                         | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                                                                                                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                                                                                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### AlertStrip {#alertstrip}
 
@@ -1105,13 +1464,24 @@ People identifier: renders a photo, or initials on a deterministic gradient, wit
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.avatar`                 | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-displays-status-indicator-when-provided`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-falls-back-to-initials-when-image-fails`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-image-is-displayed-when-src-is-provided`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-produces-deterministic-colors-for-same-name`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-produces-different-colors-for-different-names` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-renders-with-accessibility-attributes`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-renders-with-initials-for-various-names`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-respects-color-override-prop`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-sets-aria-hidden-for-decorative-mode`          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-supports-all-sizes`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-avatar-component-avatar-supports-different-shapes-circle-and-rounded`  | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.avatar`                                                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`                                                          | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                    | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                        | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                 | `aggregates` | inbound   |
 
 ### Badge {#badge}
 
@@ -1355,18 +1725,34 @@ Controlled date-based event calendar with month, week, day and agenda views, a h
 
 #### Relationships
 
-| Type        | Related Element                                                           | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.calendar-and-mini-calendar`                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.date-utilities`                               | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.chip`                                                | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                                                | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control`                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
+| Type        | Related Element                                                                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-accessibility-attributes-in-month-view`      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-agenda-view-dark-canvas-snapshot`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-agenda-view-light-canvas-snapshot`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-date-selection-changes-focused-date`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-day-view-dark-canvas-snapshot`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-day-view-light-canvas-snapshot`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-event-selection-in-month-view`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-keyboard-navigation-in-month-view`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-keyboard-navigation-pgup-pgdn-in-month-view` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-mini-calendar-selection`                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-month-view-dark-canvas-snapshot`             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-month-view-light-canvas-snapshot`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-navigation-buttons-have-accessible-labels`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-today-navigation-button`                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-week-view-dark-canvas-snapshot`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-calendar-components-week-view-light-canvas-snapshot`             | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.calendar-and-mini-calendar`                                              | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.date-utilities`                                                          | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                  | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                            | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                                                                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                                                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`                                                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                           | `aggregates` | inbound   |
 
 ### CameraControls {#cameracontrols}
 
@@ -1755,16 +2141,20 @@ Tabbed diff panel that switches between a set diff (`DiffViewer.HashSet`, added 
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.diff-viewer-components`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.hash-set-diff`                             | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.side-by-side-diff`                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                              | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                  | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-diff-viewer-components-dark-canvas-full-page-snapshot-covers-empty-small-overflow-63b1ace2`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-diff-viewer-components-hash-set-diff-collapse-expand-interaction`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-diff-viewer-components-light-canvas-full-page-snapshot-covers-empty-small-overflow-72616cee` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-diff-viewer-components-side-by-side-diff-gutter-labels-are-visually-hidden`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.diff-viewer-components`                                                                              | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                          | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                                  | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                              | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.hash-set-diff`                                                                                              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.side-by-side-diff`                                                                                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                                                                                               | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                       | `aggregates` | inbound   |
 
 ### Donut {#donut}
 
@@ -1921,16 +2311,39 @@ Compound dropdown for filter bars: a trigger with an eyebrow label and summary, 
 
 #### Relationships
 
-| Type        | Related Element                                                        | Predicate    | Direction |
-| ----------- | ---------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dropdown-placement`                        | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.dropdown-portal`                           | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.filter-dropdown`                           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                    | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                                             | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                             | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                 | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-display-updates-selected-count-in-trigger-536ed848` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-multiple-selections-allowed`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-unselecting-works-correctly`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-closes-panel-when-clicking-outside`                               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-dark-canvas-visual-snapshot-of-checkbox-mode-dark`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-dark-canvas-visual-snapshot-of-radio-mode-dark`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-displays-checkbox-items`                                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-displays-section-with-title`                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-arrow-down-navigates-to-next-item-in-checkbox-mode`      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-arrow-down-navigates-to-next-item-in-radio-mode`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-enter-selects-radio-option-and-closes-panel`             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-enter-toggles-checkbox-selection`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-escape-closes-panel-and-returns-focus-to-trigger`        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-space-selects-radio-option-and-closes-panel`             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-space-toggles-checkbox-selection`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-tab-navigates-forward-through-items-in-checkbox-mode`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-tab-navigates-forward-through-items-in-radio-mode`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-opens-panel-when-trigger-is-clicked`                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-radio-mode-only-one-selection-allowed`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-radio-mode-selection-changes-update-trigger-summary`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-renders-trigger-button`                                           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-visual-snapshot-of-checkbox-mode`                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-filter-dropdown-component-visual-snapshot-of-radio-mode`                                    | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-placement`                                                                                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-portal`                                                                                    | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.filter-dropdown`                                                                                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                             | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                                                          | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                      | `aggregates` | inbound   |
 
 ### FollowControl {#followcontrol}
 
@@ -2359,15 +2772,15 @@ Three-column set diff (Added / Removed / Kept, with counts) for comparing two ve
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
-| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.map-canvas`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1` | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                                                                       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.map-canvas`                                                                             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                     | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                 | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                          | `aggregates` | inbound   |
 
 ### HierarchyRow {#hierarchyrow}
 
@@ -2437,20 +2850,38 @@ A hive plot of a layered graph: one radial axis per layer at evenly divided angl
 
 #### Relationships
 
-| Type        | Related Element                                                                    | Predicate    | Direction |
-| ----------- | ---------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.hive-plot-layout`                                      | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.hive-plot-view`                                        | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-edge-labels`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                            | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls`                                              | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                     | `composes`   | outbound  |
-| intra-layer | `ux.statepattern.layered-selection-and-reach`                                      | `uses`       | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher`                                                | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                                         | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown`                                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id`                                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put`                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first`                                                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear`                                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node`                                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-follow-changes-the-reach`                                                                           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit`                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects`                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-link-click-selects-its-source`                                                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning`                                             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis`                                                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label`                                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection`                                             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection`                                                                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1`                                                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer`                                                           | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.hive-plot-layout`                                                                                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.hive-plot-view`                                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-edge-labels`                                                                                      | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`                                                    | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                                                                                                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                                                                        | `composes`   | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`                                                                                         | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                                                                                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### Icon {#icon}
 
@@ -2546,13 +2977,26 @@ Full-height details panel for one entity: eyebrow, title, id, version pill, head
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate    | Direction |
-| ----------- | ------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                             | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-dark-canvas-inspector-panel-full-page-dark-snapshot`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-accessibility-semantic-structure`     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-head-displays-all-required-elements`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-renders-with-head-content`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-scrolls-independently`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-section-renders-with-title-and-count` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-sections-have-borders`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-visual-regression-full-page`          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-with-section-actions-renders-buttons` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-with-version-pill-renders-version`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-displays-key-value-pairs`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-keys-are-styled-correctly`                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-with-long-values-breaks-properly`              | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid`                                                                     | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                     | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                         | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                                                                                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                  | `aggregates` | inbound   |
 
 ### KanbanBoard {#kanbanboard}
 
@@ -2572,17 +3016,45 @@ Column board of cards with pointer drag-and-drop, keyboard moves, per-column cou
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.kanban-board`                       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip`                                      | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.panel`                                     | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                              | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-announce-card-moves`                                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-have-live-region-for-announcements`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-have-proper-aria-attributes-on-cards`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-card-selection-should-clear-selection-when-clicking-clear-button`          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-card-selection-should-focus-card-with-tab-key-and-space`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-keyboard-navigation-should-support-escape-to-cancel-drag`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-keyboard-navigation-should-support-tab-navigation-between-cards`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-pointer-reordering-within-a-column-dragging-down-drops-the-card-c67b132d`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-pointer-reordering-within-a-column-dragging-up-drops-the-card-in-053366e2` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-blocked-banner-on-blocked-cd6bb9c1`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-done-styling-strikethrough-a6e6d9d1`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-status-color-dots-in-column-a95562bf`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-all-columns-with-headers-cb9c2a35`      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-cards-with-context-title-and-ada09ef5`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-independent-scrollable-columns`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-show-empty-column-placeholder`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-show-wip-limit-warning-when-cards-dd8d7b68`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-blocked-card-in-dark-b968d35f`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-default-state-in-dark-885ed38e` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-done-cards-in-dark-248e8486`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-empty-column-state-in-1c7bce46` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-selected-card-in-dark-312a44b8` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-blocked-card-state`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-default-state-b15c344d`        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-done-cards-state`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-empty-column-state`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-state-with-selected-0fd08b4f`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-wip-limit-warning-d16dcc06`    | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.kanban-board`                                                                                             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                                                                                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.panel`                                                                                                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                                                                                                    | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### KeyValueEditor {#keyvalueeditor}
 
@@ -2720,22 +3192,65 @@ The layered graph as a 3D stack: one translucent plane per layer (with a grid an
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate    | Direction |
-| ----------- | ------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layer-stack-projection`     | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layer-stack-view`           | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-dom-order`          | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-edge-labels`        | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-link-batches`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls`                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`          | `composes`   | outbound  |
-| intra-layer | `ux.actionpattern.layer-stack-camera-orbit-and-presets` | `uses`       | outbound  |
-| intra-layer | `ux.statepattern.layered-selection-and-reach`           | `uses`       | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer`            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher`                     | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                      | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-a-controlled-camera-is-never-fitted`                                             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-a-default-camera-zoom-over-the-preset-is-kept-no-fit`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-at-docs-width-870px-every-plane-title-of-the-13-sits-inside-the-scene-4477cf87`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-data-that-loads-after-mount-takes-the-preset-gap-and-is-fitted-with-no-1c98b609` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-every-preset-then-fit-keeps-all-13-planes-inside-the-scene`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-mounting-at-preset-fits-the-13-layer-stack-and-reports-it`                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-13-layers-frame-picking-a-preset-on-13-layers-frames-it`                                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-a-camera-preset-animates-to-it-ref-methods-move-the-camera`                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-are-held-interactions-only-report`                                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-that-take-every-report-follow-each-frame`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-a-controlled-parent-that-echoes-reports-late-still-lets-a-preset-finish`                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-a-drag-right-after-exiting-focus-still-lets-the-planes-close`                                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-a-layer-focus-right-after-a-preset-keeps-the-preset-turning`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-after-an-orbit-enter-on-a-node-label-still-selects-it`                                           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-an-asynchronous-layout-lands-on-the-same-positions-as-the-synchronous-one`                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-an-orbit-fades-and-clears-labels-frame-by-frame-without-a-react-commit`                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-clicking-a-node-selects-it-adds-the-drill-through-column-and-clicking-again-clears`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-dragging-orbits-without-selecting`                                                               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-draws-a-plane-per-layer-a-disc-and-a-label-button-per-node`                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-full-dr-spec-a-turntable-frame-writes-link-paths-within-one-per-batch-plus-the-reach-81e72c99`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-full-dr-spec-an-orbit-drag-re-renders-a-fixed-few-times-not-once-per-move`                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-full-dr-spec-draws-every-layer-node-and-link-of-the-13-layer-spec`                               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-full-dr-spec-preset-tween-frames-paint-without-re-rendering-the-react-tree`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-full-dr-spec-turntable-frames-paint-without-re-rendering-the-react-tree`                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-keyboard-arrows-move-between-nodes-and-layers-enter-selects-escape-clears`                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-labels-behind-planes-a-focused-layer-reads-clearly-the-planes-dimmed-around-it-fade-no-5c4a61fc` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-labels-behind-planes-profile-view-almost-side-on-nothing-sits-behind-a-plane`                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-labels-behind-planes-stack-preset-labels-under-a-nearer-plane-fade-the-top-layer-stays-30a19309` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-labels-behind-planes-the-selection-its-reach-and-the-hovered-node-are-never-faded`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-labels-behind-planes-top-view-is-the-x-ray-no-label-fades`                                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-pills-follow-the-camera-a-wheel-zoom-places-the-pills-again-with-no-parent-re-render`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-pills-follow-the-camera-an-outside-camera-change-during-a-zoom-stops-it-and-brings-the-55fcaf7b` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-pills-follow-the-camera-reduced-motion-a-jump-zoom-by-places-the-pills-again-with-no-ace4b863`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-pinch-zooms-clamped-like-the-wheel`                                                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-switching-focus-straight-to-another-layer-eases-the-planes-from-where-they-are`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-the-plane-title-focuses-its-layer-clicking-again-exits`                                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-the-selections-reach-keeps-a-path-and-arrowhead-per-link-the-rest-stay-batched`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-touch-a-two-finger-touch-pinch-zooms-and-is-not-taken-as-a-page-scroll`                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-visual-focused-layer-theme`                                                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-visual-stack-preset-labels-behind-planes-faded-theme`                                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-visual-stack-preset-with-a-followed-selection-theme`                                             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-visual-top-preset-theme`                                                                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.layer-stack-with-every-predicate-labelled-arrowheads-off-the-reach-are-batched-too`                          | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.layer-stack-projection`                                                                                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layer-stack-view`                                                                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-dom-order`                                                                                       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-edge-labels`                                                                                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-link-batches`                                                                                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                                                                                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                                                                       | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.layer-stack-camera-orbit-and-presets`                                                                              | `uses`       | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`                                                                                        | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                                                                                         | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                                                                                  | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                           | `aggregates` | inbound   |
 
 ### LayeredGraphContext (UX) {#layeredgraphcontext-ux}
 
@@ -2838,15 +3353,15 @@ Multi-series line chart with optional area fill, axes, grid, threshold line, eve
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
-| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers` | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                                                              | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle`                                                        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                    | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                            | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                        | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                 | `aggregates` | inbound   |
 
 ### LineageRail {#lineagerail}
 
@@ -2866,14 +3381,41 @@ Horizontal chain of chips joined by arrows, showing the lineage of a dataset, ru
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.lineage-rail`           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip`                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-be-focusable-for-interactive-nodes-via-19531e3f`      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-have-aria-currentstep-on-head-node-in-multi-97cef293` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-have-aria-currentstep-on-head-node`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-not-be-focusable-for-non-interactive-nodes`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-not-have-aria-current-on-non-head-nodes`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-keeps-the-amber-head-and-canvas-surface-nodes-f202cd80`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-should-apply-head-class-to-first-node`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-should-not-apply-head-class-to-non-first-nodes`          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-apply-interactive-class-to-clickable-dcd7e70a`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-be-focusable-and-keyboard-accessible-on-0674a408` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-not-set-tab-index-on-non-interactive-16926a0b`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-set-tab-index-on-interactive-nodes`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-support-click-on-interactive-node-6aaee98a`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-support-space-key-on-interactive-node`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-display-labels-inside-nodes`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-handle-empty-nodes-array`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-aria-label-on-container`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-nodes-with-rolelistitem`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-proper-structure-with-rolelist`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-not-render-arrows-for-single-node`             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-arrows-between-nodes`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-icons-when-provided`                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-nodes-with-labels`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-visual-regression-dark-canvas-dark-canvas-snapshot`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-visual-regression-light-canvas-light-canvas-snapshot`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-wrapping-behavior-should-have-wrap-class-when-wrap-prop-is-true`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-lineage-rail-component-wrapping-behavior-should-not-have-wrap-class-when-wrap-prop-is-c3dc57ec`   | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.lineage-rail`                                                                                             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                                                                                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                            | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### LinkCategoryFilter {#linkcategoryfilter}
 
@@ -2950,14 +3492,48 @@ Pan/zoom Web Mercator map that renders pins, a track polyline, or a heatmap, ove
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.map-canvas`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.pan-and-zoom`                       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-grid-fallback-rendering-should-fill-entire-canvas-area-with-grid`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-grid-fallback-rendering-should-render-grid-pattern-without-tiles`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-heatmap-should-use-emerald-color-by-default`                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-should-display-legend-for-heatmap-mode`                         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-should-render-heatmap-points-with-gradient-colors`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-initial-fit-heatmap-mode-frames-every-point`                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-initial-fit-pins-mode-frames-every-pin-and-reports-a-centre-ddfac696`        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-initial-fit-track-mode-frames-the-track`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-initial-fit-wheel-zoom-at-the-centre-keeps-the-view-centre-and-05270f1c`     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pan-and-zoom-arrow-keys-should-pan`                                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pan-and-zoom-plus-minus-keys-should-zoom`                                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pins-mode-clicking-pin-should-show-popover-with-details`                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pins-mode-escape-key-should-close-popover`                                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pins-mode-pin-should-have-aria-label-with-coordinates-and-timestamp`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pins-mode-pulse-animation-should-be-suppressed-under-prefers-4842035f`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pins-mode-selected-pin-should-display-pulse-animation`                       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-pins-mode-should-render-all-pins-as-buttons`                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-canvas-should-be-keyboard-accessible-with-cf025b42`   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-canvas-should-have-application-role`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-pins-should-be-buttons-with-proper-semantics`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-scale-bar-scale-bar-label-should-display-current-zoom-level`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-scale-bar-should-show-scale-bar-when-enabled`                                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-track-mode-should-display-legend-for-track-mode`                             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-track-mode-should-render-track-as-dashed-cyan-polyline`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-grid-only-state-in-dark-a80971cf` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-heatmap-mode-in-dark-332bd9df`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-pins-mode-in-dark-canvas`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-pins-mode-with-selected-6eec1db7` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-track-mode-in-dark-380050fd`      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-default-grid-only-state`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-heatmap-mode-state`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-pins-mode-state`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-pins-mode-with-36de1483`         | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-track-mode-state`                | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.map-canvas`                                                                                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### MetricRow {#metricrow}
 
@@ -3172,15 +3748,38 @@ A folded pane shown as a 40px vertical rail: an expand button (aria-expanded fal
 
 #### Relationships
 
-| Type        | Related Element                                                       | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.pane-rail`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.pane-rail-marks`                          | `covers`     | inbound   |
-| inter-layer | `motivation.principle.ide-density-and-terse-voice`                    | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                   | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.every-public-export-is-documented-for-agents` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                                            | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                            | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                      | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5`     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar`        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8`    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand`                    | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand`                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position`                          | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container`                           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks`                                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3`     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot`                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.pane-rail`                                                                                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pane-rail-marks`                                                                                         | `covers`     | inbound   |
+| inter-layer | `motivation.principle.ide-density-and-terse-voice`                                                                                   | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                  | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.every-public-export-is-documented-for-agents`                                                                | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                           | `aggregates` | inbound   |
 
 ### Panel {#panel}
 
@@ -3885,14 +4484,15 @@ Gantt-style status history: one horizontal track per service, colored segments a
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
-| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors` | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                                                                  | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                        | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                            | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                     | `aggregates` | inbound   |
 
 ### Statusbar {#statusbar}
 
@@ -4237,15 +4837,25 @@ Distributed-trace waterfall: span tree, service-colored timeline with parent-to-
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.trace-adapters`                     | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.trace-viewer`                       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                                     | Predicate    | Direction |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-aws-x-ray-trace-renders-in-dark-canvas`                                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-aws-x-ray-trace-renders-with-the-fault-span-selected-light`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-collapsed-subtree-renders-without-a-selection`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-interactions-clicking-a-tree-row-opens-repopulates-the-detail-panel`               | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-interactions-escape-closes-the-detail-panel-and-the-close-button-also-works`       | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-interactions-expanding-a-collapsed-node-reveals-its-children`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-interactions-keyboard-arrow-down-moves-the-selection`                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-interactions-long-attribute-keys-values-truncate-no-overlap-with-a-hover-35742fa3` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-otlp-trace-renders-in-dark-canvas`                                                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-trace-viewer-otlp-trace-renders-with-the-error-span-selected-light`                             | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.trace-adapters`                                                                                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.trace-viewer`                                                                                           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                                     | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                 | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                          | `aggregates` | inbound   |
 
 ### TriState {#tristate}
 
@@ -4325,17 +4935,36 @@ Vertical, selectable version history: amber version pill, optional headline, dif
 
 #### Relationships
 
-| Type        | Related Element                                                           | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.date-utilities`                               | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.server-rendering`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.version-timeline`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip`                                                | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                                        | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
+| Type        | Related Element                                                                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-aria-listbox-semantics-are-applied`                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-arrow-down-at-last-entry-does-not-navigate`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-arrow-down-key-navigates-to-next-version`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-arrow-up-at-first-entry-does-not-navigate`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-arrow-up-key-navigates-to-previous-version`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-click-selection-updates-on-select-callback`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-dark-canvas-snapshot`                                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-diff-stats-render-for-entries-with-stats`                  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-empty-state-renders-when-no-entries-provided`              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-head-badge-renders-for-entries-with-head-flag`             | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-light-canvas-snapshot`                                     | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-multiple-entries-show-connector-rail`                      | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-oldest-first-order-reverses-entry-order`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-read-only-mode-no-on-select-is-not-interactive`            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-selected-entry-has-aria-selected-attribute`                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-selected-entry-has-head-dot-indicator-when-marked-as-head` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-single-entry-does-not-show-connector-rail`                 | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-transition-indicator-renders-for-entries-with-transition`  | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.integration-version-timeline-component-visual-selection-state-changes-on-click`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.date-utilities`                                                                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.server-rendering`                                                                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.version-timeline`                                                                             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                                                 | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                                                                                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                                                                                        | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                | `aggregates` | inbound   |
 
 ### ViewSwitcher {#viewswitcher}
 
@@ -4398,15 +5027,26 @@ Modal for switching workspaces: optional action tiles plus a recent-workspace li
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate     | Direction |
-| ----------- | ------------------------------------------------------ | ------------- | --------- |
-| inter-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `covers`      | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                | `depends-on`  | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`    | `satisfies`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                             | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.modal`                            | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.modal`                            | `specializes` | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                             | `aggregates`  | inbound   |
+| Type        | Related Element                                                                                                              | Predicate     | Direction |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-dark-canvas-visual-snapshot-of-workspace-switcher-dialog-dark` | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-call-on-pick-recent-when-recent-workspace-is-clicked`   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-backdrop-is-clicked`                         | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-open-tile-is-clicked`                        | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-x-button-is-clicked`                         | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-recent-workspaces-list`                         | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-three-action-tiles`                             | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-title`                                          | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-not-be-visible-when-is-open-is-false`                   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-should-render-when-is-open-is-true`                            | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-workspace-switcher-dialog-visual-snapshot-of-workspace-switcher-dialog`                  | `tests`       | inbound   |
+| inter-layer | `testing.testcoveragetarget.workspace-switcher-dialog`                                                                       | `covers`      | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                      | `depends-on`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                          | `satisfies`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                                                                   | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                                                                                                  | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                                                                                                  | `specializes` | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                   | `aggregates`  | inbound   |
 
 ### Canvas Theme (Light or Dark Canvas) {#canvas-theme-light-or-dark-canvas}
 
@@ -4655,4 +5295,4 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 
 ---
 
-Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0
+Generated: 2026-11-26T13:40:58.223Z | Model Version: 0.1.0

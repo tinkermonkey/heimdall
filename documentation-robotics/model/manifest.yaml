@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.8.0
 spec_version: 0.15.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-25T23:27:05.066Z
+updated: 2026-11-26T13:40:58.220Z
 project:
   name: heimdall-ux
   description: ""
@@ -39,9 +39,9 @@ layers:
     enabled: true
     elements:
       feature: 14
+      milestone: 1
       persona: 3
       softwarecapability: 23
-      milestone: 1
   security:
     order: 4
     name: Security
@@ -131,7 +131,7 @@ layers:
       inputspacepartition: 2
       partitionvalue: 4
       targetinputfield: 2
-      testcasesketch: 1747
+      testcasesketch: 1787
       testcoveragemodel: 2
       testcoveragetarget: 90
 changeset_history:
@@ -155,4 +155,7 @@ changeset_history:
     action: committed
   - name: branch-map-poc
     committed_at: 2026-11-25T23:27:05.066Z
+    action: committed
+  - name: close-testing-layer-gaps
+    committed_at: 2026-11-26T13:40:58.220Z
     action: committed

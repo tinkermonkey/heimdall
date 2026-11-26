@@ -18,8 +18,8 @@ Product features, capabilities, personas, and milestones.
 | ------------------------- | ----- |
 | Elements                  | 41    |
 | Intra-Layer Relationships | 28    |
-| Inter-Layer Relationships | 191   |
-| Inbound Relationships     | 133   |
+| Inter-Layer Relationships | 194   |
+| Inbound Relationships     | 136   |
 | Outbound Relationships    | 58    |
 
 **Cross-Layer References**:
@@ -224,7 +224,6 @@ flowchart TB
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
-| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing`                 | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8`  | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
@@ -235,6 +234,10 @@ flowchart TB
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-unlabelled-edge-tooltip-anchors-at-the-path-midpoint`                | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-with-a-predicate-pill-tooltip-sits-beside-742ff016` | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-without-a-pill-tooltip-anchors-on-the-208a5652`     | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`                            | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`                              | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`                        | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-click-triggered-tooltips-accessibility-click-tooltips-edge-tooltip-1c7b4a8b`         | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-click-triggered-tooltips-accessibility-click-tooltips-node-tooltip-d96b5908`         | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-click-triggered-tooltips-edge-click-triggered-tooltip-edge-tooltip-010240b0`         | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
@@ -666,15 +669,18 @@ An empty src/tokens/theme.css loaded after tokens.css in every stylesheet entry 
 
 #### Relationships
 
-| Type        | Related Element                                                              | Predicate   | Direction |
-| ----------- | ---------------------------------------------------------------------------- | ----------- | --------- |
-| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`      | `satisfies` | outbound  |
-| inter-layer | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror` | `satisfies` | outbound  |
-| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                     | `tests`     | inbound   |
-| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`     | `tests`     | inbound   |
-| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`               | `tests`     | inbound   |
-| intra-layer | `product.softwarecapability.ui-primitives`                                   | `realizes`  | outbound  |
-| intra-layer | `product.persona.mirror-maintainer-restyling-the-library`                    | `serves`    | outbound  |
+| Type        | Related Element                                                                                                     | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                                             | `satisfies` | outbound  |
+| inter-layer | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`                                        | `satisfies` | outbound  |
+| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                            | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1` | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`          | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`            | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`      | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                      | `tests`     | inbound   |
+| intra-layer | `product.softwarecapability.ui-primitives`                                                                          | `realizes`  | outbound  |
+| intra-layer | `product.persona.mirror-maintainer-restyling-the-library`                                                           | `serves`    | outbound  |
 
 ### Viewport History and Restore {#viewport-history-and-restore}
 
@@ -1349,4 +1355,4 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 
 ---
 
-Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0
+Generated: 2026-11-26T13:40:58.223Z | Model Version: 0.1.0
