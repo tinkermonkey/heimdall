@@ -112,6 +112,14 @@ testing.testcasesketch.reach-inspector-renders-from-the-enclosing-provider:
     locations:
       - file: src/components/__tests__/ReachInspector.test.ts
         symbol: ReachInspector > renders from the enclosing provider
+  accepted_gaps:
+    - direction: outgoing
+      predicate: tests
+      other_spec_node_id: application.applicationfunction
+      reason: The test calls useLayeredGraph only to build the provider value; its subject is ReachInspector reading LayeredGraphContext (ux), not the hook's state or any application function.
+      decided_by: agent
+      decided_at: 2026-11-25T23:33:47.778Z
+      changeset: changeset-1795649554996-xeo4y2vbr
   metadata:
     created_at: 2026-11-24T19:01:20.531Z
     updated_at: 2026-11-24T19:01:20.531Z
@@ -10210,24 +10218,6 @@ testing.testcasesketch.integration-chart-components-donut-standard-shows-center-
     locations:
       - file: tests/charts-showcase.spec.ts
         symbol: "integration: Chart Components > Donut > standard shows center value text"
-  metadata:
-    created_at: 2026-11-24T19:01:20.553Z
-    updated_at: 2026-11-24T19:01:20.553Z
-    version: 1
-testing.testcasesketch.integration-chart-components-heatmap-cell-fills-are-non-empty-hex-colors:
-  id: ba599195-fc90-4de0-bc63-be20ad82083c
-  path: testing.testcasesketch.integration-chart-components-heatmap-cell-fills-are-non-empty-hex-colors
-  spec_node_id: testing.testcasesketch
-  type: testcasesketch
-  layer_id: testing
-  name: "integration: Chart Components > Heatmap > cell fills are non-empty hex colors"
-  attributes:
-    status: automated
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: tests/charts-showcase.spec.ts
-        symbol: "integration: Chart Components > Heatmap > cell fills are non-empty hex colors"
   metadata:
     created_at: 2026-11-24T19:01:20.553Z
     updated_at: 2026-11-24T19:01:20.553Z
@@ -30428,25 +30418,6 @@ testing.testcasesketch.integration-workspace-switcher-dialog-visual-snapshot-of-
     created_at: 2026-11-24T19:01:20.588Z
     updated_at: 2026-11-24T19:01:20.588Z
     version: 1
-testing.testcasesketch.chart-fills-resolve-from-tokens:
-  id: e51c6e5b-38b2-4ea1-8147-484d8ac2695b
-  path: testing.testcasesketch.chart-fills-resolve-from-tokens
-  spec_node_id: testing.testcasesketch
-  type: testcasesketch
-  layer_id: testing
-  name: Chart Fills Resolve From Tokens
-  description: "tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker circles carry rgb(var(--accent-primary-hover)) instead of #F59E0B; StatusTimeline segment fills are status-token references; Heatmap cells fill with the base color and a fill-opacity in [0.12, 1] (was: non-empty hex fills). Screenshots stay identical to the existing baselines."
-  attributes:
-    status: automated
-  source_reference:
-    provenance: manual
-    locations:
-      - file: tests/charts-showcase.spec.ts
-        symbol: cell fill is the base color, fill-opacity is in [0.12, 1]
-  metadata:
-    created_at: 2026-11-24T21:49:32.045Z
-    updated_at: 2026-11-24T21:49:32.045Z
-    version: 1
 testing.testcasesketch.theme-override-ships-after-the-tokens:
   id: a6c96738-6811-4d8f-ab25-edfcde9f6a8f
   path: testing.testcasesketch.theme-override-ships-after-the-tokens
@@ -30456,7 +30427,13 @@ testing.testcasesketch.theme-override-ships-after-the-tokens:
   name: Theme Override Ships After the Tokens
   description: "With :root { --accent-primary: 37 99 235; } in src/tokens/theme.css, npm run build puts that declaration after --accent-primary: 251 191 36 in dist/style.css and dist/css/base.css; check:sheets passes."
   attributes:
-    status: draft
+    status: implemented
+    implementationFormat: manual
+  source_reference:
+    provenance: manual
+    locations:
+      - file: vite.config.mjs
+        symbol: BASE_SHEETS
   metadata:
     created_at: 2026-11-24T21:49:32.045Z
     updated_at: 2026-11-24T21:49:32.045Z
@@ -30470,7 +30447,12 @@ testing.testcasesketch.color-literal-check-rejects-a-component-literal:
   name: Color Literal Check Rejects a Component Literal
   description: "npm run check:colors passes on the branch and fails when a literal such as #f59e0b is added to any component file; pure black and white, URL fragments and issue references in comments (#320) pass."
   attributes:
-    status: draft
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: scripts/check-color-literals.mjs
   metadata:
     created_at: 2026-11-24T21:49:32.045Z
     updated_at: 2026-11-24T21:49:32.045Z
@@ -31510,4 +31492,760 @@ testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on
   metadata:
     created_at: 2026-11-25T23:25:45.664Z
     updated_at: 2026-11-25T23:25:45.664Z
+    version: 1
+testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1:
+  id: d65221e4-8eb5-446c-8f41-dfbbb31a163a
+  path: testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: clampPaneRailPosition > keeps positions inside 0..1
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: clampPaneRailPosition > keeps positions inside 0..1
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1:
+  id: f565e9f0-f43d-4d50-8387-30734c274e07
+  path: testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: clampPaneRailPosition > clamps positions outside 0..1
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: clampPaneRailPosition > clamps positions outside 0..1
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0:
+  id: 9c055f91-a6e6-4dc5-8549-0204ac4c2a5b
+  path: testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: clampPaneRailPosition > sends non-finite positions to 0
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: clampPaneRailPosition > sends non-finite positions to 0
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom:
+  id: 71166ce5-274d-48a9-9acf-a25e0d5c675c
+  path: testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: orderPaneRailMarks > sorts marks top to bottom
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: orderPaneRailMarks > sorts marks top to bottom
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position:
+  id: c7e7d1fe-937c-4c94-aba8-7b60b85dd0ca
+  path: testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: orderPaneRailMarks > keeps input order for marks at the same position
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: orderPaneRailMarks > keeps input order for marks at the same position
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged:
+  id: 9edd9778-6d5c-4e22-81f9-b7ebe45f71af
+  path: testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: orderPaneRailMarks > clamps positions and leaves the input unchanged
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: orderPaneRailMarks > clamps positions and leaves the input unchanged
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label:
+  id: 4674aa0e-377d-428f-b6b6-a1f59dfb4827
+  path: testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: orderPaneRailMarks > keeps tone and label
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: orderPaneRailMarks > keeps tone and label
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks:
+  id: d57dfec2-541d-47e4-b901-142f03e3d023
+  path: testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: orderPaneRailMarks > orders hundreds of marks
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: orderPaneRailMarks > orders hundreds of marks
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends:
+  id: b1e4be0c-7816-43a2-9721-0b711b5aa091
+  path: testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: nextPaneRailMarkIndex > moves one mark with the arrow keys and stops at the ends
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: nextPaneRailMarkIndex > moves one mark with the arrow keys and stops at the ends
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end:
+  id: 7ef6ec08-9e62-4e16-aae9-9e899deff84e
+  path: testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: nextPaneRailMarkIndex > jumps to the ends with Home and End
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: nextPaneRailMarkIndex > jumps to the ends with Home and End
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails:
+  id: 137c2297-379a-4232-ae85-8e83c50e993a
+  path: testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: nextPaneRailMarkIndex > ignores other keys and empty rails
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: nextPaneRailMarkIndex > ignores other keys and empty rails
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection:
+  id: 2e81b57b-883c-4e5c-b977-e53c0d335f88
+  path: testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: nearestPaneRailMarkIndex > starts at the first mark without a selection
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: nearestPaneRailMarkIndex > starts at the first mark without a selection
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection:
+  id: 65a82b8a-2e5e-4deb-83cd-bce2f6381e75
+  path: testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: nearestPaneRailMarkIndex > finds the mark nearest the selection
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: nearestPaneRailMarkIndex > finds the mark nearest the selection
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks:
+  id: 99d93a85-61be-4246-852f-052335c96efe
+  path: testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: nearestPaneRailMarkIndex > returns 0 for no marks
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: nearestPaneRailMarkIndex > returns 0 for no marks
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.pane-rail-mark-keys-keys-marks-with-unique-ids-by-their-id:
+  id: d3947b5b-4a9b-4a15-939d-d33df17c8609
+  path: testing.testcasesketch.pane-rail-mark-keys-keys-marks-with-unique-ids-by-their-id
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: paneRailMarkKeys > keys marks with unique ids by their id
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: paneRailMarkKeys > keys marks with unique ids by their id
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.pane-rail-mark-keys-gives-duplicate-ids-distinct-keys-in-position-order:
+  id: 331f28a6-4c30-4dfd-90c5-77cd603d8bbb
+  path: testing.testcasesketch.pane-rail-mark-keys-gives-duplicate-ids-distinct-keys-in-position-order
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: paneRailMarkKeys > gives duplicate ids distinct keys, in position order
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: paneRailMarkKeys > gives duplicate ids distinct keys, in position order
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.pane-rail-mark-keys-stays-unique-when-an-id-looks-like-a-generated-key:
+  id: 3574a819-86f5-4b7c-a33f-2340cd6190b4
+  path: testing.testcasesketch.pane-rail-mark-keys-stays-unique-when-an-id-looks-like-a-generated-key
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: paneRailMarkKeys > stays unique when an id looks like a generated key
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: paneRailMarkKeys > stays unique when an id looks like a generated key
+  metadata:
+    created_at: 2026-11-25T23:32:47.368Z
+    updated_at: 2026-11-25T23:32:47.368Z
+    version: 1
+testing.testcasesketch.pane-rail-mark-keys-returns-no-keys-for-no-marks:
+  id: 32910f15-24e5-4af4-8616-c640b1dad180
+  path: testing.testcasesketch.pane-rail-mark-keys-returns-no-keys-for-no-marks
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: paneRailMarkKeys > returns no keys for no marks
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/paneRailMarks.test.ts
+        symbol: paneRailMarkKeys > returns no keys for no marks
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1:
+  id: 218f3cb8-97a8-4279-bb99-017d4411ea96
+  path: testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: Chart Components > Heatmap > cell fill is the base color, fill-opacity is in [0.12, 1]"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/charts-showcase.spec.ts
+        symbol: "integration: Chart Components > Heatmap > cell fill is the base color, fill-opacity is in [0.12, 1]"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container:
+  id: 658c921f-59bd-4dfb-92d6-e3382ce7e5cd
+  path: testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Rendering > is a 40px rail as tall as its container"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Rendering > is a 40px rail as tall as its container"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned:
+  id: 72e28284-289e-4ab5-844b-fa1d5887dbb3
+  path: testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Rendering > renders one mark per item, sorted top to bottom, toned"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Rendering > renders one mark per item, sorted top to bottom, toned"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position:
+  id: 1266c694-2bc5-4775-a25d-8d2386cda7e1
+  path: testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Rendering > draws the notch at the selected position"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Rendering > draws the notch at the selected position"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label:
+  id: 52169dc2-fb3c-455a-8407-21604b85d5a8
+  path: testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Rendering > shows the name, key hint and position label"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Rendering > shows the name, key hint and position label"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks:
+  id: 934ebf5a-ca06-459b-9bf2-0cb1926fbed9
+  path: testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Rendering > renders 400 marks"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Rendering > renders 400 marks"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3:
+  id: 49ffe427-36da-43bc-aa36-2c9b43980afa
+  path: testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Rendering > renders no map toolbar and no notch without marks or selection"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Rendering > renders no map toolbar and no notch without marks or selection"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5:
+  id: b9cf057b-3d14-47b7-ad6d-99d11e29fa20
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > expand button is collapsed, named and carries the shortcut"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > expand button is collapsed, named and carries the shortcut"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar:
+  id: 023c67be-846b-42d7-aea5-3a5808ef7878
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > marks are named buttons in a labelled vertical toolbar"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > marks are named buttons in a labelled vertical toolbar"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978:
+  id: 8d0e2f09-605f-4468-8ff8-a876ae717213
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > the map is one tab stop, starting at the mark nearest the selection"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > the map is one tab stop, starting at the mark nearest the selection"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks:
+  id: eb18bb2e-e40a-4cdc-b3eb-605a3133dd3f
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > arrow keys, Home and End move focus between marks"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > arrow keys, Home and End move focus between marks"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3:
+  id: e0b3597e-ea5d-489d-aa07-83096fba0e46
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > leaving the toolbar puts the tab stop back on the mark nearest the selection"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > leaving the toolbar puts the tab stop back on the mark nearest the selection"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f:
+  id: 5c4c190d-e185-46be-871b-24bbb381599b
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > duplicate mark ids render every mark without a React key warning"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > duplicate mark ids render every mark without a React key warning"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar:
+  id: d078c637-6661-4445-a45a-d675780a2d6b
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > each mark has a 24px hit area around its bar"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > each mark has a 24px hit area around its bar"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark:
+  id: bc07b9eb-e3f9-4e63-b7d5-b0b9463f4719
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > a neighbour's hit area does not cover a visible mark"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > a neighbour's hit area does not cover a visible mark"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8:
+  id: 0b4a6eaa-2a11-4e5f-bce4-c68d2d74d71d
+  path: testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Accessibility > marks, centre line and notch use system colours in forced-colors mode"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Accessibility > marks, centre line and notch use system colours in forced-colors mode"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand:
+  id: 7289b1f6-5b0b-4cf8-84eb-a54a45b216bb
+  path: testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Callbacks > expand button calls onExpand"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Callbacks > expand button calls onExpand"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand:
+  id: 3745d855-98e6-4dc7-8f20-22e7f07df211
+  path: testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Callbacks > the rail's empty area calls onExpand"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Callbacks > the rail's empty area calls onExpand"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand:
+  id: 2e3f8fdc-480c-4965-ae19-606440cb0d0b
+  path: testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Callbacks > a mark click calls onMarkClick, not onExpand"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Callbacks > a mark click calls onMarkClick, not onExpand"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane:
+  id: e269efbf-538c-4da5-bb96-6d21e712937e
+  path: testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Callbacks > without onMarkClick a mark click expands the pane"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Callbacks > without onMarkClick a mark click expands the pane"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19:
+  id: 5baeafa7-ab8d-490e-b6a6-cc0ca292a6e7
+  path: testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Callbacks > hover and leave call onMarkHover with the anchor, then onMarkLeave"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Callbacks > hover and leave call onMarkHover with the anchor, then onMarkLeave"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave:
+  id: 0519d899-f7dd-439d-9aa6-b28097268a91
+  path: testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Callbacks > focus and blur call onMarkHover and onMarkLeave"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Callbacks > focus and blur call onMarkHover and onMarkLeave"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot:
+  id: dc6136d7-1677-4c3d-a7be-2841a966b3ef
+  path: testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Visual Regression > light canvas snapshot"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Visual Regression > light canvas snapshot"
+  metadata:
+    created_at: 2026-11-25T23:32:47.369Z
+    updated_at: 2026-11-25T23:32:47.369Z
+    version: 1
+testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot:
+  id: d7fd9203-61e7-4f20-8149-9238bfbd4af1
+  path: testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "integration: PaneRail Component > Visual Regression > dark canvas snapshot"
+  attributes:
+    status: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/pane-rail.spec.ts
+        symbol: "integration: PaneRail Component > Visual Regression > dark canvas snapshot"
+  metadata:
+    created_at: 2026-11-25T23:32:47.370Z
+    updated_at: 2026-11-25T23:32:47.370Z
     version: 1

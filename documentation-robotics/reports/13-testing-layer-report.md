@@ -16,11 +16,11 @@ Test strategies, test cases, test data, and test coverage.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 1860  |
-| Intra-Layer Relationships | 1944  |
-| Inter-Layer Relationships | 670   |
+| Elements                  | 1900  |
+| Intra-Layer Relationships | 1984  |
+| Inter-Layer Relationships | 1388  |
 | Inbound Relationships     | 0     |
-| Outbound Relationships    | 670   |
+| Outbound Relationships    | 1388  |
 
 **Cross-Layer References**:
 
@@ -167,7 +167,9 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-breaking-polylines`                       | `testcasesketch`          | 1             |
 | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-obstacles`                                | `testcasesketch`          | 1             |
 | `testing.testcasesketch.channel-router-route-navigation-edges-routes-single-edge-with-specified-trace-spacing`                        | `testcasesketch`          | 1             |
-| `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `testcasesketch`          | 1             |
+| `testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1`                                                        | `testcasesketch`          | 1             |
+| `testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1`                                                          | `testcasesketch`          | 1             |
+| `testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0`                                                     | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-breaks-degree-and-label-ties-by-id-not-input-order`                                             | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-is-a-permutation-of-every-node-grouped-by-layer`                                                | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-is-deterministic-same-result-on-every-run-and-for-any-input-order`                              | `testcasesketch`          | 1             |
@@ -547,7 +549,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.integration-chart-components-donut-paths-have-valid-d-attributes-no-na-n`                                     | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-chart-components-donut-single-full-circle-slice-renders-visible-path`                             | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-chart-components-donut-standard-shows-center-value-text`                                          | `testcasesketch`          | 1             |
-| `testing.testcasesketch.integration-chart-components-heatmap-cell-fills-are-non-empty-hex-colors`                                     | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-chart-components-heatmap-feature-renders-with-axis-labels`                                        | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-chart-components-heatmap-show-values-does-not-render-na-n-values`                                 | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-chart-components-heatmap-show-values-renders-numeric-values-in-cells`                             | `testcasesketch`          | 1             |
@@ -1227,6 +1229,29 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.integration-page-pattern-components-visual-regression-light-canvas-page-header-component-visual-17f77c5c`     | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-page-pattern-components-visual-regression-light-canvas-quick-access-grid-component-9cb997a6`      | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-page-pattern-components-visual-regression-light-canvas-quick-access-tile-components-a0ec9db4`     | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark`            | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks`               | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f`  | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar`                   | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5`      | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3`     | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar`         | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8`     | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978`  | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand`                     | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand`                                      | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave`                | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19`   | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand`                               | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane`                | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position`                           | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container`                            | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks`                                                  | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3`      | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned`               | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label`                         | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot`                                       | `testcasesketch`          | 1             |
+| `testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot`                                      | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-primitive-components-badge-component-status-dots`                                                 | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-primitive-components-button-component-all-variants`                                               | `testcasesketch`          | 1             |
 | `testing.testcasesketch.integration-primitive-components-button-component-click-interaction`                                          | `testcasesketch`          | 1             |
@@ -1540,9 +1565,20 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.matrix-window-clamps-to-the-matrix`                                                                           | `testcasesketch`          | 1             |
 | `testing.testcasesketch.matrix-window-covers-the-rows-and-columns-in-view-plus-overscan-clear-of-the-sticky-labels`                   | `testcasesketch`          | 1             |
 | `testing.testcasesketch.matrix-window-with-no-overscan-ends-exactly-at-the-last-row-and-column-in-view`                               | `testcasesketch`          | 1             |
+| `testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection`                                            | `testcasesketch`          | 1             |
+| `testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks`                                                          | `testcasesketch`          | 1             |
+| `testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection`                                    | `testcasesketch`          | 1             |
 | `testing.testcasesketch.next-matrix-window-does-not-move-at-the-ends-of-the-matrix`                                                   | `testcasesketch`          | 1             |
 | `testing.testcasesketch.next-matrix-window-keeps-the-window-while-the-view-stays-more-than-half-the-overscan-inside-it`               | `testcasesketch`          | 1             |
+| `testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails`                                                 | `testcasesketch`          | 1             |
+| `testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end`                                                | `testcasesketch`          | 1             |
+| `testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends`                           | `testcasesketch`          | 1             |
 | `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`                                  | `testcasesketch`          | 1             |
+| `testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged`                                        | `testcasesketch`          | 1             |
+| `testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position`                                       | `testcasesketch`          | 1             |
+| `testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label`                                                                   | `testcasesketch`          | 1             |
+| `testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks`                                                               | `testcasesketch`          | 1             |
+| `testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom`                                                              | `testcasesketch`          | 1             |
 | `testing.testcasesketch.organic-layout-anchors-a-component-onto-two-pins-and-keeps-the-other-components-clear-of-it`                  | `testcasesketch`          | 1             |
 | `testing.testcasesketch.organic-layout-edge-hints-floors-adjacent-ideal-distances-at-an-edges-preferred-length`                       | `testcasesketch`          | 1             |
 | `testing.testcasesketch.organic-layout-edge-hints-keeps-a-labelled-hubs-labels-clear-of-both-endpoints-and-of-each-other`             | `testcasesketch`          | 1             |
@@ -1601,6 +1637,10 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.orthogonal-layout-shares-one-trunk-per-parent-with-bus-tree-edges-and-reports-the-groups`                     | `testcasesketch`          | 1             |
 | `testing.testcasesketch.orthogonal-layout-sizes-cells-from-the-largest-node-and-honors-mixed-node-sizes`                              | `testcasesketch`          | 1             |
 | `testing.testcasesketch.otlp-and-x-ray-normalize-to-the-same-shape-both-yield-spans-with-the-required-model-fields`                   | `testcasesketch`          | 1             |
+| `testing.testcasesketch.pane-rail-mark-keys-gives-duplicate-ids-distinct-keys-in-position-order`                                      | `testcasesketch`          | 1             |
+| `testing.testcasesketch.pane-rail-mark-keys-keys-marks-with-unique-ids-by-their-id`                                                   | `testcasesketch`          | 1             |
+| `testing.testcasesketch.pane-rail-mark-keys-returns-no-keys-for-no-marks`                                                             | `testcasesketch`          | 1             |
+| `testing.testcasesketch.pane-rail-mark-keys-stays-unique-when-an-id-looks-like-a-generated-key`                                       | `testcasesketch`          | 1             |
 | `testing.testcasesketch.place-edge-labels-drops-a-pill-with-no-clear-position`                                                        | `testcasesketch`          | 1             |
 | `testing.testcasesketch.place-edge-labels-jointly-bounds-the-repair-work-on-a-hub-with-hundreds-of-labelled-spokes`                   | `testcasesketch`          | 1             |
 | `testing.testcasesketch.place-edge-labels-jointly-builds-requests-with-a-line-only-for-polyline-routes-so-bezier-labels-d58fffc3`     | `testcasesketch`          | 1             |
@@ -1809,7 +1849,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcoveragetarget.branch-map-view`                                                                                          | `testcoveragetarget`      | 10            |
 | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `testcoveragetarget`      | 18            |
 | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `testcoveragetarget`      | 64            |
-| `testing.testcoveragetarget.chart-components`                                                                                         | `testcoveragetarget`      | 83            |
+| `testing.testcoveragetarget.chart-components`                                                                                         | `testcoveragetarget`      | 82            |
 | `testing.testcoveragetarget.chat-components`                                                                                          | `testcoveragetarget`      | 41            |
 | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                                                                              | `testcoveragetarget`      | 6             |
 | `testing.testcoveragetarget.data-display-components`                                                                                  | `testcoveragetarget`      | 28            |
@@ -1873,8 +1913,8 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `testcoveragetarget`      | 48            |
 | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `testcoveragetarget`      | 6             |
 | `testing.testcoveragetarget.pan-inertia`                                                                                              | `testcoveragetarget`      | 13            |
-| `testing.testcoveragetarget.pane-rail`                                                                                                | `testcoveragetarget`      | 1             |
-| `testing.testcoveragetarget.pane-rail-marks`                                                                                          | `testcoveragetarget`      | 1             |
+| `testing.testcoveragetarget.pane-rail`                                                                                                | `testcoveragetarget`      | 24            |
+| `testing.testcoveragetarget.pane-rail-marks`                                                                                          | `testcoveragetarget`      | 19            |
 | `testing.testcoveragetarget.primitive-components`                                                                                     | `testcoveragetarget`      | 32            |
 | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `testcoveragetarget`      | 19            |
 | `testing.testcoveragetarget.radial-tree-layout-browser`                                                                               | `testcoveragetarget`      | 18            |
@@ -1926,16 +1966,63 @@ flowchart TB
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------- | ------------ | ------------ | -------- |
 | `testing.environmentfactor.references.technology.node`               | `testing.environmentfactor.ci-chromium-rendering-environment`                                                                         | `technology.node.git-hub-actions-ubuntu-latest-runner`                               | `technology`  | `references` | many-to-many | medium   |
 | `testing.environmentfactor.references.technology.systemsoftware`     | `testing.environmentfactor.ci-chromium-rendering-environment`                                                                         | `technology.systemsoftware.web-browser`                                              | `technology`  | `references` | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-aggregatelayer-a-cross-layer-cell-toggles-the-layer-pair-filter-a-diagonal-cell-or-56bd1c22` | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-aggregatelayer-draws-one-heat-cell-per-non-empty-layer-pair`                                 | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-aggregatelayer-on-layer-cell-select-replaces-the-default-filter-and-focus-toggles`           | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-aggregatelayer-symmetric-adds-both-directions-into-the-upper-triangle`                       | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-aggregatelayer-visual-dark-canvas-heat-map-with-an-active-pair`                              | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-aggregatelayer-visual-light-canvas-symmetric-heat-map-with-a-focused-layer`                  | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-cell-click-selects-the-link-source`                                                          | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-draws-one-cell-per-link-and-one-header-button-per-node`                                      | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-grid-semantics-symmetric-cells-holding-both-directions-say-so`                               | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-grid-semantics-the-cells-form-a-grid-with-row-and-column-headers-the-drawing-98466b8c`       | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-header-click-and-keyboard-select-a-node-clicking-again-clears-it`                            | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-keyboard-cells-focus-stays-in-the-grid-the-drawn-cell-shows-the-ring-and-the-74b0fc0c`       | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-keyboard-cells-one-tab-stop-for-the-cells-arrows-move-enter-selects`                         | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-on-cell-select-gets-the-drawn-link-and-every-link-in-the-f20ec09e`  | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-ordercluster-puts-each-community-on-adjacent-rows-the-1e77a9db`     | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-on-cell-select-and-order-visual-light-canvas-cluster-order`                                  | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-selection-follows-cross-layer-links-per-the-follow-setting`                                  | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-symmetric-clicking-a-cell-holding-both-directions-selects-its-drawn-link-source`             | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-symmetric-merges-both-directions-into-one-cell-above-the-diagonal`                           | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-symmetric-on-link-select-receives-the-drawn-link-and-both-links-of-a-merged-cell`            | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-symmetric-visual-light-canvas-symmetric-with-a-selection`                                    | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-a-cell-in-the-last-visible-column-renders`                                    | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-a-focused-cell-keeps-focus-its-ring-and-its-indices-while-the-55a10509`       | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-a-selected-link-id-set-from-outside-scrolls-its-cell-into-view`               | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-in-a-fixed-height-explorer-the-matrix-is-the-only-scroll-area-and-a09aa20b`   | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-keyboard-focus-survives-scrolling-arrows-move-past-the-window-row-4a5df257`   | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-labels-stay-aligned-with-the-cells-while-scrolling-both-axes`                 | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-past-the-threshold-only-the-window-renders-and-the-dom-stays-bounded`         | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-the-grid-states-the-full-size-the-rendered-window-carries-its-row-238d3463`   | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-visual-dark-canvas-virtualized-and-scrolled`                                  | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-virtualization-visual-light-canvas-virtualized-and-scrolled`                                 | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-visual-dark-canvas-with-a-followed-selection`                                                | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.adjacency-matrix-visual-light-canvas-with-every-predicate-code`                                               | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.aspect-ratio-elliptical-warp-a-na-n-aspect-ratio-e-g-from-an-unmeasured-0-0-container-is-treated-as-ef780c32` | `application.applicationfunction.galaxy-aspect-ratio-resolution`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.aspect-ratio-elliptical-warp-a-single-galaxy-is-never-squashed-to-fit-a-wide-aspect-ratio-its-ab5d27dd`       | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.aspect-ratio-elliptical-warp-a-wide-aspect-ratio-spreads-a-forests-galaxies-into-a-measurably-wider-839831ad` | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.aspect-ratio-elliptical-warp-formula-the-warp-scales-the-root-ring-offset-by-resolve-aspect-ratio-726fb4bc`   | `application.applicationfunction.galaxy-aspect-ratio-resolution`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap`                              | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap`                              | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.aspect-ratio-elliptical-warp-omitted-and-1-produce-identical-positions-backward-compatible-with-the-c84e0a36` | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.aspect-ratio-elliptical-warp-pinned-coordinates-are-unaffected-by-aspect-ratio`                               | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.aspect-ratio-elliptical-warp-the-ratio-is-clamped-to-1-8-8-extreme-values-beyond-the-clamp-are-e11f0212`      | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-arrowheads-width-0-batch-by-colour-and-opacity-only`                                              | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-keys-a-style-the-same-from-frame-to-frame-so-its-path-is-reused`                                  | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-paints-lower-z-first-then-farther-batches-first-and-is-stable`                                    | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-puts-links-of-one-style-into-one-path-segments-concatenated-in-order`                             | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-returns-nothing-for-no-links`                                                                     | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-splits-by-colour-opacity-dash-z-and-width-step`                                                   | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.batch-links-widths-within-one-step-share-a-path-drawn-at-the-step`                                            | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears`                                        | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                 | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears`                                        | `ux.librarycomponent.branch-map`                                                     | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more`                       | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                 | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more`                       | `application.applicationfunction.branch-map-line-bundling`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more`                       | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain`                                                 | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain`                                                 | `application.applicationfunction.branch-map-trunk-selection`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot-all-seven-projects-75b1ed12`     | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap` | `motivation`  | `satisfies`  | many-to-many | high     |
@@ -1943,8 +2030,10 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `application.applicationfunction.branch-map-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement`                                                           | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`  | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement`                                                           | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement`                                                           | `application.applicationfunction.branch-map-routing`                                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene`                                                        | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`            | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene`                                                        | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene`                                                        | `application.applicationservice.branch-map-layout`                                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.branch-map-on-house-data-a-bundle-expanded-through-the-expanded-prop-gets-a-collapse-that-re-44d61a7d`        | `ux.librarycomponent.branch-map`                                                     | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record`           | `ux.librarycomponent.branch-map`                                                     | `ux`          | `tests`      | many-to-many | medium   |
@@ -1956,6 +2045,18 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                 | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `ux.librarycomponent.branch-map`                                                     | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now`                                                       | `ux.librarycomponent.branch-map`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.bundled-intra-links-between-neighbouring-rows-leaves-the-upper-node-from-its-bottom-edge-into-the-2682b803`   | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.bundled-intra-links-gives-a-row-one-trunk-above-it-neighbouring-rows-share-the-lower-trunk-rows-d4889bb9`     | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.bundled-intra-links-horizontal-wrapped-rows-no-bundled-path-crosses-a-node-including-links-between-a9d45313`  | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.bundled-intra-links-horizontal-wrapped-rows-no-bundled-path-crosses-a-node-including-links-between-a9d45313`  | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.bundled-intra-links-runs-up-to-the-trunk-along-it-and-down-into-the-target-arrow-pointing-in`                 | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.bundled-intra-links-vertical-leaves-the-left-edge-to-a-trunk-left-of-the-column`                              | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.bundled-intra-links-vertical-several-columns-per-lane-no-bundled-path-crosses-a-node`                         | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.bundled-intra-links-vertical-several-columns-per-lane-no-bundled-path-crosses-a-node`                         | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.camera-helpers-clamp-camera-clamps-pitch-and-zoom-only`                                                       | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.camera-helpers-lerp-camera-interpolates-every-field-yaw-via-the-shortest-arc`                                 | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.camera-helpers-presets-are-within-range-and-camera-from-preset-centers-the-target`                            | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.camera-helpers-wrap-angle-and-nearest-yaw-turn-the-short-way`                                                 | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.channel-router-batch-cost-400-boxes-and-400-routes-route-in-well-under-1-5-s-of-cpu-time`                     | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.channel-router-edge-cases-large-rectangles`                                                                   | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.channel-router-edge-cases-small-rectangles`                                                                   | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
@@ -1989,27 +2090,98 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-breaking-polylines`                       | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-obstacles`                                | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.channel-router-route-navigation-edges-routes-single-edge-with-specified-trace-spacing`                        | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
-| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.heatmap`                                                        | `ux`          | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.line-chart`                                                     | `ux`          | `tests`      | many-to-many | medium   |
-| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.status-timeline`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1`                                                        | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1`                                                          | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0`                                                     | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.cluster-order-breaks-degree-and-label-ties-by-id-not-input-order`                                             | `application.applicationfunction.adjacency-matrix-ordering`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.cluster-order-is-a-permutation-of-every-node-grouped-by-layer`                                                | `application.applicationfunction.adjacency-matrix-ordering`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.cluster-order-is-deterministic-same-result-on-every-run-and-for-any-input-order`                              | `application.applicationfunction.adjacency-matrix-ordering`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.cluster-order-keeps-each-community-together-within-its-layer-layers-in-rank-order`                            | `application.applicationfunction.adjacency-matrix-ordering`                          | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.clustered-view-bubble-packing-integration`                                                                    | `application.applicationfunction.clustered-force-layout-algorithm`                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-anchors-a-top-panel-that-is-shorter-than-its-content-to-the-available-de6cb29b`     | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-clamps-inside-the-viewport-when-neither-alignment-fits`                             | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-clamps-to-the-margin-when-the-trigger-is-scrolled-past-the-left-edge`               | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-flips-bottom-to-top-when-there-is-no-room-below-and-more-room-above`                | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-flips-end-to-start-when-the-panel-would-cross-the-left-edge`                        | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-flips-start-to-end-when-the-panel-would-cross-the-right-edge`                       | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-flips-top-to-bottom-when-there-is-no-room-above-and-more-room-below`                | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-honours-a-custom-offset-and-margin`                                                 | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-keeps-the-requested-side-when-neither-side-fits-but-it-has-more-room`               | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-never-reports-negative-available-height`                                            | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-places-bottom-end-with-right-edges-aligned`                                         | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-places-bottom-start-below-the-trigger-left-edges-aligned`                           | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-dropdown-position-places-top-start-above-the-trigger`                                                 | `application.applicationfunction.dropdown-placement`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-clamps-along-the-cross-axis-near-a-side-edge`                                        | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-falls-back-to-a-perpendicular-side-when-neither-vertical-side-has-room`              | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-flips-above-from-a-bottom-preference-when-there-is-no-room-below`                    | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-flips-below-when-there-is-no-room-above`                                             | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-places-the-card-above-the-anchor-centred-with-the-gap`                               | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-respects-custom-offset-and-margin`                                                   | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-takes-the-left-side-when-the-right-has-no-room-either`                               | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-treats-a-zero-size-anchor-as-a-point`                                                | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.compute-tooltip-position-uses-the-least-overflowing-side-and-stays-inside-bounds-when-nothing-fits`           | `application.applicationfunction.tooltip-placement`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-farther-points-have-larger-depth-and-smaller-scale-perspective-divide`                       | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-maps-the-target-to-the-screen-origin-plus-offset-at-scale-zoom`                              | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-side-on-world-up-is-screen-up-and-x-maps-to-x`                                               | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-stays-finite-for-points-behind-the-camera`                                                   | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-target-y-moves-the-look-at-height`                                                           | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-top-down-depth-ignores-in-plane-position-and-higher-planes-are-nearer`                       | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-projector-yaw-rotates-about-the-vertical-axis`                                                         | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-tween-channels-a-later-move-replaces-only-the-channels-it-names-the-others-keep-running`               | `application.applicationfunction.tweened-animation`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-tween-channels-a-replaced-channel-continues-from-the-value-it-was-given-without-a-jump`                | `application.applicationfunction.tweened-animation`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-tween-channels-cancel-stops-the-named-channels-where-they-are-and-drops-their-on-done`                 | `application.applicationfunction.tweened-animation`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-tween-channels-jumps-under-reduced-motion-in-one-synchronous-frame`                                    | `application.applicationfunction.tweened-animation`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.create-tween-channels-runs-a-move-to-its-target-and-reports-idle-on-the-last-frame`                           | `application.applicationfunction.tweened-animation`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.curve-end-boxes-covers-the-first-px-of-a-long-route-not-one-t-step-of-it`                                     | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.date-utils-format-timestamp-takes-a-fixed-now`                                                                | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.date-utils-is-today-takes-a-fixed-today-a-date-date-utils-test-ts-covers-timezones`                           | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.find-clear-label-position-clears-an-obstacle-sitting-on-the-midpoint-of-a-cubic-anchored-edge`                | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.find-clear-label-position-falls-back-to-the-exact-midpoint-when-every-candidate-collides`                     | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.find-clear-label-position-falls-back-to-the-exact-midpoint-when-every-candidate-collides`                     | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.find-clear-label-position-handles-orthogonal-polyline-paths-5-waypoints-for-navigation-edges`                 | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.find-clear-label-position-keeps-the-default-midpoint-when-nothing-is-in-the-way`                              | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.find-clear-label-position-keeps-the-default-midpoint-when-nothing-is-in-the-way`                              | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.find-clear-label-position-never-needs-to-consider-a-fourth-candidate-when-the-midpoint-is-already-532dd688`   | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.find-clear-label-position-never-needs-to-consider-a-fourth-candidate-when-the-midpoint-is-already-532dd688`   | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.find-clear-label-position-steps-away-from-the-midpoint-when-a-third-node-sits-on-top-of-it`                   | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.find-clear-label-position-steps-away-from-the-midpoint-when-a-third-node-sits-on-top-of-it`                   | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.force-layout-keeps-default-sized-chip-nodes-non-overlapping-in-a-simple-chain`                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.format-timestamp-with-a-fixed-now-activity-timeline-server-html-is-the-same-in-every-timezone`                | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.format-timestamp-with-a-fixed-now-prints-dates-past-a-week-as-en-us-in-utc-whatever-the-timezone`             | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.format-timestamp-with-a-fixed-now-relative-labels-depend-only-on-the-two-instants`                            | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.format-timestamp-with-a-fixed-now-runs-under-the-zones-it-claims-to-the-tz-switch-takes-effect`               | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-otlp-accepts-span-kind-status-code-name-strings`                                                         | `application.applicationfunction.otlp-trace-adaptation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-otlp-classifies-a-stringified-status-code-2-as-error`                                                    | `application.applicationfunction.otlp-trace-adaptation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-otlp-maps-a-numeric-string-span-kind-3-to-client`                                                        | `application.applicationfunction.otlp-trace-adaptation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-otlp-normalizes-hex-and-base64-ids-to-the-same-lowercase-hex`                                            | `application.applicationfunction.otlp-trace-adaptation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-otlp-tolerates-a-malformed-unix-nano-without-throwing-or-corrupting-trace-start`                         | `application.applicationfunction.otlp-trace-adaptation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-xray-a-subsegment-missing-start-time-does-not-poison-the-trace-with-na-n`                                | `application.applicationfunction.aws-x-ray-trace-adaptation`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-xray-coerces-numeric-id-parent-id-and-tolerates-a-missing-id`                                            | `application.applicationfunction.aws-x-ray-trace-adaptation`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-xray-handles-in-progress-spans-no-end-time-by-clamping-to-trace-end`                                     | `application.applicationfunction.aws-x-ray-trace-adaptation`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.from-xray-surfaces-a-string-cause-bare-exception-id-as-an-exception`                                          | `application.applicationfunction.aws-x-ray-trace-adaptation`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-body-radii-gives-all-equal-weights-the-middle-area-instead-of-dividing-by-zero`                        | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-body-radii-keeps-small-weights-distinguishable-across-a-wide-range`                                    | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-body-radii-maps-the-square-root-of-weight-to-area-between-the-min-and-max-radius`                      | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-effective-weights-sums-children-for-an-unweighted-parent-and-a-given-weight-wins-over-the-sum`         | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-effective-weights-treats-na-n-negative-and-missing-weights-as-missing-unweighted-leaf-0-once-12871752` | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-effective-weights-uses-subtree-leaf-counts-when-no-node-has-a-weight`                                  | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-layout-a-root-with-exactly-one-child-stays-in-that-childs-group-delegating-headship-to-a-348660e4`     | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-layout-a-root-with-more-than-one-child-a-genuinely-delegating-root-still-travels-with-its-8a9b2d33`    | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-a-single-root-tree-has-nothing-to-separate-separate-groups-is-a-no-op`                          | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles`                               | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles`                               | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-galaxy-layout-the-batch-entry-point-respects-a-pinned-node-even-when-separate-groups-d80e2ae5`  | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth`                                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth`                                        | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test`                                                                    | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-ordering-and-shape-does-not-squash-a-single-root-tree-to-fit-a-wide-aspect-ratio`               | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-ordering-and-shape-places-the-heaviest-satellite-closest-to-the-parents-outward-e22c7c0e`       | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-pinning-a-non-leaf-node-repositions-its-children-relative-to-the-pin-not-the-original-7a0b3c87` | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-positions-every-node`                                                                           | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-respects-pinned-nodes-their-position-never-changes`                                             | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-layout-the-layout-is-deterministic`                                                                    | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.galaxy-live-drag-287-a-flare-drag-frame-resolves-overlaps-with-grid-local-work-not-all-pairs-every-d4f70636`  | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-live-drag-287-a-flare-drag-frame-resolves-overlaps-with-grid-local-work-not-all-pairs-every-d4f70636`  | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-live-drag-287-caps-a-drag-frame-on-a-large-graph-and-finishes-the-separation-over-the-94fcbcce`        | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
@@ -2017,6 +2189,7 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.galaxy-live-drag-287-settles-with-no-overlapping-bodies-the-dropped-node-exactly-on-its-pin-its-e250ab4d`     | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-live-drag-287-settles-with-no-overlapping-bodies-the-dropped-node-exactly-on-its-pin-its-e250ab4d`     | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-live-drag-287-the-settled-live-target-is-exactly-galaxy-layout-for-the-same-pins-however-the-ca1a9823` | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.galaxy-radius-of-prefers-an-explicit-radius-over-the-box-half-diagonal`                                       | `application.applicationservice.galaxy-layout`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap`                         | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap`                         | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-simulation-step-one-step-nudges-toward-home-without-fully-arriving-unless-already-there`               | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
@@ -2024,6 +2197,9 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-simulation-step-running-many-ticks-with-no-user-interaction-does-not-erode-group-separation-ffdb4a3c`  | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-simulation-step-running-many-ticks-with-no-user-interaction-does-not-erode-group-separation-ffdb4a3c`  | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.galaxy-simulation-step-separate-groups-false-opts-the-per-tick-home-out-of-group-separation-too`              | `application.applicationfunction.galaxy-live-simulation-step`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.glide-end-320-does-not-start-a-glide-for-a-release-that-would-travel-under-half-a-pixel`                      | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.glide-end-320-ends-a-2000px-s-flick-in-about-2-3s-skipping-under-a-pixel-of-travel`                           | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.glide-end-320-stops-once-under-half-a-pixel-of-travel-is-left`                                                | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels`                       | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids`                         | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label`                             | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `tests`      | many-to-many | medium   |
@@ -2090,9 +2266,73 @@ flowchart TB
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units`               | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline`                                    | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32`   | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-marker-size-for-stroke-width-caps-scaled-size-at-the-sane-maximum`                 | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-marker-size-for-stroke-width-scales-proportionally-with-stroke-width`              | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-stroke-dash-to-dasharray-produces-an-asymmetric-pattern-from-a-dash-gap-fb455362`  | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-stroke-dash-to-dasharray-produces-an-equal-dash-gap-pattern-from-a-0a8f74f8`       | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-clamps-out-of-range-weights`                                | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-falls-back-to-the-1px-minimum-instead-of-na-n-for-b8e9cced` | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-keeps-low-end-weight-differences-visually-2a16af01`         | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-maps-weight-0-to-the-1px-minimum`                           | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-maps-weight-100-to-the-8px-maximum`                         | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-maps-weight-25-via-the-sqrt-curve`                          | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-maps-weight-50-via-the-sqrt-curve`                          | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-edge-style-utilities-weight-to-stroke-width-maps-weight-75-via-the-sqrt-curve`                          | `application.applicationfunction.edge-weight-and-dash-styling`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-calculates-angle-for-line-going-right-and-down`                                   | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-calculates-midpoint-for-straight-horizontal-line`                                 | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-calculates-midpoint-for-straight-vertical-line`                                   | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-creates-a-valid-path-string`                                                      | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-curvature0-produces-a-straight-line-path-with-control-point-at-the-44e62599`      | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-handles-negative-coordinates`                                                     | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-handles-zero-length-path`                                                         | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-path-d-attribute-has-correct-format`                                              | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-produces-symmetric-paths-for-symmetric-inputs`                                    | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-respects-curvature-parameter`                                                     | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-bezier-path-uses-default-curvature-when-not-provided`                                         | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-utilities-compute-edge-path-auto-auto-with-no-curvature-override-matches-todays-quadratic-a49774f4`     | `application.applicationfunction.bezier-edge-path-computation`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-compute-edge-path-auto-auto-with-no-curvature-override-matches-todays-quadratic-a49774f4`     | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-utilities-compute-edge-path-both-anchors-fixed-pin-endpoints-regardless-of-vertical-offset`             | `application.applicationfunction.bezier-edge-path-computation`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.graph-utilities-compute-edge-path-either-anchor-being-fixed-selects-the-cubic-bezier-renderer`                | `application.applicationfunction.bezier-edge-path-computation`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.graph-utilities-integration-rect-edge-point-bezier-path-creates-valid-paths-between-two-rectangles`           | `application.applicationservice.edge-geometry`                                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-defaults-to-one-axis-per-layer-in-layer-order`                                               | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-groups-by-any-value-sorted-by-code-point-and-leaves-null-or-undefined-unassigned`            | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-lays-the-groups-out-like-layers-with-stable-slots`                                           | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-lays-the-groups-out-like-layers-with-stable-slots`                                           | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-orders-axes-by-a-list-the-rest-follow-or-a-comparator`                                       | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-ranks-within-the-axis-groups`                                                                | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-ranks-within-the-axis-groups`                                                                | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-axis-groups-tells-structurally-equal-groupings-apart-from-changed-ones`                                  | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-clamps-the-split-so-copies-of-neighbouring-axes-do-not-meet`                                    | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-divides-axis-angles-evenly-from-the-start-angle`                                                | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-draws-unsplit-intra-layer-links-as-arcs-whose-side-encodes-direction`                           | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-hive-point-measures-clockwise-from-x`                                                           | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-keeps-a-loop-between-near-neighbours-wide-enough-for-its-arrowhead`                             | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-keeps-angles-stable-when-a-layer-is-hidden`                                                     | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-keeps-angles-stable-when-the-first-layer-or-all-but-one-is-hidden`                              | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-labels-the-copy-whose-text-reads-clear-of-the-gap`                                              | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-places-nodes-outward-by-rank`                                                                   | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-returns-null-for-a-layer-without-an-axis`                                                       | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-runs-cross-layer-links-between-the-facing-copies`                                               | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-runs-intra-layer-links-between-the-two-copies-of-the-axis`                                      | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.hive-geometry-sends-links-between-opposite-axes-to-either-side-by-direction`                                  | `application.applicationfunction.hive-plot-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown`                                        | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id`                                       | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548` | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put`                          | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first`                                                              | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear`                                                      | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node`                                    | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-follow-changes-the-reach`                                                                           | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit`                    | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects`                              | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-link-click-selects-its-source`                                                                      | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning`                                             | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis`                                                                     | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label`                                         | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection`                                             | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection`                                                                   | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1`                                                          | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer`                                                           | `ux.librarycomponent.hive-plot`                                                      | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-derives-blocked-as-0c668edc`   | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d` | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-depends-on-97d4b30d`      | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
@@ -2110,6 +2350,72 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-draws-the-cross-project-waits-and-the-interfaces-cc86bef3`   | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-keeps-only-open-work-from-now-on`                            | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-maps-every-milestone-gate-and-workstream-over-the-ed1f4b3b`  | `application.applicationfunction.house-branch-map-adapter`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-displays-status-indicator-when-provided`                                  | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-falls-back-to-initials-when-image-fails`                                  | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-image-is-displayed-when-src-is-provided`                                  | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-produces-deterministic-colors-for-same-name`                              | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-produces-different-colors-for-different-names`                            | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-renders-with-accessibility-attributes`                                    | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-renders-with-initials-for-various-names`                                  | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-respects-color-override-prop`                                             | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-sets-aria-hidden-for-decorative-mode`                                     | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-supports-all-sizes`                                                       | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-avatar-component-avatar-supports-different-shapes-circle-and-rounded`                             | `ux.librarycomponent.avatar`                                                         | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-accessibility-attributes-in-month-view`                                       | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-agenda-view-dark-canvas-snapshot`                                             | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-agenda-view-light-canvas-snapshot`                                            | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-date-selection-changes-focused-date`                                          | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-day-view-dark-canvas-snapshot`                                                | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-day-view-light-canvas-snapshot`                                               | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-event-selection-in-month-view`                                                | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-keyboard-navigation-in-month-view`                                            | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-keyboard-navigation-pgup-pgdn-in-month-view`                                  | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-mini-calendar-selection`                                                      | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-month-view-dark-canvas-snapshot`                                              | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-month-view-light-canvas-snapshot`                                             | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-navigation-buttons-have-accessible-labels`                                    | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-today-navigation-button`                                                      | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-week-view-dark-canvas-snapshot`                                               | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-calendar-components-week-view-light-canvas-snapshot`                                              | `ux.librarycomponent.calendar`                                                       | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `ux.librarycomponent.heatmap`                                                        | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`                            | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`                            | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`                            | `ux.librarycomponent.line-chart`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`                              | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`                              | `ux.librarycomponent.status-timeline`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`                        | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`                        | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`                        | `ux.librarycomponent.status-timeline`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-diff-viewer-components-dark-canvas-full-page-snapshot-covers-empty-small-overflow-63b1ace2`       | `ux.librarycomponent.diff-viewer`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-diff-viewer-components-hash-set-diff-collapse-expand-interaction`                                 | `ux.librarycomponent.diff-viewer`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-diff-viewer-components-light-canvas-full-page-snapshot-covers-empty-small-overflow-72616cee`      | `ux.librarycomponent.diff-viewer`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-diff-viewer-components-side-by-side-diff-gutter-labels-are-visually-hidden`                       | `ux.librarycomponent.diff-viewer`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-display-updates-selected-count-in-trigger-536ed848`       | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-multiple-selections-allowed`                              | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-checkbox-mode-unselecting-works-correctly`                              | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-closes-panel-when-clicking-outside`                                     | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-dark-canvas-visual-snapshot-of-checkbox-mode-dark`                      | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-dark-canvas-visual-snapshot-of-radio-mode-dark`                         | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-displays-checkbox-items`                                                | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-displays-section-with-title`                                            | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-arrow-down-navigates-to-next-item-in-checkbox-mode`            | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-arrow-down-navigates-to-next-item-in-radio-mode`               | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-enter-selects-radio-option-and-closes-panel`                   | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-enter-toggles-checkbox-selection`                              | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-escape-closes-panel-and-returns-focus-to-trigger`              | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-space-selects-radio-option-and-closes-panel`                   | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-space-toggles-checkbox-selection`                              | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-tab-navigates-forward-through-items-in-checkbox-mode`          | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-keyboard-tab-navigates-forward-through-items-in-radio-mode`             | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-opens-panel-when-trigger-is-clicked`                                    | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-radio-mode-only-one-selection-allowed`                                  | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-radio-mode-selection-changes-update-trigger-summary`                    | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-renders-trigger-button`                                                 | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-visual-snapshot-of-checkbox-mode`                                       | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-filter-dropdown-component-visual-snapshot-of-radio-mode`                                          | `ux.librarycomponent.filter-dropdown`                                                | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-cards-mode-renders-without-overlaps-after-collapse`                 | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-maintains-zero-overlap-guarantee-for-galaxy-f1dd0343`      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expand-after-collapse-maintains-zero-overlap-guarantee`             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
@@ -2174,44 +2480,405 @@ flowchart TB
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-popover-with-interactive-505b383d` | `product.feature.node-and-edge-tooltips-and-popovers`                                | `product`     | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-graph-canvas-viewport-history-center-on-select-reports-a-center-on-select-navigation-a4796f46`    | `application.applicationfunction.programmatic-viewport-move-reporting`               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-graph-canvas-viewport-history-set-viewport-moves-the-view-silent-suppresses-the-08cbf9f6`         | `application.applicationfunction.programmatic-viewport-move-reporting`               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-dark-canvas-inspector-panel-full-page-dark-snapshot`            | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-accessibility-semantic-structure`               | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-head-displays-all-required-elements`            | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-renders-with-head-content`                      | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-scrolls-independently`                          | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-section-renders-with-title-and-count`           | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-sections-have-borders`                          | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-visual-regression-full-page`                    | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-with-section-actions-renders-buttons`           | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-inspector-panel-with-version-pill-renders-version`              | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-displays-key-value-pairs`                                | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-keys-are-styled-correctly`                               | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-inspector-panel-kvgrid-components-kvgrid-with-long-values-breaks-properly`                        | `ux.librarycomponent.inspector-panel`                                                | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-announce-card-moves`                                  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-have-live-region-for-announcements`                   | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-accessibility-should-have-proper-aria-attributes-on-cards`                 | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-card-selection-should-clear-selection-when-clicking-clear-button`          | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-card-selection-should-focus-card-with-tab-key-and-space`                   | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-keyboard-navigation-should-support-escape-to-cancel-drag`                  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-keyboard-navigation-should-support-tab-navigation-between-cards`           | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-pointer-reordering-within-a-column-dragging-down-drops-the-card-c67b132d`  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-pointer-reordering-within-a-column-dragging-up-drops-the-card-in-053366e2` | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-blocked-banner-on-blocked-cd6bb9c1`    | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-done-styling-strikethrough-a6e6d9d1`   | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-display-status-color-dots-in-column-a95562bf`  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-all-columns-with-headers-cb9c2a35`      | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-cards-with-context-title-and-ada09ef5`  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-render-independent-scrollable-columns`         | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-show-empty-column-placeholder`                 | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-rendering-and-layout-should-show-wip-limit-warning-when-cards-dd8d7b68`    | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-blocked-card-in-dark-b968d35f`  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-default-state-in-dark-885ed38e` | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-done-cards-in-dark-248e8486`    | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-empty-column-state-in-1c7bce46` | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-dark-canvas-should-match-selected-card-in-dark-312a44b8` | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-blocked-card-state`            | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-default-state-b15c344d`        | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-done-cards-state`              | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-empty-column-state`            | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-state-with-selected-0fd08b4f`  | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-kanban-board-component-visual-regression-light-canvas-should-match-wip-limit-warning-d16dcc06`    | `ux.librarycomponent.kanban-board`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-be-focusable-for-interactive-nodes-via-19531e3f`      | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-have-aria-currentstep-on-head-node-in-multi-97cef293` | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-have-aria-currentstep-on-head-node`                   | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-not-be-focusable-for-non-interactive-nodes`           | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-accessibility-should-not-have-aria-current-on-non-head-nodes`              | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-keeps-the-amber-head-and-canvas-surface-nodes-f202cd80`  | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-should-apply-head-class-to-first-node`                   | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-head-node-styling-should-not-apply-head-class-to-non-first-nodes`          | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-apply-interactive-class-to-clickable-dcd7e70a`    | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-be-focusable-and-keyboard-accessible-on-0674a408` | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-not-set-tab-index-on-non-interactive-16926a0b`    | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-set-tab-index-on-interactive-nodes`               | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-support-click-on-interactive-node-6aaee98a`       | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-interactive-nodes-should-support-space-key-on-interactive-node`            | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-display-labels-inside-nodes`                   | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-handle-empty-nodes-array`                      | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-aria-label-on-container`                  | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-nodes-with-rolelistitem`                  | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-have-proper-structure-with-rolelist`           | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-not-render-arrows-for-single-node`             | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-arrows-between-nodes`                   | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-icons-when-provided`                    | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-rendering-and-layout-should-render-nodes-with-labels`                      | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-visual-regression-dark-canvas-dark-canvas-snapshot`                        | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-visual-regression-light-canvas-light-canvas-snapshot`                      | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-wrapping-behavior-should-have-wrap-class-when-wrap-prop-is-true`           | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-lineage-rail-component-wrapping-behavior-should-not-have-wrap-class-when-wrap-prop-is-c3dc57ec`   | `ux.librarycomponent.lineage-rail`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-grid-fallback-rendering-should-fill-entire-canvas-area-with-grid`            | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-grid-fallback-rendering-should-render-grid-pattern-without-tiles`            | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-heatmap-should-use-emerald-color-by-default`                    | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-should-display-legend-for-heatmap-mode`                         | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-heatmap-mode-should-render-heatmap-points-with-gradient-colors`              | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-map-canvas-component-initial-fit-a-caller-re-rendering-from-on-viewport-change-does-not-95d47740` | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-initial-fit-heatmap-mode-frames-every-point`                                 | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-initial-fit-pins-mode-frames-every-pin-and-reports-a-centre-ddfac696`        | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-initial-fit-track-mode-frames-the-track`                                     | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-initial-fit-wheel-zoom-at-the-centre-keeps-the-view-centre-and-05270f1c`     | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pan-and-zoom-arrow-keys-should-pan`                                          | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pan-and-zoom-plus-minus-keys-should-zoom`                                    | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pins-mode-clicking-pin-should-show-popover-with-details`                     | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pins-mode-escape-key-should-close-popover`                                   | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pins-mode-pin-should-have-aria-label-with-coordinates-and-timestamp`         | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pins-mode-pulse-animation-should-be-suppressed-under-prefers-4842035f`       | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pins-mode-selected-pin-should-display-pulse-animation`                       | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-pins-mode-should-render-all-pins-as-buttons`                                 | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-canvas-should-be-keyboard-accessible-with-cf025b42`   | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-canvas-should-have-application-role`                  | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-role-and-accessibility-pins-should-be-buttons-with-proper-semantics`         | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-scale-bar-scale-bar-label-should-display-current-zoom-level`                 | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-scale-bar-should-show-scale-bar-when-enabled`                                | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-track-mode-should-display-legend-for-track-mode`                             | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-track-mode-should-render-track-as-dashed-cyan-polyline`                      | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-grid-only-state-in-dark-a80971cf` | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-heatmap-mode-in-dark-332bd9df`    | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-pins-mode-in-dark-canvas`         | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-pins-mode-with-selected-6eec1db7` | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-dark-canvas-should-match-track-mode-in-dark-380050fd`      | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-default-grid-only-state`         | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-heatmap-mode-state`              | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-pins-mode-state`                 | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-pins-mode-with-36de1483`         | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-map-canvas-component-visual-regression-light-canvas-should-match-track-mode-state`                | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.integration-organic-layout-is-deterministic-across-reloads`                                                   | `application.applicationservice.organic-layout`                                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes`                             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes`                             | `application.applicationservice.organic-layout`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.integration-orthogonal-layout-is-deterministic-across-reloads`                                                | `application.applicationservice.orthogonal-layout`                                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes`                          | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes`                          | `application.applicationservice.orthogonal-layout`                                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark`            | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks`               | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f`  | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar`                   | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5`      | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3`     | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar`         | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8`     | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978`  | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand`                     | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand`                                      | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave`                | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19`   | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand`                               | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane`                | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position`                           | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container`                            | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks`                                                  | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3`      | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned`               | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label`                         | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot`                                       | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot`                                      | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-aws-x-ray-trace-renders-in-dark-canvas`                                              | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-aws-x-ray-trace-renders-with-the-fault-span-selected-light`                          | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-collapsed-subtree-renders-without-a-selection`                                       | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-interactions-clicking-a-tree-row-opens-repopulates-the-detail-panel`                 | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-interactions-escape-closes-the-detail-panel-and-the-close-button-also-works`         | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-interactions-expanding-a-collapsed-node-reveals-its-children`                        | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-interactions-keyboard-arrow-down-moves-the-selection`                                | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.integration-trace-viewer-interactions-long-attribute-keys-values-truncate-no-overlap-with-a-hover-35742fa3`   | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-interactions-long-attribute-keys-values-truncate-no-overlap-with-a-hover-35742fa3`   | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-otlp-trace-renders-in-dark-canvas`                                                   | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-trace-viewer-otlp-trace-renders-with-the-error-span-selected-light`                               | `ux.librarycomponent.trace-viewer`                                                   | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-and-zoom-about-the-view-centre-by-a-fixed-factor`                       | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-events-within-one-frame-compound`                                 | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-zoom-during-pan-inertia-keeps-the-point-under-the-7a0c359c`       | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.integration-use-pan-zoom-map-canvas-and-keep-the-reported-centre-fixed`                                       | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-aria-listbox-semantics-are-applied`                                    | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-arrow-down-at-last-entry-does-not-navigate`                            | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-arrow-down-key-navigates-to-next-version`                              | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-arrow-up-at-first-entry-does-not-navigate`                             | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-arrow-up-key-navigates-to-previous-version`                            | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-click-selection-updates-on-select-callback`                            | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-dark-canvas-snapshot`                                                  | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-diff-stats-render-for-entries-with-stats`                              | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-empty-state-renders-when-no-entries-provided`                          | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-head-badge-renders-for-entries-with-head-flag`                         | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-light-canvas-snapshot`                                                 | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-multiple-entries-show-connector-rail`                                  | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-oldest-first-order-reverses-entry-order`                               | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-read-only-mode-no-on-select-is-not-interactive`                        | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-selected-entry-has-aria-selected-attribute`                            | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-selected-entry-has-head-dot-indicator-when-marked-as-head`             | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-single-entry-does-not-show-connector-rail`                             | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-transition-indicator-renders-for-entries-with-transition`              | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-version-timeline-component-visual-selection-state-changes-on-click`                               | `ux.librarycomponent.version-timeline`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-dark-canvas-visual-snapshot-of-workspace-switcher-dialog-dark`          | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-call-on-pick-recent-when-recent-workspace-is-clicked`            | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-backdrop-is-clicked`                                  | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-open-tile-is-clicked`                                 | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-close-when-x-button-is-clicked`                                  | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-recent-workspaces-list`                                  | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-three-action-tiles`                                      | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-display-title`                                                   | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-not-be-visible-when-is-open-is-false`                            | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-should-render-when-is-open-is-true`                                     | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.integration-workspace-switcher-dialog-visual-snapshot-of-workspace-switcher-dialog`                           | `ux.librarycomponent.workspace-switcher-dialog`                                      | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.is-today-with-a-fixed-today-a-yyyy-mm-dd-string-names-the-day-in-every-timezone`                              | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.is-today-with-a-fixed-today-an-instant-counts-as-its-utc-day-not-the-local-one`                               | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.is-today-with-a-fixed-today-mini-calendar-highlights-the-same-day-in-every-timezone`                          | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.is-today-with-a-fixed-today-without-today-compares-against-the-local-clock-unchanged`                         | `application.applicationfunction.fixed-clock-date-formatting`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-keyboard-navigation-crosses-lanes-to-the-nearest-linked-node-else-the-nearest-node-preferring-5bb4dd3f`  | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-keyboard-navigation-maps-keys-by-screen-direction-in-each-orientation`                                   | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-keyboard-navigation-moves-along-a-lane-and-to-its-ends-stopping-at-them`                                 | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-keyboard-navigation-orders-each-lane-by-rows-then-along-the-row`                                         | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-keyboard-navigation-skips-an-empty-lane`                                                                 | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-link-curve-cross-layer-runs-from-the-bottom-of-the-upper-box-to-the-top-of-the-lower-one-arrow-efda0944` | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-link-curve-intra-layer-an-arc-above-the-row-between-the-top-edges`                                       | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.lane-link-curve-vertical-cross-links-leave-the-facing-side-intra-arcs-bulge-left`                             | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology`                                      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology`                                      | `application.applicationfunction.force-directed-layout-algorithm`                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layer-matrix-cells-counts-links-per-source-layer-target-layer`                                                | `application.applicationfunction.adjacency-matrix-cells`                             | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layer-matrix-cells-leaves-out-hidden-layers-and-adds-up-to-the-visible-link-count`                            | `application.applicationfunction.adjacency-matrix-cells`                             | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layer-matrix-cells-symmetric-both-directions-add-into-the-upper-triangle`                                     | `application.applicationfunction.adjacency-matrix-cells`                             | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-a-controlled-camera-is-never-fitted`                                              | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-a-default-camera-zoom-over-the-preset-is-kept-no-fit`                             | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-at-docs-width-870px-every-plane-title-of-the-13-sits-inside-the-scene-4477cf87`   | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-data-that-loads-after-mount-takes-the-preset-gap-and-is-fitted-with-no-1c98b609`  | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-every-preset-then-fit-keeps-all-13-planes-inside-the-scene`                       | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-mounting-at-preset-fits-the-13-layer-stack-and-reports-it`                        | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-13-layers-frame-picking-a-preset-on-13-layers-frames-it`                                          | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-a-camera-preset-animates-to-it-ref-methods-move-the-camera`                                       | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-are-held-interactions-only-report`                                    | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-that-take-every-report-follow-each-frame`                             | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-a-controlled-parent-that-echoes-reports-late-still-lets-a-preset-finish`                          | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-a-drag-right-after-exiting-focus-still-lets-the-planes-close`                                     | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-a-layer-focus-right-after-a-preset-keeps-the-preset-turning`                                      | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-after-an-orbit-enter-on-a-node-label-still-selects-it`                                            | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-an-asynchronous-layout-lands-on-the-same-positions-as-the-synchronous-one`                        | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-an-orbit-fades-and-clears-labels-frame-by-frame-without-a-react-commit`                           | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-clicking-a-node-selects-it-adds-the-drill-through-column-and-clicking-again-clears`               | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-dragging-orbits-without-selecting`                                                                | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-draws-a-plane-per-layer-a-disc-and-a-label-button-per-node`                                       | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-full-dr-spec-a-turntable-frame-writes-link-paths-within-one-per-batch-plus-the-reach-81e72c99`    | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-full-dr-spec-an-orbit-drag-re-renders-a-fixed-few-times-not-once-per-move`                        | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-full-dr-spec-draws-every-layer-node-and-link-of-the-13-layer-spec`                                | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-full-dr-spec-preset-tween-frames-paint-without-re-rendering-the-react-tree`                       | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-full-dr-spec-turntable-frames-paint-without-re-rendering-the-react-tree`                          | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-keyboard-arrows-move-between-nodes-and-layers-enter-selects-escape-clears`                        | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-labels-behind-planes-a-focused-layer-reads-clearly-the-planes-dimmed-around-it-fade-no-5c4a61fc`  | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-labels-behind-planes-profile-view-almost-side-on-nothing-sits-behind-a-plane`                     | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-labels-behind-planes-stack-preset-labels-under-a-nearer-plane-fade-the-top-layer-stays-30a19309`  | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-labels-behind-planes-the-selection-its-reach-and-the-hovered-node-are-never-faded`                | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-labels-behind-planes-top-view-is-the-x-ray-no-label-fades`                                        | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-pills-follow-the-camera-a-wheel-zoom-places-the-pills-again-with-no-parent-re-render`             | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-pills-follow-the-camera-an-outside-camera-change-during-a-zoom-stops-it-and-brings-the-55fcaf7b`  | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-pills-follow-the-camera-reduced-motion-a-jump-zoom-by-places-the-pills-again-with-no-ace4b863`    | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-pinch-zooms-clamped-like-the-wheel`                                                               | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-switching-focus-straight-to-another-layer-eases-the-planes-from-where-they-are`                   | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-the-plane-title-focuses-its-layer-clicking-again-exits`                                           | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-the-selections-reach-keeps-a-path-and-arrowhead-per-link-the-rest-stay-batched`                   | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-touch-a-two-finger-touch-pinch-zooms-and-is-not-taken-as-a-page-scroll`                           | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-visual-focused-layer-theme`                                                                       | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-visual-stack-preset-labels-behind-planes-faded-theme`                                             | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-visual-stack-preset-with-a-followed-selection-theme`                                              | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-visual-top-preset-theme`                                                                          | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layer-stack-with-every-predicate-labelled-arrowheads-off-the-reach-are-batched-too`                           | `ux.librarycomponent.layer-stack`                                                    | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-a-cell-click-shows-the-link-a-merged-cell-steps-6cc76233`        | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-a-filter-that-removes-the-focused-cell-keeps-focus-in-62f2a548`  | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-escape-closes-the-panel-and-returns-focus-to-the-60f0a0d2`       | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-hiding-the-links-category-drops-the-panel-and-the-70edbb4f`      | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-visual-link-inspector-panel`                                     | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                   | `testing.testcasesketch.layered-graph-explorer-matrix-link-inspector-without-the-inspector-or-with-a-consumer-handler-a-3457ac3e`     | `ux.librarycomponent.adjacency-matrix`                                               | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.layered-graph-snapshot-defaults-maps-each-snapshot-field-to-its-default-option-leaving-out-what-the-ebf0be87` | `application.applicationservice.layered-graph-state-hooks`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layered-graph-snapshot-defaults-round-trips-a-snapshot-through-json-into-a-fresh-hook`                        | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.layered-graph-snapshot-defaults-round-trips-a-snapshot-through-json-into-a-fresh-hook`                        | `application.applicationservice.layered-graph-state-hooks`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle`                | `application.applicationfunction.branch-map-line-bundling`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle`                | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget`                     | `application.applicationfunction.branch-map-line-bundling`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget`                     | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-honours-a-smaller-budget`                                                       | `application.applicationfunction.branch-map-line-bundling`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-honours-a-smaller-budget`                                                       | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-318cc046`   | `application.applicationfunction.branch-map-line-bundling`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-318cc046`   | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-4d677d55`     | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-lays-the-sample-out-with-no-issues`                                                         | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-never-overlaps-station-marks-label-boxes-or-groups-name`                                    | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-places-every-label-of-the-sample-each-station-label-on-its-own-row`                         | `application.applicationfunction.branch-map-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-places-every-label-of-the-sample-each-station-label-on-its-own-row`                         | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-85af82af`    | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-ranks-and-bands-orders-open-stations-by-longest-path-over-after-lines-and-1aab84d3`         | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-ranks-and-bands-places-dated-done-stations-above-the-start-in-date-order`                   | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-takes-text-widths-from-measure-text-when-given`                                             | `application.applicationfunction.branch-map-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-takes-text-widths-from-measure-text-when-given`                                             | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409`  | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409`  | `application.applicationfunction.branch-map-trunk-selection`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest`          | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest`          | `application.applicationfunction.branch-map-trunk-selection`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-trunk-without-one-takes-the-heaviest-chain-of-stops`                                        | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-trunk-without-one-takes-the-heaviest-chain-of-stops`                                        | `application.applicationfunction.branch-map-trunk-selection`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-validation-lays-out-an-empty-map`                                                           | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-validation-reports-duplicates-dangling-references-and-cycles-without-throwing`              | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-wraps-labels-to-two-lines-at-max-label-width-then-ends-them-with-an-ellipsis`               | `application.applicationfunction.branch-map-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-branch-map-wraps-labels-to-two-lines-at-max-label-width-then-ends-them-with-an-ellipsis`               | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-is-deterministic`                                                                                | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-leaves-hidden-layers-out`                                                                        | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-places-every-node-inside-its-own-band-one-band-per-layer-in-rank-order`                          | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.layout-lanes-stacks-bands-without-overlap-and-no-two-nodes-overlap`                                           | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-stacks-bands-without-overlap-and-no-two-nodes-overlap`                                           | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-vertical-chips-side-room-of-keeps-room-for-each-nodes-tag-inside-its-band`                       | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.layout-lanes-vertical-chips-side-room-of-keeps-room-for-each-nodes-tag-inside-its-band`                       | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-vertical-one-column-band-per-layer-side-by-side-all-the-same-height`                             | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-lanes-wraps-rows-at-max-row-width-and-orders-each-row-by-coupled-x`                                    | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-layers-async-rejects-with-a-solves-error`                                                              | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-layers-async-rejects-with-an-abort-error-when-aborted-before-or-during-the-run`                        | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-layers-async-resolves-to-the-same-result-as-layout-layers`                                             | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-layers-async-yields-before-solving-nothing-runs-in-the-calling-tick`                                   | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-request-equality-compares-options-field-by-field`                                                      | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.layout-request-equality-keys-an-index-by-content`                                                             | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.link-edge-metadata-maps-a-link-to-graph-edge-inspector-metadata`                                              | `application.applicationfunction.link-edge-metadata-formatting`                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.longest-increasing-a-reversed-sequence-keeps-one-element`                                                     | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.longest-increasing-handles-empty-input`                                                                       | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.longest-increasing-keeps-an-already-sorted-sequence-whole`                                                    | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.longest-increasing-one-element-moved-from-front-to-back-every-other-element-stays`                            | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.longest-increasing-returns-a-valid-longest-run-on-a-shuffled-sequence`                                        | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection`                                            | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks`                                                          | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection`                                    | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails`                                                 | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end`                                                | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends`                           | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`                                  | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`                                  | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged`                                        | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position`                                       | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label`                                                                   | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks`                                                               | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom`                                                              | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-anchors-a-component-onto-two-pins-and-keeps-the-other-components-clear-of-it`                  | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-edge-hints-floors-adjacent-ideal-distances-at-an-edges-preferred-length`                       | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-edge-hints-keeps-a-labelled-hubs-labels-clear-of-both-endpoints-and-of-each-other`             | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-edge-hints-re-running-a-labelled-layout-on-its-own-output-moves-nothing`                       | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-edge-hints-stays-finite-when-a-labelled-sketch-is-re-solved-in-full-with-a-new-node`           | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-ignores-self-loops-duplicate-edges-and-edges-to-unknown-nodes`                                 | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-is-deterministic-identical-input-gives-identical-output`                                       | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-keeps-a-pinned-node-exactly-where-it-was-pinned-on-a-cold-start`                               | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-keeps-hub-graphs-finite-and-compact-where-the-force-layout-diverged`                           | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-keeps-the-post-conditions-when-a-sketch-is-re-solved-in-full-on-its-own-output`                | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-lays-a-star-far-past-its-ring-capacity-out-as-a-halo-of-the-view-aspect`                       | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.organic-layout-never-overlaps-nodes-and-honors-minimum-node-distance-as-a-post-condition`                     | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-never-overlaps-nodes-and-honors-minimum-node-distance-as-a-post-condition`                     | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.organic-layout-packs-disconnected-components-and-isolates-without-overlap`                                    | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-packs-disconnected-components-and-isolates-without-overlap`                                    | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-places-new-nodes-into-a-sketch-without-disturbing-the-rest`                                    | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-places-several-new-isolates-into-a-sketch-without-producing-na-n`                              | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-polish-and-incremental-stability-an-affected-ids-re-solve-with-no-graph-change-keeps-d5119dee` | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-polish-and-incremental-stability-runs-the-polish-on-a-component-of-up-to-300-nodes-0485b771`   | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-polish-and-incremental-stability-the-polish-never-moves-a-pinned-node`                         | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-re-running-on-its-own-output-moves-nothing-warm-start-idempotence`                             | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-re-settles-the-nodes-named-in-affected-ids-and-their-neighbors-on-a-valid-sketch`              | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-re-solves-a-sketch-in-full-with-scope-all-including-a-new-node-and-stays-finite-and-a9a701f9`  | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-shelf-packs-components-into-a-block-near-the-view-aspect-and-grids-the-isolates-327dc9df`      | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-stress-never-increases-between-majorization-sweeps`                                            | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-treats-a-circle-seed-as-a-cold-start-not-a-sketch`                                             | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-treats-a-tiny-circle-seed-that-already-honors-the-post-conditions-as-a-sketch-587b9453`        | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.organic-layout-uses-pivot-mds-above-600-nodes-and-seeds-at-the-ideal-scale`                                   | `application.applicationfunction.organic-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-gives-a-hub-more-edges-than-c8f2845b` | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-holds-pins-taken-from-its-3cf356c4`   | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-is-deterministic-on-the-ec86bc78`     | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-keeps-every-cell-when-re-32f1da2a`    | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-keeps-the-lattice-result-on-c7417d3f` | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-lays-out-a-400-node-7695b2cd`         | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-lets-bus-members-share-only-1acbb144` | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-never-puts-two-pinned-nodes-5d79576a` | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-routes-a-large-hub-graph-63326143`    | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-routes-every-edge-with-fbf7d59f`      | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-survives-a-one-node-drag-db1bbe53`    | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-survives-a-one-node-drag-db1bbe53`    | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-switches-to-the-channel-dd4c5c1b`     | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-channel-router-graphs-the-lattice-router-cannot-route-widens-the-uniform-pitch-to-d46978bf` | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-fans-a-pages-views-to-its-right-in-the-same-row-ux-navigation-shape`                        | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-golden-output-keeps-a-layout-whose-rows-are-longer-than-8-the-insertion-search-a15b5bcb`    | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-golden-output-keeps-a-layout-with-more-than-64-root-candidates-the-cap-decides-b85f7a89`    | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-golden-output-keeps-the-tree-layout`                                                        | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-handles-self-loops-duplicates-and-unknown-endpoints-without-throwing`                       | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-handles-the-empty-graph-and-a-single-node`                                                  | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-holds-a-pinned-node-exactly-on-its-pin-and-keeps-every-anchor-on-the-grid`                  | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-is-deterministic-identical-input-gives-identical-positions-and-routes`                      | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-keeps-bidirectional-pairs-on-separate-ports-and-segments`                                   | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-keeps-every-cell-when-re-run-on-its-own-output-and-places-a-new-node-near-its-294e46d4`     | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-layers-by-the-structural-forest-when-edges-are-flagged-with-relational-edges-8737d8d5`      | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-lays-out-components-side-by-side-and-isolates-in-a-block-all-on-the-grid`                   | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-never-routes-an-edge-through-another-node-or-over-another-edge`                             | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.orthogonal-layout-places-every-node-on-the-reported-cell-grid-with-no-overlaps`                               | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-places-every-node-on-the-reported-cell-grid-with-no-overlaps`                               | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-returns-one-finite-axis-parallel-route-per-edge-index-aligned-boundary-to-boundary`         | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-routes-navigation-routes-last-and-keeps-them-clear-of-nodes-and-other-routes`               | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-shares-one-trunk-per-parent-with-bus-tree-edges-and-reports-the-groups`                     | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.orthogonal-layout-sizes-cells-from-the-largest-node-and-honors-mixed-node-sizes`                              | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.otlp-and-x-ray-normalize-to-the-same-shape-both-yield-spans-with-the-required-model-fields`                   | `application.applicationfunction.aws-x-ray-trace-adaptation`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.otlp-and-x-ray-normalize-to-the-same-shape-both-yield-spans-with-the-required-model-fields`                   | `application.applicationfunction.otlp-trace-adaptation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.pane-rail-mark-keys-gives-duplicate-ids-distinct-keys-in-position-order`                                      | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.pane-rail-mark-keys-keys-marks-with-unique-ids-by-their-id`                                                   | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.pane-rail-mark-keys-returns-no-keys-for-no-marks`                                                             | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.pane-rail-mark-keys-stays-unique-when-an-id-looks-like-a-generated-key`                                       | `application.applicationfunction.pane-rail-marks`                                    | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-bounds-the-repair-work-on-a-hub-with-hundreds-of-labelled-spokes`                   | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-builds-requests-with-a-line-only-for-polyline-routes-so-bezier-labels-d58fffc3`     | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-is-deterministic-and-leaves-unplaceable-input-alone`                                | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-keeps-a-label-on-its-line-when-the-parallel-track-is-not-labelled-or-the-696be7d5`  | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-marks-a-label-with-no-clear-spot-as-no-room-only-when-asked`                        | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-never-trades-two-stacked-labels-for-a-label-over-a-card`                            | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-of-two-labels-that-cannot-clear-each-other-marks-the-later-one-no-room-89df3f86`    | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-offsets-the-labels-of-parallel-labelled-tracks-to-the-outside-of-their-ca99cd41`    | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-places-revealed-labels-against-fixed-resting-labels-without-moving-or-e4eec4f3`     | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-puts-a-label-that-collides-with-nothing-where-find-clear-label-position-16f07cc2`   | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-puts-a-label-that-collides-with-nothing-where-find-clear-label-position-16f07cc2`   | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-staggers-the-labels-of-two-parallel-edges-instead-of-stacking-them`                 | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.place-edge-labels-jointly-takes-the-least-covered-spot-when-no-spot-clears-the-nodes-not-the-8dd0613e`        | `application.applicationfunction.joint-edge-label-placement`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.place-edge-labels-places-in-priority-order-and-slides-along-the-edge-to-avoid-overlap`                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-always-places-a-forced-tag-at-its-first-spot-when-nothing-is-clear`                           | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-horizontal-puts-a-tag-above-its-chip-clear-of-the-chips`                                      | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-keeps-an-unforced-tag-inside-its-lane-band`                                                   | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-places-forced-tags-first-so-the-others-keep-clear-of-them-and-of-each-other`                  | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-places-tags-clear-of-each-other-and-the-obstacles-dropping-unforced-ones-with-no-97b4fdc3`    | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-takes-the-side-its-link-ends-leave-free`                                                      | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-vertical-a-tag-whose-links-leave-on-the-right-sits-past-their-ends-inside-the-2b3cbf2f`       | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.place-lane-tags-vertical-puts-a-tag-right-of-its-chip`                                                        | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.points-to-path-closes-an-arrowhead-polygon-as-path-data`                                                      | `application.applicationfunction.batched-link-path-drawing`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.polyline-curve-walks-the-straight-segments-by-length-and-rounds-the-corners-in-the-path`                      | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.polyline-to-routed-edge-anchors-the-label-on-the-longest-straight-segment-never-on-a-bend-corner`             | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.polyline-to-routed-edge-blocked-routes-does-not-search-for-routes-between-close-diagonal-neighbours`          | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.polyline-to-routed-edge-blocked-routes-finds-the-middle-of-a-narrow-gap-that-another-rows-box-edge-44913c5f`  | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
@@ -2220,6 +2887,7 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.polyline-to-routed-edge-blocked-routes-searches-for-a-shorter-route-when-the-cheapest-clear-shape-7dbaf1fe`   | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.polyline-to-routed-edge-blocked-routes-searches-the-whole-drawing-when-the-window-round-the-two-94f33105`     | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.polyline-to-routed-edge-blocked-routes-steps-through-staggered-row-gaps-instead-of-crossing-a-box`            | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.prune-samples-keeps-the-sample-before-the-window-so-release-velocity-is-unchanged`                            | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.radial-tree-layout-collapse-stability-does-not-move-any-visible-node-when-a-subtree-is-collapsed`             | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.radial-tree-layout-collapse-stability-sizes-unmeasured-hidden-nodes-like-the-largest-measured-node`           | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.radial-tree-layout-collapsed-nodes-maintains-stable-trunk-size-for-fully-expanded-tree`                       | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
@@ -2250,18 +2918,98 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reach-relationships-orders-followed-nodes-by-hop-then-layer-then-name-spec-fixture`                           | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reach-relationships-splits-direct-links-into-cross-layer-and-intra-layer-rows-with-direction-7cc209eb`        | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reach-summary-text-counts-nodes-and-layers-and-names-the-follow-depth`                                        | `application.applicationfunction.reach-summary-formatting`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-counts-a-short-hold-against-the-velocity`                                                    | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-counts-a-slowdown-just-before-the-release`                                                   | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-gives-no-velocity-for-a-press-with-no-moves`                                                 | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-gives-no-velocity-when-the-pointer-was-held-still-for-the-whole-window-321`                  | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-interpolates-the-window-start-between-sparse-samples`                                        | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-measures-a-steady-drag-released-straight-away`                                               | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.release-velocity-uses-the-press-as-the-start-of-a-drag-shorter-than-the-window`                               | `application.applicationfunction.pan-inertia-glide`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reorder-a-reversal-reaches-the-reversed-order`                                                                | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reorder-an-unchanged-order-since-the-last-call-does-nothing`                                                  | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reorder-one-element-from-the-front-to-the-back-is-one-move-not-n-1`                                           | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.reorder-reaches-the-wanted-order-moving-only-what-lies-outside-the-longest-kept-run`                          | `application.applicationfunction.painter-depth-reordering`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.retrace-labels-keeps-each-pill-at-its-t-on-the-live-curve-and-drops-pills-whose-link-is-gone`                 | `application.applicationfunction.layered-edge-label-placement`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.retrace-labels-keeps-each-pill-at-its-t-on-the-live-curve-and-drops-pills-whose-link-is-gone`                 | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-branch-map-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off`                         | `application.applicationfunction.branch-map-routing`                                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-branch-map-routes-dependency-arrows-down-to-the-waiting-station-and-provides-arches-to-a-38c78d5a`      | `application.applicationfunction.branch-map-routing`                                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-branch-map-runs-every-line-from-its-fork-to-its-station-along-45-degree-horizontal-and-1aa8c846`        | `application.applicationfunction.branch-map-routing`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-branch-map-with-width-by-weight-a-fork-takes-weight-off-the-trunk-a-join-gives-it-back-and-a-0e3ca7f8`  | `application.applicationfunction.branch-map-placement`                               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-branch-map-with-width-by-weight-a-fork-takes-weight-off-the-trunk-a-join-gives-it-back-and-a-0e3ca7f8`  | `application.applicationfunction.branch-map-routing`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-a-drag-keeps-every-other-route-where-it-was`                | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-a-drag-keeps-every-other-route-where-it-was`                | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-keeps-gap-tracks-at-least-3px-apart`            | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-no-two-routes-share-a-gap-or-gutter-92bbfc1e`   | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-routes-every-skip-link`                         | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-uses-about-as-many-gutter-tracks-as-997b2fe9`   | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-uses-about-as-many-gutter-tracks-as-997b2fe9`   | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-widens-a-gap-for-its-tracks-only-under-gutter-efbaf15c`     | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-widens-a-gap-for-its-tracks-only-under-gutter-efbaf15c`     | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.route-lane-gutters-gives-each-stub-its-own-gap-track-and-overlapping-routes-their-own-gutter-tracks-51c767b0` | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-gives-each-stub-its-own-gap-track-and-overlapping-routes-their-own-gutter-tracks-51c767b0` | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-gives-each-stub-its-own-gap-track-and-overlapping-routes-their-own-gutter-tracks-51c767b0` | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-horizontal-leaves-the-source-toward-the-next-lane-runs-outside-the-bands-arrives-e8e1325a` | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-horizontal-leaves-the-source-toward-the-next-lane-runs-outside-the-bands-arrives-e8e1325a` | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-routes-exactly-the-links-that-skip-a-lane`                                                 | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-routes-exactly-the-links-that-skip-a-lane`                                                 | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-routes-nothing-with-fewer-than-three-lanes`                                                | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-routes-nothing-with-fewer-than-three-lanes`                                                | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-track-order-gives-the-same-routes-whatever-order-the-links-come-in`                        | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-track-order-gives-the-same-routes-whatever-order-the-links-come-in`                        | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-track-order-puts-a-route-that-contains-another-further-out-and-lets-disjoint-21a8482c`     | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-lane-gutters-vertical-the-gutter-runs-above-or-below-the-lanes`                                         | `application.applicationfunction.lane-layout-and-gutter-routing`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.route-lane-gutters-vertical-the-gutter-runs-above-or-below-the-lanes`                                         | `application.applicationservice.lane-layout`                                         | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.route-navigation-edge-avoids-obstacles`                                                                       | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.row-pair-crossings-matches-the-pairwise-count-on-random-rows-shared-ends-included`                            | `application.applicationfunction.orthogonal-layout-algorithm`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.sanitize-layered-graph-explorer-snapshot-checks-the-view-labels-and-stack-camera`                             | `application.applicationfunction.explorer-snapshot-sanitizing`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.sanitize-layered-graph-snapshot-makes-layered-graph-snapshot-defaults-safe-on-malformed-input`                | `application.applicationservice.layered-graph-state-hooks`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.separation-job-falls-back-to-separation-pass-for-positions-the-grid-cannot-hold`                              | `application.applicationfunction.node-overlap-separation-pass`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.separation-job-matches-the-plain-separation-pass-loop-bit-for-bit-s-label`                                    | `application.applicationfunction.node-overlap-separation-pass`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-a-focused-layer-pushes-the-others-apart-by-push-amount-and-stays-put-itself`                   | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-depth-sort-is-painter-order-far-first-and-stable`                                              | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-fit-title-column-a-column-off-the-bottom-moves-back-up-a-taller-one-spreads-evenly`            | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-fit-title-column-a-column-that-fits-is-only-pushed-apart`                                      | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-fit-zoom-fits-the-projected-stack-in-the-viewport-with-the-margin`                             | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-inside-polygon-inside-outside-and-on-a-projected-quad`                                         | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-leftmost-point-screen-bounds-svg-points-and-title-rail`                                        | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-planes-share-one-square-extent`                                                                | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-preset-layer-gap-keeps-the-preset-gap-up-to-five-layers-and-the-five-layer-height-6cfc2bbb`    | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-ring-points-closes-the-circle-at-the-given-radius`                                             | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-several-focus-entries-add-up-so-a-switch-between-layers-blends`                                | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.stack-geometry-stack-plane-y-spreads-ranks-evenly-about-0-rank-0-on-top`                                      | `application.applicationfunction.layer-stack-3d-projection`                          | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.tween-math-ease-in-out-cubic-is-symmetric-and-pinned-at-the-ends`                                             | `application.applicationservice.tween-animation-hooks`                               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.tween-math-interpolate-values-moves-only-the-keys-in-to`                                                      | `application.applicationfunction.tweened-animation`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-controllable-holds-its-own-state-seeded-from-the-default-when-uncontrolled`                               | `application.applicationfunction.controlled-or-uncontrolled-state`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-controllable-returns-the-controlled-value-and-only-reports-changes`                                       | `application.applicationfunction.controlled-or-uncontrolled-state`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-asynchronous-layout-is-opt-in-synchronous-by-default-as-before`                             | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-asynchronous-layout-opted-in-is-pending-with-no-layout-from-the-threshold-up-92878da3`      | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-asynchronous-layout-rendered-lands-pending-with-no-layout-first-then-the-same-2902daf1`     | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-asynchronous-layout-rendered-with-a-custom-node-size-rebuilt-data-with-an-equal-1a827aca`   | `application.applicationfunction.layer-plane-layout`                                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-derives-index-layout-and-reach-from-controlled-state`                                       | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-drops-a-selection-that-is-not-in-the-graph-and-uses-defaults-when-uncontrolled`             | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-node-labels-defaults-on-is-controllable-and-is-in-the-snapshot`                             | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-restore-and-set-filters-review-cycle-2-applies-whichever-selection-field-the-19033d4a`      | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-restore-and-set-filters-review-cycle-2-restore-changes-nothing-restore-selected-a60dcf21`   | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-restore-and-set-filters-review-cycle-2-restore-with-filters-and-a-selection-5114a254`       | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-restore-and-set-filters-review-cycle-2-set-filters-reports-a-visible-primary-1b75f72c`      | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-a-controlled-selected-id-alone-reports-changes-through-on-select`                 | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-hiding-a-layer-drops-the-selected-nodes-on-it`                                    | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-leaves-out-ids-not-in-the-graph-or-on-a-hidden-layer`                             | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-multi-select-the-primary-is-the-first-id-and-reach-is-the-union`                  | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-on-select-reports-the-visible-primary-skipping-ids-hidden-or-not-in-the-dacd5a05` | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-rendered-an-inline-follow-categories-array-keeps-reach-and-emphasis-5e21803f`     | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-rendered-set-node-labels-updates-the-shared-state`                                | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-rendered-toggle-layer-reports-the-primary-change-once-rendered`                   | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-rendered-toggle-selected-and-set-selected-ids-update-selected-ids-and-3a0aca2d`   | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-rendered-use-controllable-uncontrolled-updates-setter-identity-and-baf53ddd`      | `application.applicationfunction.controlled-or-uncontrolled-state`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-restore-a-changed-selected-id-over-a-carried-along-selected-ids-wins-83a64158`    | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-restore-uses-selected-ids-when-it-agrees-with-selected-id-or-that-is-1181d2c9`    | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-select-replaces-the-selection-and-always-reports-the-primary`                     | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-single-select-selected-ids-mirrors-selected-id`                                   | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-selection-toggle-selected-and-set-selected-ids-compose-and-report-the-primary-1e1192ec`     | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.use-layered-graph-treats-a-selection-on-a-hidden-layer-as-no-selection`                                       | `application.applicationfunction.layered-graph-state`                                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.ux-nav-layout-handles-complex-multi-parent-view-scenario`                                                     | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.ux-nav-layout-handles-custom-dimensions`                                                                      | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.ux-nav-layout-handles-deeply-nested-page-hierarchies`                                                         | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
@@ -2287,12 +3035,22 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`            | `testing.testcasesketch.ux-nav-layout-view-wider-than-2x-view-fan-gap-does-not-overlap-its-parent-page`                               | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.ux-nav-layout-view-wider-than-2x-view-fan-gap-does-not-overlap-its-parent-page`                               | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-collapsed-page-with-multiple-views-includes-all-child-views`                      | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-collapsed-page-with-multiple-views-includes-all-child-views`                      | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-hovering-a-collapsed-page-shows-routes-from-page-and-child-views`                 | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-hovering-a-collapsed-page-shows-routes-from-page-and-child-views`                 | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-hovering-a-node-that-is-the-target-of-an-edge-shows-edges-where-hovered-22422714` | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-hovering-a-node-that-is-the-target-of-an-edge-shows-edges-where-hovered-22422714` | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-hovering-a-view-shows-only-that-view-routes`                                      | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-hovering-a-view-shows-only-that-view-routes`                                      | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-hovering-an-expanded-page-shows-only-page-routes-not-child-view-routes`           | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-hovering-an-expanded-page-shows-only-page-routes-not-child-view-routes`           | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-no-hover-no-navigation-routes-are-visible`                                        | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-no-hover-no-navigation-routes-are-visible`                                        | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.visible-navigation-edge-ids-only-edges-matching-is-navigation-route-predicate-are-considered`                 | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`        | `testing.testcasesketch.visible-navigation-edge-ids-only-edges-matching-is-navigation-route-predicate-are-considered`                 | `application.applicationservice.ux-navigation-edge-visibility`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.yield-to-paint-never-runs-once-cancelled-at-any-stage`                                                        | `application.applicationfunction.yield-to-paint`                                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.yield-to-paint-runs-only-after-an-animation-frame-and-one-more-macrotask`                                     | `application.applicationfunction.yield-to-paint`                                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`       | `testing.testcasesketch.yield-to-paint-still-runs-when-no-frame-arrives-a-background-tab-pauses-r-af`                                 | `application.applicationfunction.yield-to-paint`                                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcoveragemodel.covers.application.applicationcomponent`  | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `application.applicationcomponent.heimdall-ui-library-module`                        | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragemodel.satisfies.motivation.constraint`          | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `motivation.constraint.visual-changes-pass-per-os-screenshot-baselines`              | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `testing.testcoveragemodel.satisfies.motivation.principle`           | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `motivation.principle.zero-literal-node-overlap-guarantee`                           | `motivation`  | `satisfies`  | many-to-many | high     |
@@ -3075,6 +3833,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix aggregate="layer" &gt; draws one heat cell per non-empty layer pair {#adjacencymatrix-aggregate-layer-draws-one-heat-cell-per-non-empty-layer-pair}
@@ -3093,6 +3852,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix aggregate="layer" &gt; onLayerCellSelect replaces the default filter and focus toggles {#adjacencymatrix-aggregate-layer-onlayercellselect-replaces-the-default-filter-and-focus-toggles}
@@ -3111,6 +3871,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix aggregate="layer" &gt; symmetric adds both directions into the upper triangle {#adjacencymatrix-aggregate-layer-symmetric-adds-both-directions-into-the-upper-triangle}
@@ -3129,6 +3890,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix aggregate="layer" &gt; visual: dark canvas heat map with an active pair {#adjacencymatrix-aggregate-layer-visual-dark-canvas-heat-map-with-an-active-pair}
@@ -3147,6 +3909,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix aggregate="layer" &gt; visual: light canvas symmetric heat map with a focused layer {#adjacencymatrix-aggregate-layer-visual-light-canvas-symmetric-heat-map-with-a-focused-layer}
@@ -3165,6 +3928,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix &gt; cell click selects the link source {#adjacencymatrix-cell-click-selects-the-link-source}
@@ -3183,6 +3947,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix &gt; draws one cell per link and one header button per node {#adjacencymatrix-draws-one-cell-per-link-and-one-header-button-per-node}
@@ -3201,6 +3966,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix grid semantics &gt; symmetric cells holding both directions say so {#adjacencymatrix-grid-semantics-symmetric-cells-holding-both-directions-say-so}
@@ -3219,6 +3985,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix grid semantics &gt; the cells form a grid with row and column headers; the drawing exposes no cells {#adjacencymatrix-grid-semantics-the-cells-form-a-grid-with-row-and-column-headers-the-drawing-exposes-no-cells}
@@ -3237,6 +4004,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix &gt; header click and keyboard select a node; clicking again clears it {#adjacencymatrix-header-click-and-keyboard-select-a-node-clicking-again-clears-it}
@@ -3255,6 +4023,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix keyboard cells &gt; focus stays in the grid; the drawn cell shows the ring and the crosshair {#adjacencymatrix-keyboard-cells-focus-stays-in-the-grid-the-drawn-cell-shows-the-ring-and-the-crosshair}
@@ -3273,6 +4042,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix keyboard cells &gt; one Tab stop for the cells; arrows move, Enter selects {#adjacencymatrix-keyboard-cells-one-tab-stop-for-the-cells-arrows-move-enter-selects}
@@ -3291,6 +4061,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix onCellSelect and order &gt; onCellSelect gets the drawn link and every link in the cell; the deprecated onLinkSelect still works {#adjacencymatrix-oncellselect-and-order-oncellselect-gets-the-drawn-link-and-every-link-in-the-cell-the-deprecated-onlinkselect-still-works}
@@ -3309,6 +4080,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix onCellSelect and order &gt; order="cluster" puts each community on adjacent rows, the same on every load {#adjacencymatrix-oncellselect-and-order-order-cluster-puts-each-community-on-adjacent-rows-the-same-on-every-load}
@@ -3327,6 +4099,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix onCellSelect and order &gt; visual: light canvas, cluster order {#adjacencymatrix-oncellselect-and-order-visual-light-canvas-cluster-order}
@@ -3345,6 +4118,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix &gt; selection follows cross-layer links per the Follow setting {#adjacencymatrix-selection-follows-cross-layer-links-per-the-follow-setting}
@@ -3363,6 +4137,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix symmetric &gt; clicking a cell holding both directions selects its drawn link source {#adjacencymatrix-symmetric-clicking-a-cell-holding-both-directions-selects-its-drawn-link-source}
@@ -3381,6 +4156,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix symmetric &gt; merges both directions into one cell above the diagonal {#adjacencymatrix-symmetric-merges-both-directions-into-one-cell-above-the-diagonal}
@@ -3399,6 +4175,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix symmetric &gt; onLinkSelect receives the drawn link and both links of a merged cell {#adjacencymatrix-symmetric-onlinkselect-receives-the-drawn-link-and-both-links-of-a-merged-cell}
@@ -3417,6 +4194,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix symmetric &gt; visual: light canvas, symmetric with a selection {#adjacencymatrix-symmetric-visual-light-canvas-symmetric-with-a-selection}
@@ -3435,6 +4213,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; a cell in the last visible column renders {#adjacencymatrix-virtualization-a-cell-in-the-last-visible-column-renders}
@@ -3453,6 +4232,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; a focused cell keeps focus, its ring and its indices while the window scrolls away and back {#adjacencymatrix-virtualization-a-focused-cell-keeps-focus-its-ring-and-its-indices-while-the-window-scrolls-away-and-back}
@@ -3471,6 +4251,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; a selectedLinkId set from outside scrolls its cell into view {#adjacencymatrix-virtualization-a-selectedlinkid-set-from-outside-scrolls-its-cell-into-view}
@@ -3489,6 +4270,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; in a fixed-height explorer the matrix is the only scroll area and keeps its labels in view {#adjacencymatrix-virtualization-in-a-fixed-height-explorer-the-matrix-is-the-only-scroll-area-and-keeps-its-labels-in-view}
@@ -3507,6 +4289,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; keyboard focus survives scrolling: arrows move past the window, row headers stay focusable {#adjacencymatrix-virtualization-keyboard-focus-survives-scrolling-arrows-move-past-the-window-row-headers-stay-focusable}
@@ -3525,6 +4308,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; labels stay aligned with the cells while scrolling both axes {#adjacencymatrix-virtualization-labels-stay-aligned-with-the-cells-while-scrolling-both-axes}
@@ -3543,6 +4327,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; past the threshold, only the window renders and the DOM stays bounded {#adjacencymatrix-virtualization-past-the-threshold-only-the-window-renders-and-the-dom-stays-bounded}
@@ -3561,6 +4346,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; the grid states the full size; the rendered window carries its row and column indices {#adjacencymatrix-virtualization-the-grid-states-the-full-size-the-rendered-window-carries-its-row-and-column-indices}
@@ -3579,6 +4365,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; visual: dark canvas, virtualized and scrolled {#adjacencymatrix-virtualization-visual-dark-canvas-virtualized-and-scrolled}
@@ -3597,6 +4384,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix virtualization &gt; visual: light canvas, virtualized and scrolled {#adjacencymatrix-virtualization-visual-light-canvas-virtualized-and-scrolled}
@@ -3615,6 +4403,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix &gt; visual: dark canvas with a followed selection {#adjacencymatrix-visual-dark-canvas-with-a-followed-selection}
@@ -3633,6 +4422,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### AdjacencyMatrix &gt; visual: light canvas with every predicate code {#adjacencymatrix-visual-light-canvas-with-every-predicate-code}
@@ -3651,6 +4441,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### aspectRatio (elliptical warp) &gt; a NaN aspectRatio (e.g. from an unmeasured 0/0 container) is treated as omitted, not propagated {#aspectratio-elliptical-warp-a-nan-aspectratio-e-g-from-an-unmeasured-0-0-container-is-treated-as-omitted-not-propagated}
@@ -3688,6 +4479,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### aspectRatio (elliptical warp) &gt; a wide aspectRatio spreads a forest's galaxies into a measurably wider-than-tall arrangement {#aspectratio-elliptical-warp-a-wide-aspectratio-spreads-a-forest-s-galaxies-into-a-measurably-wider-than-tall-arrangement}
@@ -3706,6 +4498,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### aspectRatio (elliptical warp) &gt; composes with separateGroups — group boundaries stay non-overlapping under an elliptical warp {#aspectratio-elliptical-warp-composes-with-separategroups-group-boundaries-stay-non-overlapping-under-an-elliptical-warp}
@@ -3783,6 +4576,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### aspectRatio (elliptical warp) &gt; pinned coordinates are unaffected by aspectRatio {#aspectratio-elliptical-warp-pinned-coordinates-are-unaffected-by-aspectratio}
@@ -3801,6 +4595,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### aspectRatio (elliptical warp) &gt; the ratio is clamped to \[1/8, 8\] — extreme values beyond the clamp are indistinguishable from the boundary {#aspectratio-elliptical-warp-the-ratio-is-clamped-to-1-8-8-extreme-values-beyond-the-clamp-are-indistinguishable-from-the-boundary}
@@ -3819,6 +4614,7 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### batchLinks &gt; arrowheads (width 0) batch by colour and opacity only {#batchlinks-arrowheads-width-0-batch-by-colour-and-opacity-only}
@@ -3835,9 +4631,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### batchLinks &gt; keys a style the same from frame to frame, so its path is reused {#batchlinks-keys-a-style-the-same-from-frame-to-frame-so-its-path-is-reused}
 
@@ -3853,9 +4650,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### batchLinks &gt; paints lower z first, then farther batches first, and is stable {#batchlinks-paints-lower-z-first-then-farther-batches-first-and-is-stable}
 
@@ -3871,9 +4669,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### batchLinks &gt; puts links of one style into one path, segments concatenated in order {#batchlinks-puts-links-of-one-style-into-one-path-segments-concatenated-in-order}
 
@@ -3889,9 +4688,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### batchLinks &gt; returns nothing for no links {#batchlinks-returns-nothing-for-no-links}
 
@@ -3907,9 +4707,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### batchLinks &gt; splits by colour, opacity, dash, z and width step {#batchlinks-splits-by-colour-opacity-dash-z-and-width-step}
 
@@ -3925,9 +4726,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### batchLinks &gt; widths within one step share a path, drawn at the step {#batchlinks-widths-within-one-step-share-a-path-drawn-at-the-step}
 
@@ -3943,9 +4745,10 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### BranchMap &gt; click and keyboard select stations and lines, Escape clears {#branchmap-click-and-keyboard-select-stations-and-lines-escape-clears}
 
@@ -3991,6 +4794,7 @@ The sample's 20-line group (9 destinations) and 17-line group (15 destinations),
 | ----------- | -------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget` | `satisfies` | outbound  |
 | inter-layer | `application.applicationfunction.branch-map-line-bundling`           | `tests`     | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`               | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`                 | `composes`  | inbound   |
 
 ### branch map layout &gt; a stated trunk names waypoints {#branch-map-layout-a-stated-trunk-names-waypoints}
@@ -4012,6 +4816,7 @@ group.trunk names waypoints: the trunk passes through every one, in rank order, 
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | inter-layer | `application.applicationfunction.branch-map-trunk-selection` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
@@ -4082,6 +4887,7 @@ routeBranchMap on a serialized and parsed BranchMapLayout gives the same scene a
 | Type        | Related Element                                                                     | Predicate   | Direction |
 | ----------- | ----------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`                              | `tests`     | outbound  |
 | inter-layer | `application.applicationfunction.branch-map-routing`                                | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`                                | `composes`  | inbound   |
 
@@ -4105,6 +4911,7 @@ Two runs, and a run on shuffled input arrays, give deep-equal scenes.
 | Type        | Related Element                                                           | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`                    | `tests`     | outbound  |
 | inter-layer | `application.applicationservice.branch-map-layout`                        | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`                      | `composes`  | inbound   |
 
@@ -4451,6 +5258,7 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### bundled intra links &gt; gives a row one trunk above it; neighbouring rows share the lower trunk; rows further apart get none {#bundled-intra-links-gives-a-row-one-trunk-above-it-neighbouring-rows-share-the-lower-trunk-rows-further-apart-get-none}
@@ -4469,6 +5277,7 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### bundled intra links &gt; horizontal, wrapped rows: no bundled path crosses a node, including links between rows {#bundled-intra-links-horizontal-wrapped-rows-no-bundled-path-crosses-a-node-including-links-between-rows}
@@ -4485,9 +5294,11 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### bundled intra links &gt; runs up to the trunk, along it and down into the target, arrow pointing in {#bundled-intra-links-runs-up-to-the-trunk-along-it-and-down-into-the-target-arrow-pointing-in}
 
@@ -4505,6 +5316,7 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### bundled intra links &gt; vertical: leaves the left edge to a trunk left of the column {#bundled-intra-links-vertical-leaves-the-left-edge-to-a-trunk-left-of-the-column}
@@ -4523,6 +5335,7 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### bundled intra links &gt; vertical, several columns per lane: no bundled path crosses a node {#bundled-intra-links-vertical-several-columns-per-lane-no-bundled-path-crosses-a-node}
@@ -4539,9 +5352,11 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### camera helpers &gt; clampCamera clamps pitch and zoom only {#camera-helpers-clampcamera-clamps-pitch-and-zoom-only}
 
@@ -4557,9 +5372,10 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### camera helpers &gt; lerpCamera interpolates every field, yaw via the shortest arc {#camera-helpers-lerpcamera-interpolates-every-field-yaw-via-the-shortest-arc}
 
@@ -4575,9 +5391,10 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### camera helpers &gt; presets are within range and cameraFromPreset centers the target {#camera-helpers-presets-are-within-range-and-camerafrompreset-centers-the-target}
 
@@ -4593,9 +5410,10 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### camera helpers &gt; wrapAngle and nearestYaw turn the short way {#camera-helpers-wrapangle-and-nearestyaw-turn-the-short-way}
 
@@ -4611,9 +5429,10 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### channelRouter &gt; batch cost &gt; 400 boxes and 400 routes route in well under 1.5 s of CPU time {#channelrouter-batch-cost-400-boxes-and-400-routes-route-in-well-under-1-5-s-of-cpu-time}
 
@@ -5206,13 +6025,11 @@ Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
 | inter-layer | `application.applicationfunction.navigation-edge-orthogonal-routing` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.navigation-edge-channel-routing`         | `composes` | inbound   |
 
-### Chart Fills Resolve From Tokens {#chart-fills-resolve-from-tokens}
+### clampPaneRailPosition &gt; clamps positions outside 0..1 {#clamppanerailposition-clamps-positions-outside-0-1}
 
-**ID**: `testing.testcasesketch.chart-fills-resolve-from-tokens`
+**ID**: `testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1`
 
 **Type**: `testcasesketch`
-
-tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker circles carry rgb(var(--accent-primary-hover)) instead of #F59E0B; StatusTimeline segment fills are status-token references; Heatmap cells fill with the base color and a fill-opacity in \[0.12, 1\] (was: non-empty hex fills). Screenshots stay identical to the existing baselines.
 
 #### Attributes
 
@@ -5222,14 +6039,48 @@ tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker 
 
 #### Relationships
 
-| Type        | Related Element                                                         | Predicate   | Direction |
-| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
-| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
-| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
-| inter-layer | `ux.librarycomponent.heatmap`                                           | `tests`     | outbound  |
-| inter-layer | `ux.librarycomponent.line-chart`                                        | `tests`     | outbound  |
-| inter-layer | `ux.librarycomponent.status-timeline`                                   | `tests`     | outbound  |
-| intra-layer | `testing.testcoveragetarget.chart-components`                           | `composes`  | inbound   |
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### clampPaneRailPosition &gt; keeps positions inside 0..1 {#clamppanerailposition-keeps-positions-inside-0-1}
+
+**ID**: `testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### clampPaneRailPosition &gt; sends non-finite positions to 0 {#clamppanerailposition-sends-non-finite-positions-to-0}
+
+**ID**: `testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
 
 ### clusterOrder &gt; breaks degree and label ties by id, not input order {#clusterorder-breaks-degree-and-label-ties-by-id-not-input-order}
 
@@ -5247,6 +6098,7 @@ tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker 
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-ordering` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### clusterOrder &gt; is a permutation of every node, grouped by layer {#clusterorder-is-a-permutation-of-every-node-grouped-by-layer}
@@ -5265,6 +6117,7 @@ tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker 
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-ordering` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### clusterOrder &gt; is deterministic: same result on every run and for any input order {#clusterorder-is-deterministic-same-result-on-every-run-and-for-any-input-order}
@@ -5283,6 +6136,7 @@ tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker 
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-ordering` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### clusterOrder &gt; keeps each community together within its layer, layers in rank order {#clusterorder-keeps-each-community-together-within-its-layer-layers-in-rank-order}
@@ -5301,6 +6155,7 @@ tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker 
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-ordering` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### Clustered View Bubble Packing Integration {#clustered-view-bubble-packing-integration}
@@ -5336,9 +6191,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Attributes
 
-| Name   | Value |
-| ------ | ----- |
-| status | draft |
+| Name                 | Value     |
+| -------------------- | --------- |
+| implementationFormat | automated |
+| status               | automated |
 
 #### Relationships
 
@@ -5361,9 +6217,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; clamps inside the viewport when neither alignment fits {#computedropdownposition-clamps-inside-the-viewport-when-neither-alignment-fits}
 
@@ -5379,9 +6236,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; clamps to the margin when the trigger is scrolled past the left edge {#computedropdownposition-clamps-to-the-margin-when-the-trigger-is-scrolled-past-the-left-edge}
 
@@ -5397,9 +6255,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; flips bottom to top when there is no room below and more room above {#computedropdownposition-flips-bottom-to-top-when-there-is-no-room-below-and-more-room-above}
 
@@ -5415,9 +6274,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; flips end to start when the panel would cross the left edge {#computedropdownposition-flips-end-to-start-when-the-panel-would-cross-the-left-edge}
 
@@ -5433,9 +6293,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; flips start to end when the panel would cross the right edge {#computedropdownposition-flips-start-to-end-when-the-panel-would-cross-the-right-edge}
 
@@ -5451,9 +6312,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; flips top to bottom when there is no room above and more room below {#computedropdownposition-flips-top-to-bottom-when-there-is-no-room-above-and-more-room-below}
 
@@ -5469,9 +6331,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; honours a custom offset and margin {#computedropdownposition-honours-a-custom-offset-and-margin}
 
@@ -5487,9 +6350,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; keeps the requested side when neither side fits but it has more room {#computedropdownposition-keeps-the-requested-side-when-neither-side-fits-but-it-has-more-room}
 
@@ -5505,9 +6369,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; never reports negative available height {#computedropdownposition-never-reports-negative-available-height}
 
@@ -5523,9 +6388,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; places bottom-end with right edges aligned {#computedropdownposition-places-bottom-end-with-right-edges-aligned}
 
@@ -5541,9 +6407,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; places bottom-start below the trigger, left edges aligned {#computedropdownposition-places-bottom-start-below-the-trigger-left-edges-aligned}
 
@@ -5559,9 +6426,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeDropdownPosition &gt; places top-start above the trigger {#computedropdownposition-places-top-start-above-the-trigger}
 
@@ -5577,9 +6445,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.dropdown-placement` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.dropdown-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.dropdown-placement`      | `composes` | inbound   |
 
 ### computeReach &gt; continues only from nodes reached over cross-layer links {#computereach-continues-only-from-nodes-reached-over-cross-layer-links}
 
@@ -5721,9 +6590,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; falls back to a perpendicular side when neither vertical side has room {#computetooltipposition-falls-back-to-a-perpendicular-side-when-neither-vertical-side-has-room}
 
@@ -5739,9 +6609,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; flips above from a bottom preference when there is no room below {#computetooltipposition-flips-above-from-a-bottom-preference-when-there-is-no-room-below}
 
@@ -5757,9 +6628,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; flips below when there is no room above {#computetooltipposition-flips-below-when-there-is-no-room-above}
 
@@ -5775,9 +6647,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; places the card above the anchor, centred, with the gap {#computetooltipposition-places-the-card-above-the-anchor-centred-with-the-gap}
 
@@ -5793,9 +6666,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; respects custom offset and margin {#computetooltipposition-respects-custom-offset-and-margin}
 
@@ -5811,9 +6685,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; takes the left side when the right has no room either {#computetooltipposition-takes-the-left-side-when-the-right-has-no-room-either}
 
@@ -5829,9 +6704,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; treats a zero-size anchor as a point {#computetooltipposition-treats-a-zero-size-anchor-as-a-point}
 
@@ -5847,9 +6723,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### computeTooltipPosition &gt; uses the least-overflowing side and stays inside bounds when nothing fits {#computetooltipposition-uses-the-least-overflowing-side-and-stays-inside-bounds-when-nothing-fits}
 
@@ -5865,9 +6742,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.tooltip-placement` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tooltip-placement` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.tooltip-placement`      | `composes` | inbound   |
 
 ### createProjector &gt; farther points have larger depth and smaller scale (perspective divide) {#createprojector-farther-points-have-larger-depth-and-smaller-scale-perspective-divide}
 
@@ -5883,9 +6761,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createProjector &gt; maps the target to the screen origin (plus offset) at scale = zoom {#createprojector-maps-the-target-to-the-screen-origin-plus-offset-at-scale-zoom}
 
@@ -5901,9 +6780,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createProjector &gt; side-on: world up is screen up, and x maps to x {#createprojector-side-on-world-up-is-screen-up-and-x-maps-to-x}
 
@@ -5919,9 +6799,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createProjector &gt; stays finite for points behind the camera {#createprojector-stays-finite-for-points-behind-the-camera}
 
@@ -5937,9 +6818,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createProjector &gt; targetY moves the look-at height {#createprojector-targety-moves-the-look-at-height}
 
@@ -5955,9 +6837,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createProjector &gt; top-down: depth ignores in-plane position and higher planes are nearer {#createprojector-top-down-depth-ignores-in-plane-position-and-higher-planes-are-nearer}
 
@@ -5973,9 +6856,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createProjector &gt; yaw rotates about the vertical axis {#createprojector-yaw-rotates-about-the-vertical-axis}
 
@@ -5991,9 +6875,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### createTweenChannels &gt; a later move replaces only the channels it names; the others keep running {#createtweenchannels-a-later-move-replaces-only-the-channels-it-names-the-others-keep-running}
 
@@ -6011,6 +6896,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tweened-animation` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
 
 ### createTweenChannels &gt; a replaced channel continues from the value it was given, without a jump {#createtweenchannels-a-replaced-channel-continues-from-the-value-it-was-given-without-a-jump}
@@ -6029,6 +6915,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tweened-animation` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
 
 ### createTweenChannels &gt; cancel stops the named channels where they are and drops their onDone {#createtweenchannels-cancel-stops-the-named-channels-where-they-are-and-drops-their-ondone}
@@ -6047,6 +6934,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tweened-animation` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
 
 ### createTweenChannels &gt; jumps under reduced motion, in one synchronous frame {#createtweenchannels-jumps-under-reduced-motion-in-one-synchronous-frame}
@@ -6065,6 +6953,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tweened-animation` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
 
 ### createTweenChannels &gt; runs a move to its target and reports idle on the last frame {#createtweenchannels-runs-a-move-to-its-target-and-reports-idle-on-the-last-frame}
@@ -6083,6 +6972,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tweened-animation` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
 
 ### curveEndBoxes &gt; covers the first px of a long route, not one t step of it {#curveendboxes-covers-the-first-px-of-a-long-route-not-one-t-step-of-it}
@@ -6101,6 +6991,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### dateUtils &gt; formatTimestamp takes a fixed now {#dateutils-formattimestamp-takes-a-fixed-now}
@@ -6117,9 +7008,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.server-rendering` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.server-rendering`                 | `composes` | inbound   |
 
 ### dateUtils &gt; isToday takes a fixed today (a date; dateUtils.test.ts covers timezones) {#dateutils-istoday-takes-a-fixed-today-a-date-dateutils-test-ts-covers-timezones}
 
@@ -6135,9 +7027,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.server-rendering` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.server-rendering`                 | `composes` | inbound   |
 
 ### edge curves &gt; hit their endpoints and report unit tangents {#edge-curves-hit-their-endpoints-and-report-unit-tangents}
 
@@ -6355,6 +7248,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 | Type        | Related Element                                                    | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.edge-label-clear-position-search` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.edge-geometry`                     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.edge-label-placement-and-styling`      | `composes` | inbound   |
 
 ### findClearLabelPosition &gt; handles orthogonal polyline paths (5+ waypoints) for navigation edges {#findclearlabelposition-handles-orthogonal-polyline-paths-5-waypoints-for-navigation-edges}
@@ -6393,6 +7287,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 | Type        | Related Element                                                    | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.edge-label-clear-position-search` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.edge-geometry`                     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.edge-label-placement-and-styling`      | `composes` | inbound   |
 
 ### findClearLabelPosition &gt; never needs to consider a fourth candidate when the midpoint is already clear {#findclearlabelposition-never-needs-to-consider-a-fourth-candidate-when-the-midpoint-is-already-clear}
@@ -6412,6 +7307,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 | Type        | Related Element                                                    | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.edge-label-clear-position-search` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.edge-geometry`                     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.edge-label-placement-and-styling`      | `composes` | inbound   |
 
 ### findClearLabelPosition &gt; steps away from the midpoint when a third node sits on top of it {#findclearlabelposition-steps-away-from-the-midpoint-when-a-third-node-sits-on-top-of-it}
@@ -6431,6 +7327,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 | Type        | Related Element                                                    | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.edge-label-clear-position-search` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.edge-geometry`                     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.edge-label-placement-and-styling`      | `composes` | inbound   |
 
 ### forceLayout &gt; keeps default-sized chip nodes non-overlapping in a simple chain {#forcelayout-keeps-default-sized-chip-nodes-non-overlapping-in-a-simple-chain}
@@ -6556,9 +7453,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### formatTimestamp with a fixed now &gt; prints dates past a week as en-US in UTC, whatever the timezone {#formattimestamp-with-a-fixed-now-prints-dates-past-a-week-as-en-us-in-utc-whatever-the-timezone}
 
@@ -6574,9 +7472,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### formatTimestamp with a fixed now &gt; relative labels depend only on the two instants {#formattimestamp-with-a-fixed-now-relative-labels-depend-only-on-the-two-instants}
 
@@ -6592,9 +7491,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### formatTimestamp with a fixed now &gt; runs under the zones it claims to (the TZ switch takes effect) {#formattimestamp-with-a-fixed-now-runs-under-the-zones-it-claims-to-the-tz-switch-takes-effect}
 
@@ -6610,9 +7510,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### fromOTLP &gt; accepts SPAN_KIND_\* / STATUS_CODE_\* name strings {#fromotlp-accepts-span-kind-status-code-name-strings}
 
@@ -6628,9 +7529,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`             | `composes` | inbound   |
 
 ### fromOTLP &gt; classifies a stringified status code ("2") as error {#fromotlp-classifies-a-stringified-status-code-2-as-error}
 
@@ -6646,9 +7548,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`             | `composes` | inbound   |
 
 ### fromOTLP &gt; coerces intValue/boolValue attributes to JS primitives {#fromotlp-coerces-intvalue-boolvalue-attributes-to-js-primitives}
 
@@ -6772,9 +7675,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`             | `composes` | inbound   |
 
 ### fromOTLP &gt; maps status code ERROR -&gt; error and extracts the exception event {#fromotlp-maps-status-code-error-error-and-extracts-the-exception-event}
 
@@ -6808,9 +7712,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`             | `composes` | inbound   |
 
 ### fromOTLP &gt; resolves the root span and service.name from resource attributes {#fromotlp-resolves-the-root-span-and-service-name-from-resource-attributes}
 
@@ -6844,9 +7749,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`             | `composes` | inbound   |
 
 ### fromOTLP &gt; UNSET status maps to ok (OTLP has no warn) {#fromotlp-unset-status-maps-to-ok-otlp-has-no-warn}
 
@@ -6880,9 +7786,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`                  | `composes` | inbound   |
 
 ### fromXRay &gt; coerces numeric id/parent_id and tolerates a missing id {#fromxray-coerces-numeric-id-parent-id-and-tolerates-a-missing-id}
 
@@ -6898,9 +7805,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`                  | `composes` | inbound   |
 
 ### fromXRay &gt; converts epoch-seconds to ms offsets/durations {#fromxray-converts-epoch-seconds-to-ms-offsets-durations}
 
@@ -6952,9 +7860,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`                  | `composes` | inbound   |
 
 ### fromXRay &gt; maps namespace remote/aws -&gt; CLIENT, plain subsegment -&gt; INTERNAL {#fromxray-maps-namespace-remote-aws-client-plain-subsegment-internal}
 
@@ -7060,9 +7969,10 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`                  | `composes` | inbound   |
 
 ### fromXRay &gt; walks the subsegment tree into a flat span list {#fromxray-walks-the-subsegment-tree-into-a-flat-span-list}
 
@@ -7098,6 +8008,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyBodyRadii &gt; keeps small weights distinguishable across a wide range {#galaxybodyradii-keeps-small-weights-distinguishable-across-a-wide-range}
@@ -7116,6 +8027,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyBodyRadii &gt; maps the square root of weight to area between the min and max radius {#galaxybodyradii-maps-the-square-root-of-weight-to-area-between-the-min-and-max-radius}
@@ -7134,6 +8046,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyEffectiveWeights &gt; sums children for an unweighted parent, and a given weight wins over the sum {#galaxyeffectiveweights-sums-children-for-an-unweighted-parent-and-a-given-weight-wins-over-the-sum}
@@ -7152,6 +8065,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyEffectiveWeights &gt; treats NaN, negative and missing weights as missing (unweighted leaf = 0 once any weight is given) {#galaxyeffectiveweights-treats-nan-negative-and-missing-weights-as-missing-unweighted-leaf-0-once-any-weight-is-given}
@@ -7170,6 +8084,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyEffectiveWeights &gt; uses subtree leaf counts when no node has a weight {#galaxyeffectiveweights-uses-subtree-leaf-counts-when-no-node-has-a-weight}
@@ -7188,6 +8103,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyLayout &gt; a root with exactly one child stays in that child's group — delegating headship to a single child would orphan the root from every group {#galaxylayout-a-root-with-exactly-one-child-stays-in-that-child-s-group-delegating-headship-to-a-single-child-would-orphan-the-root-from-every-group}
@@ -7244,6 +8160,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### galaxyLayout &gt; galaxies in a busy forest never overlap (packed by system circles) {#galaxylayout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles}
@@ -7282,6 +8199,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### galaxyLayout &gt; independent galaxies never overlap, whatever their depth {#galaxylayout-independent-galaxies-never-overlap-whatever-their-depth}
@@ -7301,6 +8219,7 @@ npm run check:colors passes on the branch and fails when a literal such as #f59e
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationservice.galaxy-layout`                                  | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                  | `composes`  | inbound   |
 
 ### Galaxy Layout Lab POC Dataset Stress Test {#galaxy-layout-lab-poc-dataset-stress-test}
@@ -7341,6 +8260,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyLayout ordering and shape &gt; places the heaviest satellite closest to the parent's outward heading {#galaxylayout-ordering-and-shape-places-the-heaviest-satellite-closest-to-the-parent-s-outward-heading}
@@ -7359,6 +8279,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxyLayout &gt; pinning a non-leaf node repositions its children relative to the pin, not the original root-ring placement {#galaxylayout-pinning-a-non-leaf-node-repositions-its-children-relative-to-the-pin-not-the-original-root-ring-placement}
@@ -7377,6 +8298,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### galaxyLayout &gt; positions every node {#galaxylayout-positions-every-node}
@@ -7395,6 +8317,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### galaxyLayout &gt; respects pinned nodes — their position never changes {#galaxylayout-respects-pinned-nodes-their-position-never-changes}
@@ -7413,6 +8336,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### galaxyLayout &gt; the layout is deterministic {#galaxylayout-the-layout-is-deterministic}
@@ -7431,6 +8355,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation` | `composes` | inbound   |
 
 ### galaxy live drag (#287) &gt; a flare drag frame resolves overlaps with grid-local work, not all pairs every pass {#galaxy-live-drag-287-a-flare-drag-frame-resolves-overlaps-with-grid-local-work-not-all-pairs-every-pass}
@@ -7546,6 +8471,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                           | Predicate  | Direction |
 | ----------- | --------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`            | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit` | `composes` | inbound   |
 
 ### galaxySimulationStep &gt; a held drag carries its subtree, settles, and leaves no overlap {#galaxysimulationstep-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap}
@@ -7659,9 +8585,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### glide end (#320) &gt; ends a 2000px/s flick in about 2.3s, skipping under a pixel of travel {#glide-end-320-ends-a-2000px-s-flick-in-about-2-3s-skipping-under-a-pixel-of-travel}
 
@@ -7677,9 +8604,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### glide end (#320) &gt; stops once under half a pixel of travel is left {#glide-end-320-stops-once-under-half-a-pixel-of-travel-is-left}
 
@@ -7695,9 +8623,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### GraphCanvas accessible names (#304) &gt; edge popover dialog is named by edge and node labels {#graphcanvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels}
 
@@ -8805,9 +9734,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; markerSizeForStrokeWidth &gt; scales proportionally with stroke width {#graph-edge-style-utilities-markersizeforstrokewidth-scales-proportionally-with-stroke-width}
 
@@ -8823,9 +9753,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; strokeDashToDasharray &gt; produces an asymmetric pattern from a \[dash, gap\] tuple {#graph-edge-style-utilities-strokedashtodasharray-produces-an-asymmetric-pattern-from-a-dash-gap-tuple}
 
@@ -8841,9 +9772,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; strokeDashToDasharray &gt; produces an equal dash/gap pattern from a single number {#graph-edge-style-utilities-strokedashtodasharray-produces-an-equal-dash-gap-pattern-from-a-single-number}
 
@@ -8859,9 +9791,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; clamps out-of-range weights {#graph-edge-style-utilities-weighttostrokewidth-clamps-out-of-range-weights}
 
@@ -8877,9 +9810,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; falls back to the 1px minimum instead of NaN for non-finite input {#graph-edge-style-utilities-weighttostrokewidth-falls-back-to-the-1px-minimum-instead-of-nan-for-non-finite-input}
 
@@ -8895,9 +9829,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; keeps low-end weight differences visually distinguishable {#graph-edge-style-utilities-weighttostrokewidth-keeps-low-end-weight-differences-visually-distinguishable}
 
@@ -8913,9 +9848,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; maps weight 0 to the 1px minimum {#graph-edge-style-utilities-weighttostrokewidth-maps-weight-0-to-the-1px-minimum}
 
@@ -8931,9 +9867,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; maps weight 100 to the 8px maximum {#graph-edge-style-utilities-weighttostrokewidth-maps-weight-100-to-the-8px-maximum}
 
@@ -8949,9 +9886,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; maps weight 25 via the sqrt curve {#graph-edge-style-utilities-weighttostrokewidth-maps-weight-25-via-the-sqrt-curve}
 
@@ -8967,9 +9905,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; maps weight 50 via the sqrt curve {#graph-edge-style-utilities-weighttostrokewidth-maps-weight-50-via-the-sqrt-curve}
 
@@ -8985,9 +9924,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Edge Style Utilities &gt; weightToStrokeWidth &gt; maps weight 75 via the sqrt curve {#graph-edge-style-utilities-weighttostrokewidth-maps-weight-75-via-the-sqrt-curve}
 
@@ -9003,9 +9943,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate  | Direction |
-| ----------- | ------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.edge-weight-and-dash-styling` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.graph-edge-style-utilities`        | `composes` | inbound   |
 
 ### Graph Utilities &gt; anchoredEdgePoint &gt; falls through to rectEdgePoint for auto {#graph-utilities-anchorededgepoint-falls-through-to-rectedgepoint-for-auto}
 
@@ -9131,6 +10072,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; calculates midpoint for straight horizontal line {#graph-utilities-bezierpath-calculates-midpoint-for-straight-horizontal-line}
@@ -9149,6 +10091,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; calculates midpoint for straight vertical line {#graph-utilities-bezierpath-calculates-midpoint-for-straight-vertical-line}
@@ -9167,6 +10110,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; creates a valid path string {#graph-utilities-bezierpath-creates-a-valid-path-string}
@@ -9185,6 +10129,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; curvature=0 produces a straight-line path with control point at the midpoint {#graph-utilities-bezierpath-curvature-0-produces-a-straight-line-path-with-control-point-at-the-midpoint}
@@ -9203,6 +10148,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; handles negative coordinates {#graph-utilities-bezierpath-handles-negative-coordinates}
@@ -9221,6 +10167,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; handles zero-length path {#graph-utilities-bezierpath-handles-zero-length-path}
@@ -9239,6 +10186,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; path d attribute has correct format {#graph-utilities-bezierpath-path-d-attribute-has-correct-format}
@@ -9257,6 +10205,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; produces symmetric paths for symmetric inputs {#graph-utilities-bezierpath-produces-symmetric-paths-for-symmetric-inputs}
@@ -9275,6 +10224,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; respects curvature parameter {#graph-utilities-bezierpath-respects-curvature-parameter}
@@ -9293,6 +10243,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; bezierPath &gt; uses default curvature when not provided {#graph-utilities-bezierpath-uses-default-curvature-when-not-provided}
@@ -9311,6 +10262,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; computeEdgePath &gt; auto/auto with no curvature override matches todays quadratic bezier at 0.22 {#graph-utilities-computeedgepath-auto-auto-with-no-curvature-override-matches-todays-quadratic-bezier-at-0-22}
@@ -9330,6 +10282,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.bezier-edge-path-computation` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.edge-geometry`                 | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities`     | `composes` | inbound   |
 
 ### Graph Utilities &gt; computeEdgePath &gt; both anchors fixed pin endpoints regardless of vertical offset {#graph-utilities-computeedgepath-both-anchors-fixed-pin-endpoints-regardless-of-vertical-offset}
@@ -9638,6 +10591,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities` | `composes` | inbound   |
 
 ### Graph Utilities &gt; integration: rectEdgePoint + bezierPath &gt; edge points are on the rectangle boundaries {#graph-utilities-integration-rectedgepoint-bezierpath-edge-points-are-on-the-rectangle-boundaries}
@@ -9852,9 +10806,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive axis groups &gt; groups by any value, sorted by code point, and leaves null or undefined unassigned {#hive-axis-groups-groups-by-any-value-sorted-by-code-point-and-leaves-null-or-undefined-unassigned}
 
@@ -9870,9 +10825,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive axis groups &gt; lays the groups out like layers, with stable slots {#hive-axis-groups-lays-the-groups-out-like-layers-with-stable-slots}
 
@@ -9888,9 +10844,11 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout`   | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`        | `composes` | inbound   |
 
 ### hive axis groups &gt; orders axes by a list (the rest follow) or a comparator {#hive-axis-groups-orders-axes-by-a-list-the-rest-follow-or-a-comparator}
 
@@ -9906,9 +10864,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive axis groups &gt; ranks within the axis groups {#hive-axis-groups-ranks-within-the-axis-groups}
 
@@ -9924,9 +10883,11 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout`   | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`        | `composes` | inbound   |
 
 ### hive axis groups &gt; tells structurally equal groupings apart from changed ones {#hive-axis-groups-tells-structurally-equal-groupings-apart-from-changed-ones}
 
@@ -9942,9 +10903,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; clamps the split so copies of neighbouring axes do not meet {#hive-geometry-clamps-the-split-so-copies-of-neighbouring-axes-do-not-meet}
 
@@ -9960,9 +10922,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; divides axis angles evenly from the start angle {#hive-geometry-divides-axis-angles-evenly-from-the-start-angle}
 
@@ -9978,9 +10941,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; draws unsplit intra-layer links as arcs whose side encodes direction {#hive-geometry-draws-unsplit-intra-layer-links-as-arcs-whose-side-encodes-direction}
 
@@ -9996,9 +10960,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; hivePoint measures clockwise from +x {#hive-geometry-hivepoint-measures-clockwise-from-x}
 
@@ -10014,9 +10979,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; keeps a loop between near neighbours wide enough for its arrowhead {#hive-geometry-keeps-a-loop-between-near-neighbours-wide-enough-for-its-arrowhead}
 
@@ -10032,9 +10998,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; keeps angles stable when a layer is hidden {#hive-geometry-keeps-angles-stable-when-a-layer-is-hidden}
 
@@ -10050,9 +11017,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; keeps angles stable when the first layer, or all but one, is hidden {#hive-geometry-keeps-angles-stable-when-the-first-layer-or-all-but-one-is-hidden}
 
@@ -10068,9 +11036,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; labels the copy whose text reads clear of the gap {#hive-geometry-labels-the-copy-whose-text-reads-clear-of-the-gap}
 
@@ -10086,9 +11055,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; places nodes outward by rank {#hive-geometry-places-nodes-outward-by-rank}
 
@@ -10104,9 +11074,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; returns null for a layer without an axis {#hive-geometry-returns-null-for-a-layer-without-an-axis}
 
@@ -10122,9 +11093,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; runs cross-layer links between the facing copies {#hive-geometry-runs-cross-layer-links-between-the-facing-copies}
 
@@ -10140,9 +11112,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; runs intra-layer links between the two copies of the axis {#hive-geometry-runs-intra-layer-links-between-the-two-copies-of-the-axis}
 
@@ -10158,9 +11131,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### hive geometry &gt; sends links between opposite axes to either side by direction {#hive-geometry-sends-links-between-opposite-axes-to-either-side-by-direction}
 
@@ -10176,9 +11150,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.hive-plot-layout` | `composes` | inbound   |
+| Type        | Related Element                                    | Predicate  | Direction |
+| ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.hive-plot-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.hive-plot-layout`      | `composes` | inbound   |
 
 ### HivePlot &gt; a selection on a node without an axis is named as not shown {#hiveplot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown}
 
@@ -10196,6 +11171,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; axes by any attribute: one axis per value, sorted, titled by id {#hiveplot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id}
@@ -10214,6 +11190,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; axes by attribute: a layer filter that empties an axis leaves a gap; the rest and the frame stay put {#hiveplot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-stay-put}
@@ -10232,6 +11209,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; axes by attribute: hiding a layer hides its nodes, and every axis stays put {#hiveplot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put}
@@ -10250,6 +11228,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; axisOrder puts the listed axes first {#hiveplot-axisorder-puts-the-listed-axes-first}
@@ -10268,6 +11247,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; click selects, clicking again and Escape clear {#hiveplot-click-selects-clicking-again-and-escape-clear}
@@ -10286,6 +11266,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; draws doubled axes, every link and one focusable button per node {#hiveplot-draws-doubled-axes-every-link-and-one-focusable-button-per-node}
@@ -10304,6 +11285,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; follow changes the reach {#hiveplot-follow-changes-the-reach}
@@ -10322,6 +11304,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; hiding a layer leaves a gap: the other axes and the frame stay put$\{split ? ' (unsplit)' : ''\} {#hiveplot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit}
@@ -10340,6 +11323,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; keyboard: one tab stop, arrows move along and across axes, Enter selects {#hiveplot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects}
@@ -10358,6 +11342,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; link click selects its source {#hiveplot-link-click-selects-its-source}
@@ -10376,6 +11361,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; nodes without an axis are not drawn, with a dev warning {#hiveplot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning}
@@ -10394,6 +11380,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; split=0 draws one line per axis {#hiveplot-split-0-draws-one-line-per-axis}
@@ -10412,6 +11399,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; unsplit: hovering a node never moves or drops another label {#hiveplot-unsplit-hovering-a-node-never-moves-or-drops-another-label}
@@ -10430,6 +11418,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; visual: $\{theme\} canvas, axes by attribute with a selection {#hiveplot-visual-theme-canvas-axes-by-attribute-with-a-selection}
@@ -10448,6 +11437,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; visual: $\{theme\} canvas, no selection {#hiveplot-visual-theme-canvas-no-selection}
@@ -10466,6 +11456,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; visual: $\{theme\} canvas, selection at follow 1 {#hiveplot-visual-theme-canvas-selection-at-follow-1}
@@ -10484,6 +11475,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### HivePlot &gt; visual: unsplit loops with a hidden layer {#hiveplot-visual-unsplit-loops-with-a-hidden-layer}
@@ -10502,6 +11494,7 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 | Type        | Related Element                             | Predicate  | Direction |
 | ----------- | ------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.hive-plot`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.hive-plot-view` | `composes` | inbound   |
 
 ### house branch map adapter &gt; maps workstreams, interfaces and blocked as House does {#house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does}
@@ -11563,6 +12556,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar falls back to initials when image fails {#integration-avatar-component-avatar-falls-back-to-initials-when-image-fails}
@@ -11581,6 +12575,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar image is displayed when src is provided {#integration-avatar-component-avatar-image-is-displayed-when-src-is-provided}
@@ -11599,6 +12594,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar produces deterministic colors for same name {#integration-avatar-component-avatar-produces-deterministic-colors-for-same-name}
@@ -11617,6 +12613,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar produces different colors for different names {#integration-avatar-component-avatar-produces-different-colors-for-different-names}
@@ -11635,6 +12632,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar renders with accessibility attributes {#integration-avatar-component-avatar-renders-with-accessibility-attributes}
@@ -11653,6 +12651,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar renders with initials for various names {#integration-avatar-component-avatar-renders-with-initials-for-various-names}
@@ -11671,6 +12670,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar respects color override prop {#integration-avatar-component-avatar-respects-color-override-prop}
@@ -11689,6 +12689,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar sets aria-hidden for decorative mode {#integration-avatar-component-avatar-sets-aria-hidden-for-decorative-mode}
@@ -11707,6 +12708,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar supports all sizes {#integration-avatar-component-avatar-supports-all-sizes}
@@ -11725,6 +12727,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Avatar Component &gt; Avatar supports different shapes (circle and rounded) {#integration-avatar-component-avatar-supports-different-shapes-circle-and-rounded}
@@ -11743,6 +12746,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                     | Predicate  | Direction |
 | ----------- | ----------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.avatar`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.avatar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; accessibility attributes in month view {#integration-calendar-components-accessibility-attributes-in-month-view}
@@ -11761,6 +12765,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; agenda view dark canvas snapshot {#integration-calendar-components-agenda-view-dark-canvas-snapshot}
@@ -11779,6 +12784,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; agenda view light canvas snapshot {#integration-calendar-components-agenda-view-light-canvas-snapshot}
@@ -11797,6 +12803,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; date selection changes focused date {#integration-calendar-components-date-selection-changes-focused-date}
@@ -11815,6 +12822,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; day view dark canvas snapshot {#integration-calendar-components-day-view-dark-canvas-snapshot}
@@ -11833,6 +12841,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; day view light canvas snapshot {#integration-calendar-components-day-view-light-canvas-snapshot}
@@ -11851,6 +12860,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; event selection in month view {#integration-calendar-components-event-selection-in-month-view}
@@ -11869,6 +12879,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; keyboard navigation in month view {#integration-calendar-components-keyboard-navigation-in-month-view}
@@ -11887,6 +12898,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; keyboard navigation pgup/pgdn in month view {#integration-calendar-components-keyboard-navigation-pgup-pgdn-in-month-view}
@@ -11905,6 +12917,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; mini calendar selection {#integration-calendar-components-mini-calendar-selection}
@@ -11923,6 +12936,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; month view dark canvas snapshot {#integration-calendar-components-month-view-dark-canvas-snapshot}
@@ -11941,6 +12955,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; month view light canvas snapshot {#integration-calendar-components-month-view-light-canvas-snapshot}
@@ -11959,6 +12974,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; navigation buttons have accessible labels {#integration-calendar-components-navigation-buttons-have-accessible-labels}
@@ -11977,6 +12993,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; today navigation button {#integration-calendar-components-today-navigation-button}
@@ -11995,6 +13012,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; week view dark canvas snapshot {#integration-calendar-components-week-view-dark-canvas-snapshot}
@@ -12013,6 +13031,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Calendar Components &gt; week view light canvas snapshot {#integration-calendar-components-week-view-light-canvas-snapshot}
@@ -12031,6 +13050,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.calendar`                          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.calendar-and-mini-calendar` | `composes` | inbound   |
 
 ### integration: Chart Components &gt; BarH &gt; feature renders wider than standard {#integration-chart-components-barh-feature-renders-wider-than-standard}
@@ -12195,9 +13215,9 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 | ----------- | --------------------------------------------- | ---------- | --------- |
 | intra-layer | `testing.testcoveragetarget.chart-components` | `composes` | inbound   |
 
-### integration: Chart Components &gt; Heatmap &gt; cell fills are non-empty hex colors {#integration-chart-components-heatmap-cell-fills-are-non-empty-hex-colors}
+### integration: Chart Components &gt; Heatmap &gt; cell fill is the base color, fill-opacity is in \[0.12, 1\] {#integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1}
 
-**ID**: `testing.testcasesketch.integration-chart-components-heatmap-cell-fills-are-non-empty-hex-colors`
+**ID**: `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`
 
 **Type**: `testcasesketch`
 
@@ -12209,9 +13229,12 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.chart-components` | `composes` | inbound   |
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.heatmap`                                           | `tests`     | outbound  |
+| intra-layer | `testing.testcoveragetarget.chart-components`                           | `composes`  | inbound   |
 
 ### integration: Chart Components &gt; Heatmap &gt; feature renders with axis labels {#integration-chart-components-heatmap-feature-renders-with-axis-labels}
 
@@ -12353,9 +13376,12 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.chart-components` | `composes` | inbound   |
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.line-chart`                                        | `tests`     | outbound  |
+| intra-layer | `testing.testcoveragetarget.chart-components`                           | `composes`  | inbound   |
 
 ### integration: Chart Components &gt; LineChart &gt; micro renders without axes {#integration-chart-components-linechart-micro-renders-without-axes}
 
@@ -12839,9 +13865,12 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.chart-components` | `composes` | inbound   |
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.status-timeline`                                   | `tests`     | outbound  |
+| intra-layer | `testing.testcoveragetarget.chart-components`                           | `composes`  | inbound   |
 
 ### integration: Chart Components &gt; StatusTimeline &gt; segment rects use semantic status colors {#integration-chart-components-statustimeline-segment-rects-use-semantic-status-colors}
 
@@ -12857,9 +13886,12 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                               | Predicate  | Direction |
-| ----------- | --------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.chart-components` | `composes` | inbound   |
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.status-timeline`                                   | `tests`     | outbound  |
+| intra-layer | `testing.testcoveragetarget.chart-components`                           | `composes`  | inbound   |
 
 ### integration: Chart Components &gt; StatusTimeline &gt; standard renders 4 track labels {#integration-chart-components-statustimeline-standard-renders-4-track-labels}
 
@@ -14659,6 +15691,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.diff-viewer`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.diff-viewer-components` | `composes` | inbound   |
 
 ### integration: DiffViewer Components &gt; HashSetDiff collapse/expand interaction {#integration-diffviewer-components-hashsetdiff-collapse-expand-interaction}
@@ -14677,6 +15710,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.diff-viewer`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.diff-viewer-components` | `composes` | inbound   |
 
 ### integration: DiffViewer Components &gt; light canvas full page snapshot (covers empty, small, overflow states and glyph rendering) {#integration-diffviewer-components-light-canvas-full-page-snapshot-covers-empty-small-overflow-states-and-glyph-rendering}
@@ -14695,6 +15729,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.diff-viewer`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.diff-viewer-components` | `composes` | inbound   |
 
 ### integration: DiffViewer Components &gt; SideBySideDiff gutter labels are visually hidden {#integration-diffviewer-components-sidebysidediff-gutter-labels-are-visually-hidden}
@@ -14713,6 +15748,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.diff-viewer`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.diff-viewer-components` | `composes` | inbound   |
 
 ### integration: dropdown portal &gt; flips up and left when there is no room below or to the right {#integration-dropdown-portal-flips-up-and-left-when-there-is-no-room-below-or-to-the-right}
@@ -14929,6 +15965,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; checkbox mode: multiple selections allowed {#integration-filterdropdown-component-checkbox-mode-multiple-selections-allowed}
@@ -14947,6 +15984,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; checkbox mode: unselecting works correctly {#integration-filterdropdown-component-checkbox-mode-unselecting-works-correctly}
@@ -14965,6 +16003,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; closes panel when clicking outside {#integration-filterdropdown-component-closes-panel-when-clicking-outside}
@@ -14983,6 +16022,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; dark canvas &gt; visual snapshot of checkbox mode - dark {#integration-filterdropdown-component-dark-canvas-visual-snapshot-of-checkbox-mode-dark}
@@ -15001,6 +16041,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; dark canvas &gt; visual snapshot of radio mode - dark {#integration-filterdropdown-component-dark-canvas-visual-snapshot-of-radio-mode-dark}
@@ -15019,6 +16060,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; displays checkbox items {#integration-filterdropdown-component-displays-checkbox-items}
@@ -15037,6 +16079,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; displays section with title {#integration-filterdropdown-component-displays-section-with-title}
@@ -15055,6 +16098,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Arrow Down navigates to next item in checkbox mode {#integration-filterdropdown-component-keyboard-arrow-down-navigates-to-next-item-in-checkbox-mode}
@@ -15073,6 +16117,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Arrow Down navigates to next item in radio mode {#integration-filterdropdown-component-keyboard-arrow-down-navigates-to-next-item-in-radio-mode}
@@ -15091,6 +16136,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Enter selects radio option and closes panel {#integration-filterdropdown-component-keyboard-enter-selects-radio-option-and-closes-panel}
@@ -15109,6 +16155,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Enter toggles checkbox selection {#integration-filterdropdown-component-keyboard-enter-toggles-checkbox-selection}
@@ -15127,6 +16174,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Escape closes panel and returns focus to trigger {#integration-filterdropdown-component-keyboard-escape-closes-panel-and-returns-focus-to-trigger}
@@ -15145,6 +16193,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Space selects radio option and closes panel {#integration-filterdropdown-component-keyboard-space-selects-radio-option-and-closes-panel}
@@ -15163,6 +16212,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Space toggles checkbox selection {#integration-filterdropdown-component-keyboard-space-toggles-checkbox-selection}
@@ -15181,6 +16231,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Tab navigates forward through items in checkbox mode {#integration-filterdropdown-component-keyboard-tab-navigates-forward-through-items-in-checkbox-mode}
@@ -15199,6 +16250,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; keyboard: Tab navigates forward through items in radio mode {#integration-filterdropdown-component-keyboard-tab-navigates-forward-through-items-in-radio-mode}
@@ -15217,6 +16269,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; opens panel when trigger is clicked {#integration-filterdropdown-component-opens-panel-when-trigger-is-clicked}
@@ -15235,6 +16288,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; radio mode: only one selection allowed {#integration-filterdropdown-component-radio-mode-only-one-selection-allowed}
@@ -15253,6 +16307,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; radio mode: selection changes update trigger summary {#integration-filterdropdown-component-radio-mode-selection-changes-update-trigger-summary}
@@ -15271,6 +16326,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; renders trigger button {#integration-filterdropdown-component-renders-trigger-button}
@@ -15289,6 +16345,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; visual snapshot of checkbox mode {#integration-filterdropdown-component-visual-snapshot-of-checkbox-mode}
@@ -15307,6 +16364,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: FilterDropdown Component &gt; visual snapshot of radio mode {#integration-filterdropdown-component-visual-snapshot-of-radio-mode}
@@ -15325,6 +16383,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                              | Predicate  | Direction |
 | ----------- | -------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.filter-dropdown`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.filter-dropdown` | `composes` | inbound   |
 
 ### integration: fit frames boundary circles (#305) &gt; force-clustered mount fit &gt; cluster bubbles stay in frame {#integration-fit-frames-boundary-circles-305-force-clustered-mount-fit-cluster-bubbles-stay-in-frame}
@@ -20663,6 +21722,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel accessibility - semantic structure {#integration-inspectorpanel-kvgrid-components-inspectorpanel-accessibility-semantic-structure}
@@ -20681,6 +21741,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel head displays all required elements {#integration-inspectorpanel-kvgrid-components-inspectorpanel-head-displays-all-required-elements}
@@ -20699,6 +21760,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel renders with head content {#integration-inspectorpanel-kvgrid-components-inspectorpanel-renders-with-head-content}
@@ -20717,6 +21779,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel scrolls independently {#integration-inspectorpanel-kvgrid-components-inspectorpanel-scrolls-independently}
@@ -20735,6 +21798,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel.Section renders with title and count {#integration-inspectorpanel-kvgrid-components-inspectorpanel-section-renders-with-title-and-count}
@@ -20753,6 +21817,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel sections have borders {#integration-inspectorpanel-kvgrid-components-inspectorpanel-sections-have-borders}
@@ -20771,6 +21836,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel visual regression - full page {#integration-inspectorpanel-kvgrid-components-inspectorpanel-visual-regression-full-page}
@@ -20789,6 +21855,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel with section actions renders buttons {#integration-inspectorpanel-kvgrid-components-inspectorpanel-with-section-actions-renders-buttons}
@@ -20807,6 +21874,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; InspectorPanel with version pill renders version {#integration-inspectorpanel-kvgrid-components-inspectorpanel-with-version-pill-renders-version}
@@ -20825,6 +21893,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; KVGrid displays key-value pairs {#integration-inspectorpanel-kvgrid-components-kvgrid-displays-key-value-pairs}
@@ -20843,6 +21912,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; KVGrid keys are styled correctly {#integration-inspectorpanel-kvgrid-components-kvgrid-keys-are-styled-correctly}
@@ -20861,6 +21931,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: InspectorPanel & KVGrid Components &gt; KVGrid with long values breaks properly {#integration-inspectorpanel-kvgrid-components-kvgrid-with-long-values-breaks-properly}
@@ -20879,6 +21950,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.inspector-panel`                   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Accessibility &gt; should announce card moves {#integration-kanbanboard-component-accessibility-should-announce-card-moves}
@@ -20897,6 +21969,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Accessibility &gt; should have live region for announcements {#integration-kanbanboard-component-accessibility-should-have-live-region-for-announcements}
@@ -20915,6 +21988,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Accessibility &gt; should have proper ARIA attributes on cards {#integration-kanbanboard-component-accessibility-should-have-proper-aria-attributes-on-cards}
@@ -20933,6 +22007,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Card Selection &gt; should clear selection when clicking clear button {#integration-kanbanboard-component-card-selection-should-clear-selection-when-clicking-clear-button}
@@ -20951,6 +22026,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Card Selection &gt; should focus card with Tab key and Space {#integration-kanbanboard-component-card-selection-should-focus-card-with-tab-key-and-space}
@@ -20969,6 +22045,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Keyboard Navigation &gt; should support Escape to cancel drag {#integration-kanbanboard-component-keyboard-navigation-should-support-escape-to-cancel-drag}
@@ -20987,6 +22064,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Keyboard Navigation &gt; should support Tab navigation between cards {#integration-kanbanboard-component-keyboard-navigation-should-support-tab-navigation-between-cards}
@@ -21005,6 +22083,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Pointer reordering within a column &gt; dragging down drops the card in the slot under the pointer {#integration-kanbanboard-component-pointer-reordering-within-a-column-dragging-down-drops-the-card-in-the-slot-under-the-pointer}
@@ -21023,6 +22102,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Pointer reordering within a column &gt; dragging up drops the card in the slot under the pointer {#integration-kanbanboard-component-pointer-reordering-within-a-column-dragging-up-drops-the-card-in-the-slot-under-the-pointer}
@@ -21041,6 +22121,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should display blocked banner on blocked cards {#integration-kanbanboard-component-rendering-and-layout-should-display-blocked-banner-on-blocked-cards}
@@ -21059,6 +22140,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should display done styling (strikethrough + dim) on completed cards {#integration-kanbanboard-component-rendering-and-layout-should-display-done-styling-strikethrough-dim-on-completed-cards}
@@ -21077,6 +22159,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should display status-color dots in column headers {#integration-kanbanboard-component-rendering-and-layout-should-display-status-color-dots-in-column-headers}
@@ -21095,6 +22178,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should render all columns with headers, titles, and count chips {#integration-kanbanboard-component-rendering-and-layout-should-render-all-columns-with-headers-titles-and-count-chips}
@@ -21113,6 +22197,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should render cards with context, title, and metadata {#integration-kanbanboard-component-rendering-and-layout-should-render-cards-with-context-title-and-metadata}
@@ -21131,6 +22216,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should render independent scrollable columns {#integration-kanbanboard-component-rendering-and-layout-should-render-independent-scrollable-columns}
@@ -21149,6 +22235,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should show empty column placeholder {#integration-kanbanboard-component-rendering-and-layout-should-show-empty-column-placeholder}
@@ -21167,6 +22254,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Rendering and Layout &gt; should show WIP limit warning when cards exceed limit {#integration-kanbanboard-component-rendering-and-layout-should-show-wip-limit-warning-when-cards-exceed-limit}
@@ -21185,6 +22273,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Dark Canvas &gt; should match blocked card in dark canvas {#integration-kanbanboard-component-visual-regression-dark-canvas-should-match-blocked-card-in-dark-canvas}
@@ -21203,6 +22292,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Dark Canvas &gt; should match default state in dark canvas {#integration-kanbanboard-component-visual-regression-dark-canvas-should-match-default-state-in-dark-canvas}
@@ -21221,6 +22311,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Dark Canvas &gt; should match done cards in dark canvas {#integration-kanbanboard-component-visual-regression-dark-canvas-should-match-done-cards-in-dark-canvas}
@@ -21239,6 +22330,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Dark Canvas &gt; should match empty column state in dark canvas {#integration-kanbanboard-component-visual-regression-dark-canvas-should-match-empty-column-state-in-dark-canvas}
@@ -21257,6 +22349,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Dark Canvas &gt; should match selected card in dark canvas {#integration-kanbanboard-component-visual-regression-dark-canvas-should-match-selected-card-in-dark-canvas}
@@ -21275,6 +22368,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Light Canvas &gt; should match blocked card state {#integration-kanbanboard-component-visual-regression-light-canvas-should-match-blocked-card-state}
@@ -21293,6 +22387,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Light Canvas &gt; should match default state snapshot {#integration-kanbanboard-component-visual-regression-light-canvas-should-match-default-state-snapshot}
@@ -21311,6 +22406,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Light Canvas &gt; should match done cards state {#integration-kanbanboard-component-visual-regression-light-canvas-should-match-done-cards-state}
@@ -21329,6 +22425,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Light Canvas &gt; should match empty column state {#integration-kanbanboard-component-visual-regression-light-canvas-should-match-empty-column-state}
@@ -21347,6 +22444,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Light Canvas &gt; should match state with selected card {#integration-kanbanboard-component-visual-regression-light-canvas-should-match-state-with-selected-card}
@@ -21365,6 +22463,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: KanbanBoard Component &gt; Visual Regression - Light Canvas &gt; should match WIP limit warning state {#integration-kanbanboard-component-visual-regression-light-canvas-should-match-wip-limit-warning-state}
@@ -21383,6 +22482,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.kanban-board`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.kanban-board` | `composes` | inbound   |
 
 ### integration: LineChart data toggle &gt; keeps rendering as series data switches between empty and non-empty {#integration-linechart-data-toggle-keeps-rendering-as-series-data-switches-between-empty-and-non-empty}
@@ -21419,6 +22519,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Accessibility &gt; should have aria-current="step" on head node {#integration-lineagerail-component-accessibility-should-have-aria-current-step-on-head-node}
@@ -21437,6 +22538,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Accessibility &gt; should have aria-current="step" on head node in multi-node lineage {#integration-lineagerail-component-accessibility-should-have-aria-current-step-on-head-node-in-multi-node-lineage}
@@ -21455,6 +22557,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Accessibility &gt; should not be focusable for non-interactive nodes {#integration-lineagerail-component-accessibility-should-not-be-focusable-for-non-interactive-nodes}
@@ -21473,6 +22576,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Accessibility &gt; should not have aria-current on non-head nodes {#integration-lineagerail-component-accessibility-should-not-have-aria-current-on-non-head-nodes}
@@ -21491,6 +22595,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Head Node Styling &gt; keeps the amber head and canvas-surface nodes on dark canvas {#integration-lineagerail-component-head-node-styling-keeps-the-amber-head-and-canvas-surface-nodes-on-dark-canvas}
@@ -21509,6 +22614,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Head Node Styling &gt; should apply head class to first node {#integration-lineagerail-component-head-node-styling-should-apply-head-class-to-first-node}
@@ -21527,6 +22633,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Head Node Styling &gt; should not apply head class to non-first nodes {#integration-lineagerail-component-head-node-styling-should-not-apply-head-class-to-non-first-nodes}
@@ -21545,6 +22652,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Interactive Nodes &gt; should apply interactive class to clickable nodes {#integration-lineagerail-component-interactive-nodes-should-apply-interactive-class-to-clickable-nodes}
@@ -21563,6 +22671,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Interactive Nodes &gt; should be focusable and keyboard-accessible on interactive node {#integration-lineagerail-component-interactive-nodes-should-be-focusable-and-keyboard-accessible-on-interactive-node}
@@ -21581,6 +22690,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Interactive Nodes &gt; should not set tabIndex on non-interactive nodes {#integration-lineagerail-component-interactive-nodes-should-not-set-tabindex-on-non-interactive-nodes}
@@ -21599,6 +22709,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Interactive Nodes &gt; should set tabIndex on interactive nodes {#integration-lineagerail-component-interactive-nodes-should-set-tabindex-on-interactive-nodes}
@@ -21617,6 +22728,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Interactive Nodes &gt; should support click on interactive node without errors {#integration-lineagerail-component-interactive-nodes-should-support-click-on-interactive-node-without-errors}
@@ -21635,6 +22747,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Interactive Nodes &gt; should support Space key on interactive node {#integration-lineagerail-component-interactive-nodes-should-support-space-key-on-interactive-node}
@@ -21653,6 +22766,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should display labels inside nodes {#integration-lineagerail-component-rendering-and-layout-should-display-labels-inside-nodes}
@@ -21671,6 +22785,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should handle empty nodes array {#integration-lineagerail-component-rendering-and-layout-should-handle-empty-nodes-array}
@@ -21689,6 +22804,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should have aria-label on container {#integration-lineagerail-component-rendering-and-layout-should-have-aria-label-on-container}
@@ -21707,6 +22823,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should have nodes with role=listitem {#integration-lineagerail-component-rendering-and-layout-should-have-nodes-with-role-listitem}
@@ -21725,6 +22842,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should have proper structure with role=list {#integration-lineagerail-component-rendering-and-layout-should-have-proper-structure-with-role-list}
@@ -21743,6 +22861,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should not render arrows for single node {#integration-lineagerail-component-rendering-and-layout-should-not-render-arrows-for-single-node}
@@ -21761,6 +22880,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should render arrows between nodes {#integration-lineagerail-component-rendering-and-layout-should-render-arrows-between-nodes}
@@ -21779,6 +22899,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should render icons when provided {#integration-lineagerail-component-rendering-and-layout-should-render-icons-when-provided}
@@ -21797,6 +22918,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Rendering and Layout &gt; should render nodes with labels {#integration-lineagerail-component-rendering-and-layout-should-render-nodes-with-labels}
@@ -21815,6 +22937,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Visual Regression - Dark Canvas &gt; dark canvas snapshot {#integration-lineagerail-component-visual-regression-dark-canvas-dark-canvas-snapshot}
@@ -21833,6 +22956,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Visual Regression - Light Canvas &gt; light canvas snapshot {#integration-lineagerail-component-visual-regression-light-canvas-light-canvas-snapshot}
@@ -21851,6 +22975,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Wrapping Behavior &gt; should have wrap class when wrap prop is true {#integration-lineagerail-component-wrapping-behavior-should-have-wrap-class-when-wrap-prop-is-true}
@@ -21869,6 +22994,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LineageRail Component &gt; Wrapping Behavior &gt; should not have wrap class when wrap prop is false {#integration-lineagerail-component-wrapping-behavior-should-not-have-wrap-class-when-wrap-prop-is-false}
@@ -21887,6 +23013,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.lineage-rail`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lineage-rail` | `composes` | inbound   |
 
 ### integration: LogStream Component &gt; LogStream applies overflow-anchor auto {#integration-logstream-component-logstream-applies-overflow-anchor-auto}
@@ -22211,6 +23338,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Grid Fallback Rendering &gt; should render grid pattern without tiles {#integration-mapcanvas-component-grid-fallback-rendering-should-render-grid-pattern-without-tiles}
@@ -22229,6 +23357,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Heatmap Mode &gt; heatmap should use emerald color by default {#integration-mapcanvas-component-heatmap-mode-heatmap-should-use-emerald-color-by-default}
@@ -22247,6 +23376,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Heatmap Mode &gt; should display legend for heatmap mode {#integration-mapcanvas-component-heatmap-mode-should-display-legend-for-heatmap-mode}
@@ -22265,6 +23395,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Heatmap Mode &gt; should render heatmap points with gradient colors {#integration-mapcanvas-component-heatmap-mode-should-render-heatmap-points-with-gradient-colors}
@@ -22283,6 +23414,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Initial fit &gt; a caller re-rendering from onViewportChange does not loop {#integration-mapcanvas-component-initial-fit-a-caller-re-rendering-from-onviewportchange-does-not-loop}
@@ -22320,6 +23452,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Initial fit &gt; pins mode frames every pin and reports a centre between them {#integration-mapcanvas-component-initial-fit-pins-mode-frames-every-pin-and-reports-a-centre-between-them}
@@ -22338,6 +23471,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Initial fit &gt; track mode frames the track {#integration-mapcanvas-component-initial-fit-track-mode-frames-the-track}
@@ -22356,6 +23490,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Initial fit &gt; wheel zoom at the centre keeps the view centre and scales distances by the zoom factor {#integration-mapcanvas-component-initial-fit-wheel-zoom-at-the-centre-keeps-the-view-centre-and-scales-distances-by-the-zoom-factor}
@@ -22374,6 +23509,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pan and Zoom &gt; arrow keys should pan {#integration-mapcanvas-component-pan-and-zoom-arrow-keys-should-pan}
@@ -22392,6 +23528,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pan and Zoom &gt; plus/minus keys should zoom {#integration-mapcanvas-component-pan-and-zoom-plus-minus-keys-should-zoom}
@@ -22410,6 +23547,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pins Mode &gt; clicking pin should show popover with details {#integration-mapcanvas-component-pins-mode-clicking-pin-should-show-popover-with-details}
@@ -22428,6 +23566,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pins Mode &gt; escape key should close popover {#integration-mapcanvas-component-pins-mode-escape-key-should-close-popover}
@@ -22446,6 +23585,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pins Mode &gt; pin should have aria-label with coordinates and timestamp {#integration-mapcanvas-component-pins-mode-pin-should-have-aria-label-with-coordinates-and-timestamp}
@@ -22464,6 +23604,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pins Mode &gt; pulse animation should be suppressed under prefers-reduced-motion {#integration-mapcanvas-component-pins-mode-pulse-animation-should-be-suppressed-under-prefers-reduced-motion}
@@ -22482,6 +23623,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pins Mode &gt; selected pin should display pulse animation {#integration-mapcanvas-component-pins-mode-selected-pin-should-display-pulse-animation}
@@ -22500,6 +23642,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Pins Mode &gt; should render all pins as buttons {#integration-mapcanvas-component-pins-mode-should-render-all-pins-as-buttons}
@@ -22518,6 +23661,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Role and Accessibility &gt; canvas should be keyboard accessible with tabindex {#integration-mapcanvas-component-role-and-accessibility-canvas-should-be-keyboard-accessible-with-tabindex}
@@ -22536,6 +23680,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Role and Accessibility &gt; canvas should have application role {#integration-mapcanvas-component-role-and-accessibility-canvas-should-have-application-role}
@@ -22554,6 +23699,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Role and Accessibility &gt; pins should be buttons with proper semantics {#integration-mapcanvas-component-role-and-accessibility-pins-should-be-buttons-with-proper-semantics}
@@ -22572,6 +23718,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Scale Bar &gt; scale bar label should display current zoom level {#integration-mapcanvas-component-scale-bar-scale-bar-label-should-display-current-zoom-level}
@@ -22590,6 +23737,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Scale Bar &gt; should show scale bar when enabled {#integration-mapcanvas-component-scale-bar-should-show-scale-bar-when-enabled}
@@ -22608,6 +23756,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Track Mode &gt; should display legend for track mode {#integration-mapcanvas-component-track-mode-should-display-legend-for-track-mode}
@@ -22626,6 +23775,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Track Mode &gt; should render track as dashed cyan polyline {#integration-mapcanvas-component-track-mode-should-render-track-as-dashed-cyan-polyline}
@@ -22644,6 +23794,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Dark Canvas &gt; should match grid-only state in dark canvas {#integration-mapcanvas-component-visual-regression-dark-canvas-should-match-grid-only-state-in-dark-canvas}
@@ -22662,6 +23813,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Dark Canvas &gt; should match heatmap mode in dark canvas {#integration-mapcanvas-component-visual-regression-dark-canvas-should-match-heatmap-mode-in-dark-canvas}
@@ -22680,6 +23832,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Dark Canvas &gt; should match pins mode in dark canvas {#integration-mapcanvas-component-visual-regression-dark-canvas-should-match-pins-mode-in-dark-canvas}
@@ -22698,6 +23851,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Dark Canvas &gt; should match pins mode with selected pin in dark canvas {#integration-mapcanvas-component-visual-regression-dark-canvas-should-match-pins-mode-with-selected-pin-in-dark-canvas}
@@ -22716,6 +23870,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Dark Canvas &gt; should match track mode in dark canvas {#integration-mapcanvas-component-visual-regression-dark-canvas-should-match-track-mode-in-dark-canvas}
@@ -22734,6 +23889,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Light Canvas &gt; should match default grid-only state {#integration-mapcanvas-component-visual-regression-light-canvas-should-match-default-grid-only-state}
@@ -22752,6 +23908,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Light Canvas &gt; should match heatmap mode state {#integration-mapcanvas-component-visual-regression-light-canvas-should-match-heatmap-mode-state}
@@ -22770,6 +23927,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Light Canvas &gt; should match pins mode state {#integration-mapcanvas-component-visual-regression-light-canvas-should-match-pins-mode-state}
@@ -22788,6 +23946,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Light Canvas &gt; should match pins mode with selected pin {#integration-mapcanvas-component-visual-regression-light-canvas-should-match-pins-mode-with-selected-pin}
@@ -22806,6 +23965,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Visual Regression - Light Canvas &gt; should match track mode state {#integration-mapcanvas-component-visual-regression-light-canvas-should-match-track-mode-state}
@@ -22824,6 +23984,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                         | Predicate  | Direction |
 | ----------- | --------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.map-canvas`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
 
 ### integration: Organic Layout &gt; is deterministic across reloads {#integration-organic-layout-is-deterministic-across-reloads}
@@ -22842,6 +24003,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.organic-layout`     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.organic-layout-browser` | `composes` | inbound   |
 
 ### integration: Organic Layout &gt; renders every node without overlapping bounding boxes {#integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes}
@@ -22861,6 +24023,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationservice.organic-layout`                                 | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.organic-layout-browser`                             | `composes`  | inbound   |
 
 ### integration: Orthogonal Layout &gt; is deterministic across reloads {#integration-orthogonal-layout-is-deterministic-across-reloads}
@@ -22879,6 +24042,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.orthogonal-layout`     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-browser` | `composes` | inbound   |
 
 ### integration: Orthogonal Layout &gt; renders every node without overlapping bounding boxes {#integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes}
@@ -22898,6 +24062,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationservice.orthogonal-layout`                              | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-browser`                          | `composes`  | inbound   |
 
 ### integration: Overlay Components &gt; ConfirmDialog Component &gt; should call onConfirm and close when confirm button is clicked {#integration-overlay-components-confirmdialog-component-should-call-onconfirm-and-close-when-confirm-button-is-clicked}
@@ -24501,6 +25666,443 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 | Type        | Related Element                                      | Predicate  | Direction |
 | ----------- | ---------------------------------------------------- | ---------- | --------- |
 | intra-layer | `testing.testcoveragetarget.page-pattern-components` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; a neighbour's hit area does not cover a visible mark {#integration-panerail-component-accessibility-a-neighbour-s-hit-area-does-not-cover-a-visible-mark}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; arrow keys, Home and End move focus between marks {#integration-panerail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; duplicate mark ids render every mark without a React key warning {#integration-panerail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-key-warning}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; each mark has a 24px hit area around its bar {#integration-panerail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; expand button is collapsed, named and carries the shortcut {#integration-panerail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-shortcut}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; leaving the toolbar puts the tab stop back on the mark nearest the selection {#integration-panerail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-mark-nearest-the-selection}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; marks are named buttons in a labelled vertical toolbar {#integration-panerail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; marks, centre line and notch use system colours in forced-colors mode {#integration-panerail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-forced-colors-mode}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Accessibility &gt; the map is one tab stop, starting at the mark nearest the selection {#integration-panerail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-the-selection}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Callbacks &gt; a mark click calls onMarkClick, not onExpand {#integration-panerail-component-callbacks-a-mark-click-calls-onmarkclick-not-onexpand}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Callbacks &gt; expand button calls onExpand {#integration-panerail-component-callbacks-expand-button-calls-onexpand}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Callbacks &gt; focus and blur call onMarkHover and onMarkLeave {#integration-panerail-component-callbacks-focus-and-blur-call-onmarkhover-and-onmarkleave}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Callbacks &gt; hover and leave call onMarkHover with the anchor, then onMarkLeave {#integration-panerail-component-callbacks-hover-and-leave-call-onmarkhover-with-the-anchor-then-onmarkleave}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Callbacks &gt; the rail's empty area calls onExpand {#integration-panerail-component-callbacks-the-rail-s-empty-area-calls-onexpand}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Callbacks &gt; without onMarkClick a mark click expands the pane {#integration-panerail-component-callbacks-without-onmarkclick-a-mark-click-expands-the-pane}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Rendering &gt; draws the notch at the selected position {#integration-panerail-component-rendering-draws-the-notch-at-the-selected-position}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Rendering &gt; is a 40px rail as tall as its container {#integration-panerail-component-rendering-is-a-40px-rail-as-tall-as-its-container}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Rendering &gt; renders 400 marks {#integration-panerail-component-rendering-renders-400-marks}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Rendering &gt; renders no map toolbar and no notch without marks or selection {#integration-panerail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-selection}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Rendering &gt; renders one mark per item, sorted top to bottom, toned {#integration-panerail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Rendering &gt; shows the name, key hint and position label {#integration-panerail-component-rendering-shows-the-name-key-hint-and-position-label}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Visual Regression &gt; dark canvas snapshot {#integration-panerail-component-visual-regression-dark-canvas-snapshot}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
+
+### integration: PaneRail Component &gt; Visual Regression &gt; light canvas snapshot {#integration-panerail-component-visual-regression-light-canvas-snapshot}
+
+**ID**: `testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                        | Predicate  | Direction |
+| ----------- | -------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`        | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail` | `composes` | inbound   |
 
 ### integration: Primitive Components &gt; Badge component - status dots {#integration-primitive-components-badge-component-status-dots}
 
@@ -26480,6 +28082,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; AWS X-Ray trace renders with the fault span selected (light) {#integration-traceviewer-aws-x-ray-trace-renders-with-the-fault-span-selected-light}
@@ -26498,6 +28101,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; collapsed subtree renders without a selection {#integration-traceviewer-collapsed-subtree-renders-without-a-selection}
@@ -26516,6 +28120,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; interactions &gt; clicking a tree row opens / repopulates the detail panel {#integration-traceviewer-interactions-clicking-a-tree-row-opens-repopulates-the-detail-panel}
@@ -26534,6 +28139,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; interactions &gt; Escape closes the detail panel and the close button also works {#integration-traceviewer-interactions-escape-closes-the-detail-panel-and-the-close-button-also-works}
@@ -26552,6 +28158,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; interactions &gt; expanding a collapsed node reveals its children {#integration-traceviewer-interactions-expanding-a-collapsed-node-reveals-its-children}
@@ -26570,6 +28177,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; interactions &gt; keyboard ArrowDown moves the selection {#integration-traceviewer-interactions-keyboard-arrowdown-moves-the-selection}
@@ -26588,6 +28196,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; interactions &gt; long attribute keys/values truncate (no overlap) with a hover title {#integration-traceviewer-interactions-long-attribute-keys-values-truncate-no-overlap-with-a-hover-title}
@@ -26607,6 +28216,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `ux.librarycomponent.trace-viewer`                                              | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer`                                       | `composes`  | inbound   |
 
 ### integration: TraceViewer &gt; OTLP trace renders in dark canvas {#integration-traceviewer-otlp-trace-renders-in-dark-canvas}
@@ -26625,6 +28235,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: TraceViewer &gt; OTLP trace renders with the error span selected (light) {#integration-traceviewer-otlp-trace-renders-with-the-error-span-selected-light}
@@ -26643,6 +28254,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                           | Predicate  | Direction |
 | ----------- | ----------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.trace-viewer`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.trace-viewer` | `composes` | inbound   |
 
 ### integration: usePanZoom &gt; GraphCanvas &gt; + and - zoom about the view centre by a fixed factor {#integration-usepanzoom-graphcanvas-and-zoom-about-the-view-centre-by-a-fixed-factor}
@@ -26863,6 +28475,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; arrow down at last entry does not navigate {#integration-versiontimeline-component-arrow-down-at-last-entry-does-not-navigate}
@@ -26881,6 +28494,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; arrow down key navigates to next version {#integration-versiontimeline-component-arrow-down-key-navigates-to-next-version}
@@ -26899,6 +28513,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; arrow up at first entry does not navigate {#integration-versiontimeline-component-arrow-up-at-first-entry-does-not-navigate}
@@ -26917,6 +28532,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; arrow up key navigates to previous version {#integration-versiontimeline-component-arrow-up-key-navigates-to-previous-version}
@@ -26935,6 +28551,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; click selection updates onSelect callback {#integration-versiontimeline-component-click-selection-updates-onselect-callback}
@@ -26953,6 +28570,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; dark canvas snapshot {#integration-versiontimeline-component-dark-canvas-snapshot}
@@ -26971,6 +28589,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; diff stats render for entries with stats {#integration-versiontimeline-component-diff-stats-render-for-entries-with-stats}
@@ -26989,6 +28608,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; empty state renders when no entries provided {#integration-versiontimeline-component-empty-state-renders-when-no-entries-provided}
@@ -27007,6 +28627,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; head badge renders for entries with head flag {#integration-versiontimeline-component-head-badge-renders-for-entries-with-head-flag}
@@ -27025,6 +28646,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; light canvas snapshot {#integration-versiontimeline-component-light-canvas-snapshot}
@@ -27043,6 +28665,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; multiple entries show connector rail {#integration-versiontimeline-component-multiple-entries-show-connector-rail}
@@ -27061,6 +28684,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; oldest-first order reverses entry order {#integration-versiontimeline-component-oldest-first-order-reverses-entry-order}
@@ -27079,6 +28703,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; read-only mode (no onSelect) is not interactive {#integration-versiontimeline-component-read-only-mode-no-onselect-is-not-interactive}
@@ -27097,6 +28722,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; selected entry has aria-selected attribute {#integration-versiontimeline-component-selected-entry-has-aria-selected-attribute}
@@ -27115,6 +28741,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; selected entry has head dot indicator when marked as head {#integration-versiontimeline-component-selected-entry-has-head-dot-indicator-when-marked-as-head}
@@ -27133,6 +28760,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; single entry does not show connector rail {#integration-versiontimeline-component-single-entry-does-not-show-connector-rail}
@@ -27151,6 +28779,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; transition indicator renders for entries with transition {#integration-versiontimeline-component-transition-indicator-renders-for-entries-with-transition}
@@ -27169,6 +28798,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: VersionTimeline Component &gt; visual selection state changes on click {#integration-versiontimeline-component-visual-selection-state-changes-on-click}
@@ -27187,6 +28817,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.version-timeline`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.version-timeline` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; dark canvas &gt; visual snapshot of workspace switcher dialog - dark {#integration-workspaceswitcherdialog-dark-canvas-visual-snapshot-of-workspace-switcher-dialog-dark}
@@ -27205,6 +28836,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should call onPickRecent when recent workspace is clicked {#integration-workspaceswitcherdialog-should-call-onpickrecent-when-recent-workspace-is-clicked}
@@ -27223,6 +28855,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should close when backdrop is clicked {#integration-workspaceswitcherdialog-should-close-when-backdrop-is-clicked}
@@ -27241,6 +28874,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should close when Open tile is clicked {#integration-workspaceswitcherdialog-should-close-when-open-tile-is-clicked}
@@ -27259,6 +28893,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should close when X button is clicked {#integration-workspaceswitcherdialog-should-close-when-x-button-is-clicked}
@@ -27277,6 +28912,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should display recent workspaces list {#integration-workspaceswitcherdialog-should-display-recent-workspaces-list}
@@ -27295,6 +28931,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should display three action tiles {#integration-workspaceswitcherdialog-should-display-three-action-tiles}
@@ -27313,6 +28950,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should display title {#integration-workspaceswitcherdialog-should-display-title}
@@ -27331,6 +28969,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should not be visible when isOpen is false {#integration-workspaceswitcherdialog-should-not-be-visible-when-isopen-is-false}
@@ -27349,6 +28988,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; should render when isOpen is true {#integration-workspaceswitcherdialog-should-render-when-isopen-is-true}
@@ -27367,6 +29007,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### integration: WorkspaceSwitcherDialog &gt; visual snapshot of workspace switcher dialog {#integration-workspaceswitcherdialog-visual-snapshot-of-workspace-switcher-dialog}
@@ -27385,6 +29026,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `composes` | inbound   |
 
 ### isToday with a fixed today &gt; a YYYY-MM-DD string names the day in every timezone {#istoday-with-a-fixed-today-a-yyyy-mm-dd-string-names-the-day-in-every-timezone}
@@ -27401,9 +29043,10 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### isToday with a fixed today &gt; an instant counts as its UTC day, not the local one {#istoday-with-a-fixed-today-an-instant-counts-as-its-utc-day-not-the-local-one}
 
@@ -27419,9 +29062,10 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### isToday with a fixed today &gt; MiniCalendar highlights the same day in every timezone {#istoday-with-a-fixed-today-minicalendar-highlights-the-same-day-in-every-timezone}
 
@@ -27437,9 +29081,10 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### isToday with a fixed today &gt; without today, compares against the local clock (unchanged) {#istoday-with-a-fixed-today-without-today-compares-against-the-local-clock-unchanged}
 
@@ -27455,9 +29100,10 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.date-utilities` | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.fixed-clock-date-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.date-utilities`                   | `composes` | inbound   |
 
 ### lane keyboard navigation &gt; crosses lanes to the nearest linked node, else the nearest node, preferring the row next to the gap {#lane-keyboard-navigation-crosses-lanes-to-the-nearest-linked-node-else-the-nearest-node-preferring-the-row-next-to-the-gap}
 
@@ -27475,6 +29121,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### lane keyboard navigation &gt; maps keys by screen direction in each orientation {#lane-keyboard-navigation-maps-keys-by-screen-direction-in-each-orientation}
@@ -27493,6 +29140,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### lane keyboard navigation &gt; moves along a lane and to its ends, stopping at them {#lane-keyboard-navigation-moves-along-a-lane-and-to-its-ends-stopping-at-them}
@@ -27511,6 +29159,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### lane keyboard navigation &gt; orders each lane by rows, then along the row {#lane-keyboard-navigation-orders-each-lane-by-rows-then-along-the-row}
@@ -27529,6 +29178,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### lane keyboard navigation &gt; skips an empty lane {#lane-keyboard-navigation-skips-an-empty-lane}
@@ -27547,6 +29197,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### laneLinkCurve &gt; cross-layer: runs from the bottom of the upper box to the top of the lower one, arrow pointing down {#lanelinkcurve-cross-layer-runs-from-the-bottom-of-the-upper-box-to-the-top-of-the-lower-one-arrow-pointing-down}
@@ -27565,6 +29216,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### laneLinkCurve &gt; intra-layer: an arc above the row between the top edges {#lanelinkcurve-intra-layer-an-arc-above-the-row-between-the-top-edges}
@@ -27583,6 +29235,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### laneLinkCurve &gt; vertical: cross links leave the facing side, intra arcs bulge left {#lanelinkcurve-vertical-cross-links-leave-the-facing-side-intra-arcs-bulge-left}
@@ -27601,6 +29254,7 @@ Open workstreams become lines from their opening gate or the start; interfaces b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### Large Card Nodes Stay Non-Overlapping in a Bushy Hub-and-Spoke Topology {#large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology}
@@ -27643,6 +29297,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-cells`    | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### layerMatrixCells &gt; leaves out hidden layers and adds up to the visible link count {#layermatrixcells-leaves-out-hidden-layers-and-adds-up-to-the-visible-link-count}
@@ -27661,6 +29316,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-cells`    | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### layerMatrixCells &gt; symmetric: both directions add into the upper triangle {#layermatrixcells-symmetric-both-directions-add-into-the-upper-triangle}
@@ -27679,6 +29335,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.adjacency-matrix-cells`    | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; a controlled camera is never fitted {#layerstack-13-layers-frame-a-controlled-camera-is-never-fitted}
@@ -27697,6 +29354,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; a defaultCamera zoom over the preset is kept: no fit {#layerstack-13-layers-frame-a-defaultcamera-zoom-over-the-preset-is-kept-no-fit}
@@ -27715,6 +29373,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; at docs width (870px), every plane title of the 13 sits inside the scene at $\{preset\} {#layerstack-13-layers-frame-at-docs-width-870px-every-plane-title-of-the-13-sits-inside-the-scene-at-preset}
@@ -27733,6 +29392,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; data that loads after mount takes the preset gap and is fitted, with no Fit click {#layerstack-13-layers-frame-data-that-loads-after-mount-takes-the-preset-gap-and-is-fitted-with-no-fit-click}
@@ -27751,6 +29411,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; every preset, then Fit, keeps all 13 planes inside the scene {#layerstack-13-layers-frame-every-preset-then-fit-keeps-all-13-planes-inside-the-scene}
@@ -27769,6 +29430,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; mounting at $\{preset\} fits the 13-layer stack, and reports it {#layerstack-13-layers-frame-mounting-at-preset-fits-the-13-layer-stack-and-reports-it}
@@ -27787,6 +29449,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; 13 layers frame &gt; picking a preset on 13 layers frames it {#layerstack-13-layers-frame-picking-a-preset-on-13-layers-frames-it}
@@ -27805,6 +29468,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; a camera preset animates to it; ref methods move the camera {#layerstack-a-camera-preset-animates-to-it-ref-methods-move-the-camera}
@@ -27823,6 +29487,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; a controlled camera and gap are held: interactions only report {#layerstack-a-controlled-camera-and-gap-are-held-interactions-only-report}
@@ -27841,6 +29506,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; a controlled camera and gap that take every report follow each frame {#layerstack-a-controlled-camera-and-gap-that-take-every-report-follow-each-frame}
@@ -27859,6 +29525,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; a controlled parent that echoes reports late still lets a preset finish {#layerstack-a-controlled-parent-that-echoes-reports-late-still-lets-a-preset-finish}
@@ -27877,6 +29544,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; a drag right after exiting focus still lets the planes close {#layerstack-a-drag-right-after-exiting-focus-still-lets-the-planes-close}
@@ -27895,6 +29563,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; a layer focus right after a preset keeps the preset turning {#layerstack-a-layer-focus-right-after-a-preset-keeps-the-preset-turning}
@@ -27913,6 +29582,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; after an orbit, Enter on a node label still selects it {#layerstack-after-an-orbit-enter-on-a-node-label-still-selects-it}
@@ -27931,6 +29601,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; an asynchronous layout lands on the same positions as the synchronous one {#layerstack-an-asynchronous-layout-lands-on-the-same-positions-as-the-synchronous-one}
@@ -27949,6 +29620,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; an orbit fades and clears labels frame by frame without a React commit {#layerstack-an-orbit-fades-and-clears-labels-frame-by-frame-without-a-react-commit}
@@ -27967,6 +29639,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; clicking a node selects it, adds the drill-through column, and clicking again clears {#layerstack-clicking-a-node-selects-it-adds-the-drill-through-column-and-clicking-again-clears}
@@ -27985,6 +29658,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; dragging orbits without selecting {#layerstack-dragging-orbits-without-selecting}
@@ -28003,6 +29677,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; draws a plane per layer, a disc and a label button per node {#layerstack-draws-a-plane-per-layer-a-disc-and-a-label-button-per-node}
@@ -28021,6 +29696,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; full DR spec &gt; a turntable frame writes link paths within one per batch plus the reach$\{query ? ', with a selection' : ''\} {#layerstack-full-dr-spec-a-turntable-frame-writes-link-paths-within-one-per-batch-plus-the-reach-query-with-a-selection}
@@ -28039,6 +29715,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; full DR spec &gt; an orbit drag re-renders a fixed few times, not once per move {#layerstack-full-dr-spec-an-orbit-drag-re-renders-a-fixed-few-times-not-once-per-move}
@@ -28057,6 +29734,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; full DR spec &gt; draws every layer, node and link of the 13-layer spec {#layerstack-full-dr-spec-draws-every-layer-node-and-link-of-the-13-layer-spec}
@@ -28075,6 +29753,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; full DR spec &gt; preset tween frames paint without re-rendering the React tree {#layerstack-full-dr-spec-preset-tween-frames-paint-without-re-rendering-the-react-tree}
@@ -28093,6 +29772,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; full DR spec &gt; turntable frames paint without re-rendering the React tree {#layerstack-full-dr-spec-turntable-frames-paint-without-re-rendering-the-react-tree}
@@ -28111,6 +29791,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; keyboard: arrows move between nodes and layers, Enter selects, Escape clears {#layerstack-keyboard-arrows-move-between-nodes-and-layers-enter-selects-escape-clears}
@@ -28129,6 +29810,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; labels behind planes &gt; a focused layer reads clearly: the planes dimmed around it fade no label {#layerstack-labels-behind-planes-a-focused-layer-reads-clearly-the-planes-dimmed-around-it-fade-no-label}
@@ -28147,6 +29829,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; labels behind planes &gt; profile view: almost side-on, nothing sits behind a plane {#layerstack-labels-behind-planes-profile-view-almost-side-on-nothing-sits-behind-a-plane}
@@ -28165,6 +29848,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; labels behind planes &gt; stack preset: labels under a nearer plane fade, the top layer stays clear {#layerstack-labels-behind-planes-stack-preset-labels-under-a-nearer-plane-fade-the-top-layer-stays-clear}
@@ -28183,6 +29867,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; labels behind planes &gt; the selection, its reach and the hovered node are never faded {#layerstack-labels-behind-planes-the-selection-its-reach-and-the-hovered-node-are-never-faded}
@@ -28201,6 +29886,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; labels behind planes &gt; top view is the x-ray: no label fades {#layerstack-labels-behind-planes-top-view-is-the-x-ray-no-label-fades}
@@ -28219,6 +29905,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; pills follow the camera &gt; a wheel zoom places the pills again, with no parent re-render {#layerstack-pills-follow-the-camera-a-wheel-zoom-places-the-pills-again-with-no-parent-re-render}
@@ -28237,6 +29924,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; pills follow the camera &gt; an outside camera change during a zoom stops it and brings the pills back {#layerstack-pills-follow-the-camera-an-outside-camera-change-during-a-zoom-stops-it-and-brings-the-pills-back}
@@ -28255,6 +29943,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; pills follow the camera &gt; reduced motion &gt; a jump (zoomBy) places the pills again, with no parent re-render {#layerstack-pills-follow-the-camera-reduced-motion-a-jump-zoomby-places-the-pills-again-with-no-parent-re-render}
@@ -28273,6 +29962,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; pinch zooms, clamped like the wheel {#layerstack-pinch-zooms-clamped-like-the-wheel}
@@ -28291,6 +29981,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; switching focus straight to another layer eases the planes from where they are {#layerstack-switching-focus-straight-to-another-layer-eases-the-planes-from-where-they-are}
@@ -28309,6 +30000,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; the plane title focuses its layer; clicking again exits {#layerstack-the-plane-title-focuses-its-layer-clicking-again-exits}
@@ -28327,6 +30019,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; the selection's reach keeps a path and arrowhead per link; the rest stay batched {#layerstack-the-selection-s-reach-keeps-a-path-and-arrowhead-per-link-the-rest-stay-batched}
@@ -28345,6 +30038,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; touch &gt; a two-finger touch pinch zooms and is not taken as a page scroll {#layerstack-touch-a-two-finger-touch-pinch-zooms-and-is-not-taken-as-a-page-scroll}
@@ -28363,6 +30057,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; visual &gt; focused layer, $\{theme\} {#layerstack-visual-focused-layer-theme}
@@ -28381,6 +30076,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; visual &gt; stack preset, labels behind planes faded, $\{theme\} {#layerstack-visual-stack-preset-labels-behind-planes-faded-theme}
@@ -28399,6 +30095,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; visual &gt; stack preset with a followed selection, $\{theme\} {#layerstack-visual-stack-preset-with-a-followed-selection-theme}
@@ -28417,6 +30114,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; visual &gt; top preset, $\{theme\} {#layerstack-visual-top-preset-theme}
@@ -28435,6 +30133,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### LayerStack &gt; with every predicate labelled, arrowheads off the reach are batched too {#layerstack-with-every-predicate-labelled-arrowheads-off-the-reach-are-batched-too}
@@ -28453,6 +30152,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                               | Predicate  | Direction |
 | ----------- | --------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.layer-stack`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-view` | `composes` | inbound   |
 
 ### Layered graph chrome &gt; a multi-selection reaches the union, and the inspector shows the primary {#layered-graph-chrome-a-multi-selection-reaches-the-union-and-the-inspector-shows-the-primary}
@@ -28867,6 +30567,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### LayeredGraphExplorer matrix link inspector &gt; a filter that removes the focused cell keeps focus in the grid, with the ring on the new Tab stop {#layeredgraphexplorer-matrix-link-inspector-a-filter-that-removes-the-focused-cell-keeps-focus-in-the-grid-with-the-ring-on-the-new-tab-stop}
@@ -28885,6 +30586,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### LayeredGraphExplorer matrix link inspector &gt; Escape closes the panel and returns focus to the clicked cell, the Tab stop {#layeredgraphexplorer-matrix-link-inspector-escape-closes-the-panel-and-returns-focus-to-the-clicked-cell-the-tab-stop}
@@ -28903,6 +30605,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### LayeredGraphExplorer matrix link inspector &gt; hiding the link’s category drops the panel and the outline {#layeredgraphexplorer-matrix-link-inspector-hiding-the-link-s-category-drops-the-panel-and-the-outline}
@@ -28921,6 +30624,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### LayeredGraphExplorer matrix link inspector &gt; visual: link inspector panel {#layeredgraphexplorer-matrix-link-inspector-visual-link-inspector-panel}
@@ -28939,6 +30643,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### LayeredGraphExplorer matrix link inspector &gt; without the inspector, or with a consumer handler, a cell click keeps its old behaviour {#layeredgraphexplorer-matrix-link-inspector-without-the-inspector-or-with-a-consumer-handler-a-cell-click-keeps-its-old-behaviour}
@@ -28957,6 +30662,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.adjacency-matrix`             | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.adjacency-matrix-view` | `composes` | inbound   |
 
 ### LayeredGraphExplorer &gt; renders the header, stack, link bar, inspector and status line {#layeredgraphexplorer-renders-the-header-stack-link-bar-inspector-and-status-line}
@@ -29173,6 +30879,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.layered-graph-state-hooks` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-snapshot-sanitization` | `composes` | inbound   |
 
 ### layeredGraphSnapshotDefaults &gt; round-trips a snapshot through JSON into a fresh hook {#layeredgraphsnapshotdefaults-round-trips-a-snapshot-through-json-into-a-fresh-hook}
@@ -29191,6 +30898,8 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`      | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.layered-graph-state-hooks` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-snapshot-sanitization` | `composes` | inbound   |
 
 ### layoutBranchMap &gt; lane budget &gt; draws every line of an expanded group, and of an expanded bundle {#layoutbranchmap-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle}
@@ -29211,6 +30920,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-line-bundling` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`       | `composes` | inbound   |
 
 ### layoutBranchMap &gt; lane budget &gt; draws what "N more" held when it is expanded, past the budget {#layoutbranchmap-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget}
@@ -29231,6 +30941,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-line-bundling` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`       | `composes` | inbound   |
 
 ### layoutBranchMap &gt; lane budget &gt; honours a smaller budget {#layoutbranchmap-lane-budget-honours-a-smaller-budget}
@@ -29251,6 +30962,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-line-bundling` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`       | `composes` | inbound   |
 
 ### layoutBranchMap &gt; lane budget &gt; puts stations no line leads to on one dotted spur per group, in rank order {#layoutbranchmap-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-order}
@@ -29271,6 +30983,7 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-line-bundling` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`     | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`       | `composes` | inbound   |
 
 ### layoutBranchMap &gt; lanes &gt; reuses a lane once it is free and continues a line straight on from its station {#layoutbranchmap-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-station}
@@ -29353,6 +31066,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-label-placement` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
 ### layoutBranchMap &gt; ranks and bands &gt; gives every station of a group its own row, and a rank one band across groups {#layoutbranchmap-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-across-groups}
@@ -29433,6 +31147,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-label-placement` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
 ### layoutBranchMap &gt; trunk &gt; keeps the given order among stated stations of one rank, and reports only a real inversion {#layoutbranchmap-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-real-inversion}
@@ -29452,6 +31167,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | inter-layer | `application.applicationfunction.branch-map-trunk-selection` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
@@ -29472,6 +31188,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | inter-layer | `application.applicationfunction.branch-map-trunk-selection` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
@@ -29492,6 +31209,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | inter-layer | `application.applicationfunction.branch-map-trunk-selection` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
@@ -29553,6 +31271,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationfunction.branch-map-label-placement` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`         | `composes` | inbound   |
 
 ### layoutLanes &gt; is deterministic {#layoutlanes-is-deterministic}
@@ -29569,9 +31288,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### layoutLanes &gt; leaves hidden layers out {#layoutlanes-leaves-hidden-layers-out}
 
@@ -29587,9 +31307,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### layoutLanes &gt; places every node inside its own band, one band per layer in rank order {#layoutlanes-places-every-node-inside-its-own-band-one-band-per-layer-in-rank-order}
 
@@ -29605,9 +31326,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### layoutLanes &gt; stacks bands without overlap and no two nodes overlap {#layoutlanes-stacks-bands-without-overlap-and-no-two-nodes-overlap}
 
@@ -29626,6 +31348,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing`                | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`                     | `composes`  | inbound   |
 
 ### layoutLanes &gt; vertical chips: sideRoomOf keeps room for each node's tag inside its band {#layoutlanes-vertical-chips-sideroomof-keeps-room-for-each-node-s-tag-inside-its-band}
@@ -29642,9 +31365,11 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### layoutLanes &gt; vertical: one column band per layer side by side, all the same height {#layoutlanes-vertical-one-column-band-per-layer-side-by-side-all-the-same-height}
 
@@ -29660,9 +31385,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### layoutLanes &gt; wraps rows at maxRowWidth and orders each row by coupled x {#layoutlanes-wraps-rows-at-maxrowwidth-and-orders-each-row-by-coupled-x}
 
@@ -29678,9 +31404,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### layoutLayersAsync &gt; rejects with a solve’s error {#layoutlayersasync-rejects-with-a-solve-s-error}
 
@@ -29696,9 +31423,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### layoutLayersAsync &gt; rejects with an AbortError when aborted, before or during the run {#layoutlayersasync-rejects-with-an-aborterror-when-aborted-before-or-during-the-run}
 
@@ -29714,9 +31442,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### layoutLayersAsync &gt; resolves to the same result as layoutLayers {#layoutlayersasync-resolves-to-the-same-result-as-layoutlayers}
 
@@ -29732,9 +31461,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### layoutLayersAsync &gt; yields before solving: nothing runs in the calling tick {#layoutlayersasync-yields-before-solving-nothing-runs-in-the-calling-tick}
 
@@ -29750,9 +31480,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### layoutLayers &gt; normalizes into \[-1, 1\], is deterministic, and coupled shortens cross-layer links {#layoutlayers-normalizes-into-1-1-is-deterministic-and-coupled-shortens-cross-layer-links}
 
@@ -29804,9 +31535,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### layout request equality &gt; keys an index by content {#layout-request-equality-keys-an-index-by-content}
 
@@ -29822,9 +31554,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### linkEdgeMetadata &gt; maps a link to GraphEdgeInspector metadata {#linkedgemetadata-maps-a-link-to-graphedgeinspector-metadata}
 
@@ -29859,9 +31592,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### longestIncreasing &gt; handles empty input {#longestincreasing-handles-empty-input}
 
@@ -29877,9 +31611,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### longestIncreasing &gt; keeps an already sorted sequence whole {#longestincreasing-keeps-an-already-sorted-sequence-whole}
 
@@ -29895,9 +31630,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### longestIncreasing &gt; one element moved from front to back: every other element stays {#longestincreasing-one-element-moved-from-front-to-back-every-other-element-stays}
 
@@ -29913,9 +31649,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### longestIncreasing &gt; returns a valid longest run on a shuffled sequence {#longestincreasing-returns-a-valid-longest-run-on-a-shuffled-sequence}
 
@@ -29931,9 +31668,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### matrixCellStep &gt; Home and End go to the ends of the row; other keys do nothing {#matrixcellstep-home-and-end-go-to-the-ends-of-the-row-other-keys-do-nothing}
 
@@ -30187,6 +31925,63 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
+### nearestPaneRailMarkIndex &gt; finds the mark nearest the selection {#nearestpanerailmarkindex-finds-the-mark-nearest-the-selection}
+
+**ID**: `testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### nearestPaneRailMarkIndex &gt; returns 0 for no marks {#nearestpanerailmarkindex-returns-0-for-no-marks}
+
+**ID**: `testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### nearestPaneRailMarkIndex &gt; starts at the first mark without a selection {#nearestpanerailmarkindex-starts-at-the-first-mark-without-a-selection}
+
+**ID**: `testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
 ### nextMatrixWindow &gt; does not move at the ends of the matrix {#nextmatrixwindow-does-not-move-at-the-ends-of-the-matrix}
 
 **ID**: `testing.testcasesketch.next-matrix-window-does-not-move-at-the-ends-of-the-matrix`
@@ -30223,6 +32018,63 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
 | intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
 
+### nextPaneRailMarkIndex &gt; ignores other keys and empty rails {#nextpanerailmarkindex-ignores-other-keys-and-empty-rails}
+
+**ID**: `testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### nextPaneRailMarkIndex &gt; jumps to the ends with Home and End {#nextpanerailmarkindex-jumps-to-the-ends-with-home-and-end}
+
+**ID**: `testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### nextPaneRailMarkIndex &gt; moves one mark with the arrow keys and stops at the ends {#nextpanerailmarkindex-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends}
+
+**ID**: `testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
 ### nudgeOverlappingSegments &gt; does not move a segment onto another route's line {#nudgeoverlappingsegments-does-not-move-a-segment-onto-another-route-s-line}
 
 **ID**: `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`
@@ -30243,6 +32095,101 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | inter-layer | `application.applicationfunction.navigation-edge-orthogonal-routing`            | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.navigation-edge-channel-routing`                    | `composes`  | inbound   |
 
+### orderPaneRailMarks &gt; clamps positions and leaves the input unchanged {#orderpanerailmarks-clamps-positions-and-leaves-the-input-unchanged}
+
+**ID**: `testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### orderPaneRailMarks &gt; keeps input order for marks at the same position {#orderpanerailmarks-keeps-input-order-for-marks-at-the-same-position}
+
+**ID**: `testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### orderPaneRailMarks &gt; keeps tone and label {#orderpanerailmarks-keeps-tone-and-label}
+
+**ID**: `testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### orderPaneRailMarks &gt; orders hundreds of marks {#orderpanerailmarks-orders-hundreds-of-marks}
+
+**ID**: `testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### orderPaneRailMarks &gt; sorts marks top to bottom {#orderpanerailmarks-sorts-marks-top-to-bottom}
+
+**ID**: `testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
 ### organicLayout &gt; anchors a component onto two pins and keeps the other components clear of it {#organiclayout-anchors-a-component-onto-two-pins-and-keeps-the-other-components-clear-of-it}
 
 **ID**: `testing.testcasesketch.organic-layout-anchors-a-component-onto-two-pins-and-keeps-the-other-components-clear-of-it`
@@ -30257,9 +32204,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; edge hints &gt; floors adjacent ideal distances at an edge's preferred length {#organiclayout-edge-hints-floors-adjacent-ideal-distances-at-an-edge-s-preferred-length}
 
@@ -30275,9 +32223,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; edge hints &gt; keeps a labelled hub's labels clear of both endpoints and of each other {#organiclayout-edge-hints-keeps-a-labelled-hub-s-labels-clear-of-both-endpoints-and-of-each-other}
 
@@ -30293,9 +32242,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; edge hints &gt; re-running a labelled layout on its own output moves nothing {#organiclayout-edge-hints-re-running-a-labelled-layout-on-its-own-output-moves-nothing}
 
@@ -30311,9 +32261,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; edge hints &gt; stays finite when a labelled sketch is re-solved in full with a new node {#organiclayout-edge-hints-stays-finite-when-a-labelled-sketch-is-re-solved-in-full-with-a-new-node}
 
@@ -30329,9 +32280,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; ignores self-loops, duplicate edges and edges to unknown nodes {#organiclayout-ignores-self-loops-duplicate-edges-and-edges-to-unknown-nodes}
 
@@ -30347,9 +32299,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; is deterministic: identical input gives identical output {#organiclayout-is-deterministic-identical-input-gives-identical-output}
 
@@ -30365,9 +32318,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; keeps a pinned node exactly where it was pinned on a cold start {#organiclayout-keeps-a-pinned-node-exactly-where-it-was-pinned-on-a-cold-start}
 
@@ -30383,9 +32337,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; keeps hub graphs finite and compact where the force layout diverged {#organiclayout-keeps-hub-graphs-finite-and-compact-where-the-force-layout-diverged}
 
@@ -30401,9 +32356,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; keeps the post-conditions when a sketch is re-solved in full on its own output {#organiclayout-keeps-the-post-conditions-when-a-sketch-is-re-solved-in-full-on-its-own-output}
 
@@ -30419,9 +32375,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; lays a star far past its ring capacity out as a halo of the view aspect {#organiclayout-lays-a-star-far-past-its-ring-capacity-out-as-a-halo-of-the-view-aspect}
 
@@ -30437,9 +32394,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; never overlaps nodes and honors minimumNodeDistance as a post-condition {#organiclayout-never-overlaps-nodes-and-honors-minimumnodedistance-as-a-post-condition}
 
@@ -30458,6 +32416,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm`                      | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`                           | `composes`  | inbound   |
 
 ### organicLayout &gt; packs disconnected components and isolates without overlap {#organiclayout-packs-disconnected-components-and-isolates-without-overlap}
@@ -30477,6 +32436,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm`                      | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`                           | `composes`  | inbound   |
 
 ### organicLayout &gt; places new nodes into a sketch without disturbing the rest {#organiclayout-places-new-nodes-into-a-sketch-without-disturbing-the-rest}
@@ -30493,9 +32453,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; places several new isolates into a sketch without producing NaN {#organiclayout-places-several-new-isolates-into-a-sketch-without-producing-nan}
 
@@ -30511,9 +32472,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout: polish and incremental stability &gt; an affectedIds re-solve with no graph change keeps the drawing: no node moves relative to the rest {#organiclayout-polish-and-incremental-stability-an-affectedids-re-solve-with-no-graph-change-keeps-the-drawing-no-node-moves-relative-to-the-rest}
 
@@ -30529,9 +32491,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout: polish and incremental stability &gt; runs the polish on a component of up to 300 nodes, and skips it above {#organiclayout-polish-and-incremental-stability-runs-the-polish-on-a-component-of-up-to-300-nodes-and-skips-it-above}
 
@@ -30547,9 +32510,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout: polish and incremental stability &gt; the polish never moves a pinned node {#organiclayout-polish-and-incremental-stability-the-polish-never-moves-a-pinned-node}
 
@@ -30565,9 +32529,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; re-running on its own output moves nothing (warm-start idempotence) {#organiclayout-re-running-on-its-own-output-moves-nothing-warm-start-idempotence}
 
@@ -30583,9 +32548,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; re-settles the nodes named in affectedIds and their neighbors on a valid sketch {#organiclayout-re-settles-the-nodes-named-in-affectedids-and-their-neighbors-on-a-valid-sketch}
 
@@ -30601,9 +32567,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; re-solves a sketch in full with scope "all", including a new node, and stays finite and valid {#organiclayout-re-solves-a-sketch-in-full-with-scope-all-including-a-new-node-and-stays-finite-and-valid}
 
@@ -30619,9 +32586,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; shelf-packs components into a block near the view aspect and grids the isolates beneath them {#organiclayout-shelf-packs-components-into-a-block-near-the-view-aspect-and-grids-the-isolates-beneath-them}
 
@@ -30637,9 +32605,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; stress never increases between majorization sweeps {#organiclayout-stress-never-increases-between-majorization-sweeps}
 
@@ -30655,9 +32624,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; treats a circle seed as a cold start, not a sketch {#organiclayout-treats-a-circle-seed-as-a-cold-start-not-a-sketch}
 
@@ -30673,9 +32643,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; treats a tiny circle seed that already honors the post-conditions as a sketch (documented) {#organiclayout-treats-a-tiny-circle-seed-that-already-honors-the-post-conditions-as-a-sketch-documented}
 
@@ -30691,9 +32662,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### organicLayout &gt; uses PivotMDS above 600 nodes and seeds at the ideal scale {#organiclayout-uses-pivotmds-above-600-nodes-and-seeds-at-the-ideal-scale}
 
@@ -30709,9 +32681,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.organic-layout-algorithm`      | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; gives a hub more edges than the lattice has port slots (8 px ports) {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-gives-a-hub-more-edges-than-the-lattice-has-port-slots-8-px-ports}
 
@@ -30729,6 +32702,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; holds pins taken from its own widened output exactly {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-holds-pins-taken-from-its-own-widened-output-exactly}
@@ -30747,6 +32721,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; is deterministic on the channel path {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-is-deterministic-on-the-channel-path}
@@ -30765,6 +32740,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; keeps every cell when re-run on its own widened output, as a sketch or with every node pinned {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-keeps-every-cell-when-re-run-on-its-own-widened-output-as-a-sketch-or-with-every-node-pinned}
@@ -30783,6 +32759,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; keeps the lattice result on a small graph it routes completely {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-keeps-the-lattice-result-on-a-small-graph-it-routes-completely}
@@ -30801,6 +32778,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; lays out a 400-node component well inside the Stage 3 budget {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-lays-out-a-400-node-component-well-inside-the-stage-3-budget}
@@ -30819,6 +32797,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; lets bus members share only with each other on the channel path {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-lets-bus-members-share-only-with-each-other-on-the-channel-path}
@@ -30837,6 +32816,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; never puts two pinned nodes on one cell, and holds every uncontested pin within half a cell {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-never-puts-two-pinned-nodes-on-one-cell-and-holds-every-uncontested-pin-within-half-a-cell}
@@ -30855,6 +32835,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; routes a large hub graph with no edge through a node and no shared segment {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-routes-a-large-hub-graph-with-no-edge-through-a-node-and-no-shared-segment}
@@ -30873,6 +32854,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; routes every edge with narrow and mixed card sizes (port lines fit each side) {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-routes-every-edge-with-narrow-and-mixed-card-sizes-port-lines-fit-each-side}
@@ -30891,6 +32873,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; survives a one-node drag with every node pinned (GraphCanvas): nothing else moves, nothing overlaps {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-survives-a-one-node-drag-with-every-node-pinned-graphcanvas-nothing-else-moves-nothing-overlaps}
@@ -30910,6 +32893,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`                   | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers`            | `composes`  | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; switches to the channel router on a small graph where the lattice falls back {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-switches-to-the-channel-router-on-a-small-graph-where-the-lattice-falls-back}
@@ -30928,6 +32912,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout channel router (graphs the lattice router cannot route) &gt; widens the uniform pitch to the busiest channel and keeps every anchor on it {#orthogonallayout-channel-router-graphs-the-lattice-router-cannot-route-widens-the-uniform-pitch-to-the-busiest-channel-and-keeps-every-anchor-on-it}
@@ -30946,6 +32931,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; fans a page's views to its right in the same row (ux-navigation shape) {#orthogonallayout-fans-a-page-s-views-to-its-right-in-the-same-row-ux-navigation-shape}
@@ -30964,6 +32950,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout golden output &gt; keeps a layout whose rows are longer than 8 (the insertion search changes this one) {#orthogonallayout-golden-output-keeps-a-layout-whose-rows-are-longer-than-8-the-insertion-search-changes-this-one}
@@ -30982,6 +32969,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout golden output &gt; keeps a layout with more than 64 root candidates (the cap decides which are ordered) {#orthogonallayout-golden-output-keeps-a-layout-with-more-than-64-root-candidates-the-cap-decides-which-are-ordered}
@@ -31000,6 +32988,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout golden output &gt; keeps the tree layout {#orthogonallayout-golden-output-keeps-the-tree-layout}
@@ -31018,6 +33007,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; handles self-loops, duplicates and unknown endpoints without throwing {#orthogonallayout-handles-self-loops-duplicates-and-unknown-endpoints-without-throwing}
@@ -31036,6 +33026,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; handles the empty graph and a single node {#orthogonallayout-handles-the-empty-graph-and-a-single-node}
@@ -31054,6 +33045,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; holds a pinned node exactly on its pin and keeps every anchor on the grid {#orthogonallayout-holds-a-pinned-node-exactly-on-its-pin-and-keeps-every-anchor-on-the-grid}
@@ -31072,6 +33064,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; is deterministic: identical input gives identical positions and routes {#orthogonallayout-is-deterministic-identical-input-gives-identical-positions-and-routes}
@@ -31090,6 +33083,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; keeps bidirectional pairs on separate ports and segments {#orthogonallayout-keeps-bidirectional-pairs-on-separate-ports-and-segments}
@@ -31108,6 +33102,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; keeps every cell when re-run on its own output, and places a new node near its neighbors {#orthogonallayout-keeps-every-cell-when-re-run-on-its-own-output-and-places-a-new-node-near-its-neighbors}
@@ -31126,6 +33121,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; layers by the structural forest when edges are flagged, with relational edges never moving a node up {#orthogonallayout-layers-by-the-structural-forest-when-edges-are-flagged-with-relational-edges-never-moving-a-node-up}
@@ -31144,6 +33140,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; lays out components side by side and isolates in a block, all on the grid {#orthogonallayout-lays-out-components-side-by-side-and-isolates-in-a-block-all-on-the-grid}
@@ -31162,6 +33159,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; never routes an edge through another node or over another edge {#orthogonallayout-never-routes-an-edge-through-another-node-or-over-another-edge}
@@ -31180,6 +33178,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; places every node on the reported cell grid with no overlaps {#orthogonallayout-places-every-node-on-the-reported-cell-grid-with-no-overlaps}
@@ -31199,6 +33198,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`                   | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers`            | `composes`  | inbound   |
 
 ### orthogonalLayout &gt; returns one finite axis-parallel route per edge, index-aligned, boundary to boundary {#orthogonallayout-returns-one-finite-axis-parallel-route-per-edge-index-aligned-boundary-to-boundary}
@@ -31217,6 +33217,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; routes navigation routes last and keeps them clear of nodes and other routes {#orthogonallayout-routes-navigation-routes-last-and-keeps-them-clear-of-nodes-and-other-routes}
@@ -31235,6 +33236,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; shares one trunk per parent with busTreeEdges and reports the groups {#orthogonallayout-shares-one-trunk-per-parent-with-bustreeedges-and-reports-the-groups}
@@ -31253,6 +33255,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### orthogonalLayout &gt; sizes cells from the largest node and honors mixed node sizes {#orthogonallayout-sizes-cells-from-the-largest-node-and-honors-mixed-node-sizes}
@@ -31271,6 +33274,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### OTLP and X-Ray normalize to the same shape &gt; both yield spans with the required model fields {#otlp-and-x-ray-normalize-to-the-same-shape-both-yield-spans-with-the-required-model-fields}
@@ -31287,9 +33291,87 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.trace-adapters` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation`      | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.trace-adapters`                  | `composes` | inbound   |
+
+### paneRailMarkKeys &gt; gives duplicate ids distinct keys, in position order {#panerailmarkkeys-gives-duplicate-ids-distinct-keys-in-position-order}
+
+**ID**: `testing.testcasesketch.pane-rail-mark-keys-gives-duplicate-ids-distinct-keys-in-position-order`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### paneRailMarkKeys &gt; keys marks with unique ids by their id {#panerailmarkkeys-keys-marks-with-unique-ids-by-their-id}
+
+**ID**: `testing.testcasesketch.pane-rail-mark-keys-keys-marks-with-unique-ids-by-their-id`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### paneRailMarkKeys &gt; returns no keys for no marks {#panerailmarkkeys-returns-no-keys-for-no-marks}
+
+**ID**: `testing.testcasesketch.pane-rail-mark-keys-returns-no-keys-for-no-marks`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
+
+### paneRailMarkKeys &gt; stays unique when an id looks like a generated key {#panerailmarkkeys-stays-unique-when-an-id-looks-like-a-generated-key}
+
+**ID**: `testing.testcasesketch.pane-rail-mark-keys-stays-unique-when-an-id-looks-like-a-generated-key`
+
+**Type**: `testcasesketch`
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pane-rail-marks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`      | `composes` | inbound   |
 
 ### placeEdgeLabels &gt; drops a pill with no clear position {#placeedgelabels-drops-a-pill-with-no-clear-position}
 
@@ -31325,6 +33407,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; builds requests with a line only for polyline routes, so bezier labels never leave their curve {#placeedgelabelsjointly-builds-requests-with-a-line-only-for-polyline-routes-so-bezier-labels-never-leave-their-curve}
@@ -31343,6 +33426,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; is deterministic and leaves unplaceable input alone {#placeedgelabelsjointly-is-deterministic-and-leaves-unplaceable-input-alone}
@@ -31361,6 +33445,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; keeps a label on its line when the parallel track is not labelled, or the tracks are apart {#placeedgelabelsjointly-keeps-a-label-on-its-line-when-the-parallel-track-is-not-labelled-or-the-tracks-are-apart}
@@ -31379,6 +33464,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; marks a label with no clear spot as noRoom, only when asked {#placeedgelabelsjointly-marks-a-label-with-no-clear-spot-as-noroom-only-when-asked}
@@ -31397,6 +33483,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; never trades two stacked labels for a label over a card {#placeedgelabelsjointly-never-trades-two-stacked-labels-for-a-label-over-a-card}
@@ -31415,6 +33502,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; of two labels that cannot clear each other, marks the later one noRoom and keeps the earlier {#placeedgelabelsjointly-of-two-labels-that-cannot-clear-each-other-marks-the-later-one-noroom-and-keeps-the-earlier}
@@ -31433,6 +33521,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; offsets the labels of parallel labelled tracks to the outside of their own lines {#placeedgelabelsjointly-offsets-the-labels-of-parallel-labelled-tracks-to-the-outside-of-their-own-lines}
@@ -31451,6 +33540,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; places revealed labels against fixed resting labels without moving or returning them {#placeedgelabelsjointly-places-revealed-labels-against-fixed-resting-labels-without-moving-or-returning-them}
@@ -31469,6 +33559,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; puts a label that collides with nothing where findClearLabelPosition would {#placeedgelabelsjointly-puts-a-label-that-collides-with-nothing-where-findclearlabelposition-would}
@@ -31488,6 +33579,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.edge-label-clear-position-search`    | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; staggers the labels of two parallel edges instead of stacking them {#placeedgelabelsjointly-staggers-the-labels-of-two-parallel-edges-instead-of-stacking-them}
@@ -31506,6 +33598,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabelsJointly &gt; takes the least-covered spot when no spot clears the nodes, not the midpoint {#placeedgelabelsjointly-takes-the-least-covered-spot-when-no-spot-clears-the-nodes-not-the-midpoint}
@@ -31524,6 +33617,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                                       | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`          | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `composes` | inbound   |
 
 ### placeEdgeLabels &gt; keeps input order on equal priority {#placeedgelabels-keeps-input-order-on-equal-priority}
@@ -31597,6 +33691,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; horizontal: puts a tag above its chip, clear of the chips {#placelanetags-horizontal-puts-a-tag-above-its-chip-clear-of-the-chips}
@@ -31615,6 +33710,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; keeps an unforced tag inside its lane band {#placelanetags-keeps-an-unforced-tag-inside-its-lane-band}
@@ -31633,6 +33729,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; places forced tags first, so the others keep clear of them and of each other {#placelanetags-places-forced-tags-first-so-the-others-keep-clear-of-them-and-of-each-other}
@@ -31651,6 +33748,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; places tags clear of each other and the obstacles, dropping unforced ones with no room {#placelanetags-places-tags-clear-of-each-other-and-the-obstacles-dropping-unforced-ones-with-no-room}
@@ -31669,6 +33767,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; takes the side its link ends leave free {#placelanetags-takes-the-side-its-link-ends-leave-free}
@@ -31687,6 +33786,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; vertical: a tag whose links leave on the right sits past their ends, inside the reserved room {#placelanetags-vertical-a-tag-whose-links-leave-on-the-right-sits-past-their-ends-inside-the-reserved-room}
@@ -31705,6 +33805,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### placeLaneTags &gt; vertical: puts a tag right of its chip {#placelanetags-vertical-puts-a-tag-right-of-its-chip}
@@ -31723,6 +33824,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### pointsToPath &gt; closes an arrowhead polygon as path data {#pointstopath-closes-an-arrowhead-polygon-as-path-data}
@@ -31739,9 +33841,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-link-batches` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.batched-link-path-drawing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-link-batches`           | `composes` | inbound   |
 
 ### polylineCurve &gt; walks the straight segments by length and rounds the corners in the path {#polylinecurve-walks-the-straight-segments-by-length-and-rounds-the-corners-in-the-path}
 
@@ -31759,6 +33862,7 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### polylineToRoutedEdge &gt; anchors the label on the longest straight segment, never on a bend corner {#polylinetoroutededge-anchors-the-label-on-the-longest-straight-segment-never-on-a-bend-corner}
@@ -31927,9 +34031,10 @@ Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### radialTreeLayout &gt; collapse stability &gt; does not move any visible node when a subtree is collapsed {#radialtreelayout-collapse-stability-does-not-move-any-visible-node-when-a-subtree-is-collapsed}
 
@@ -32464,9 +34569,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### releaseVelocity &gt; counts a slowdown just before the release {#releasevelocity-counts-a-slowdown-just-before-the-release}
 
@@ -32482,9 +34588,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### releaseVelocity &gt; gives no velocity for a press with no moves {#releasevelocity-gives-no-velocity-for-a-press-with-no-moves}
 
@@ -32500,9 +34607,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### releaseVelocity &gt; gives no velocity when the pointer was held still for the whole window (#321) {#releasevelocity-gives-no-velocity-when-the-pointer-was-held-still-for-the-whole-window-321}
 
@@ -32518,9 +34626,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### releaseVelocity &gt; interpolates the window start between sparse samples {#releasevelocity-interpolates-the-window-start-between-sparse-samples}
 
@@ -32536,9 +34645,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### releaseVelocity &gt; measures a steady drag released straight away {#releasevelocity-measures-a-steady-drag-released-straight-away}
 
@@ -32554,9 +34664,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### releaseVelocity &gt; uses the press as the start of a drag shorter than the window {#releasevelocity-uses-the-press-as-the-start-of-a-drag-shorter-than-the-window}
 
@@ -32572,9 +34683,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-inertia` | `composes` | inbound   |
+| Type        | Related Element                                     | Predicate  | Direction |
+| ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-inertia-glide` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-inertia`            | `composes` | inbound   |
 
 ### reorder &gt; a reversal reaches the reversed order {#reorder-a-reversal-reaches-the-reversed-order}
 
@@ -32590,9 +34702,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### reorder &gt; an unchanged order since the last call does nothing {#reorder-an-unchanged-order-since-the-last-call-does-nothing}
 
@@ -32608,9 +34721,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### reorder &gt; one element from the front to the back is one move, not n − 1 {#reorder-one-element-from-the-front-to-the-back-is-one-move-not-n-1}
 
@@ -32626,9 +34740,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### reorder &gt; reaches the wanted order, moving only what lies outside the longest kept run {#reorder-reaches-the-wanted-order-moving-only-what-lies-outside-the-longest-kept-run}
 
@@ -32644,9 +34759,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                | Predicate  | Direction |
-| ----------- | ---------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-dom-order` | `composes` | inbound   |
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.painter-depth-reordering` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-dom-order`             | `composes` | inbound   |
 
 ### retraceLabels &gt; keeps each pill at its t on the live curve and drops pills whose link is gone {#retracelabels-keeps-each-pill-at-its-t-on-the-live-curve-and-drops-pills-whose-link-is-gone}
 
@@ -32662,9 +34778,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-edge-label-placement` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                   | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`    | `composes` | inbound   |
 
 ### routeBranchMap &gt; draws one width for every line and one trunk segment with width off {#routebranchmap-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off}
 
@@ -32741,10 +34859,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                      | Predicate  | Direction |
-| ----------- | ---------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationfunction.branch-map-routing` | `tests`    | outbound  |
-| intra-layer | `testing.testcoveragetarget.branch-map-layout-tests` | `composes` | inbound   |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement` | `tests`    | outbound  |
+| inter-layer | `application.applicationfunction.branch-map-routing`   | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.branch-map-layout-tests`   | `composes` | inbound   |
 
 ### routeLaneGutters at DR scale (synthetic, 13 lanes) &gt; a drag keeps every other route where it was {#routelanegutters-at-dr-scale-synthetic-13-lanes-a-drag-keeps-every-other-route-where-it-was}
 
@@ -32760,9 +34879,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeLaneGutters at DR scale (synthetic, 13 lanes) &gt; orientation &gt; keeps gap tracks at least 3px apart {#routelanegutters-at-dr-scale-synthetic-13-lanes-orientation-keeps-gap-tracks-at-least-3px-apart}
 
@@ -32780,6 +34901,7 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### routeLaneGutters at DR scale (synthetic, 13 lanes) &gt; orientation &gt; no two routes share a gap or gutter run, except within one stub {#routelanegutters-at-dr-scale-synthetic-13-lanes-orientation-no-two-routes-share-a-gap-or-gutter-run-except-within-one-stub}
@@ -32798,6 +34920,7 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### routeLaneGutters at DR scale (synthetic, 13 lanes) &gt; orientation &gt; routes every skip link {#routelanegutters-at-dr-scale-synthetic-13-lanes-orientation-routes-every-skip-link}
@@ -32816,6 +34939,7 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### routeLaneGutters at DR scale (synthetic, 13 lanes) &gt; orientation &gt; uses about as many gutter tracks as routes overlap at once {#routelanegutters-at-dr-scale-synthetic-13-lanes-orientation-uses-about-as-many-gutter-tracks-as-routes-overlap-at-once}
@@ -32835,6 +34959,7 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                                    | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`                     | `composes`  | inbound   |
 
 ### routeLaneGutters at DR scale (synthetic, 13 lanes) &gt; widens a gap for its tracks, only under gutter routing {#routelanegutters-at-dr-scale-synthetic-13-lanes-widens-a-gap-for-its-tracks-only-under-gutter-routing}
@@ -32851,9 +34976,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeLaneGutters &gt; gives each stub its own gap track and overlapping routes their own gutter tracks, an outer route wrapping the inner {#routelanegutters-gives-each-stub-its-own-gap-track-and-overlapping-routes-their-own-gutter-tracks-an-outer-route-wrapping-the-inner}
 
@@ -32872,6 +34999,8 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing`                | `tests`     | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                                    | `tests`     | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`                     | `composes`  | inbound   |
 
 ### routeLaneGutters &gt; horizontal: leaves the source toward the next lane, runs outside the bands, arrives at the target edge {#routelanegutters-horizontal-leaves-the-source-toward-the-next-lane-runs-outside-the-bands-arrives-at-the-target-edge}
@@ -32888,9 +35017,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeLaneGutters &gt; routes exactly the links that skip a lane {#routelanegutters-routes-exactly-the-links-that-skip-a-lane}
 
@@ -32906,9 +35037,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeLaneGutters &gt; routes nothing with fewer than three lanes {#routelanegutters-routes-nothing-with-fewer-than-three-lanes}
 
@@ -32924,9 +35057,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeLaneGutters track order &gt; gives the same routes whatever order the links come in {#routelanegutters-track-order-gives-the-same-routes-whatever-order-the-links-come-in}
 
@@ -32942,9 +35077,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeLaneGutters track order &gt; puts a route that contains another further out, and lets disjoint spans share a track {#routelanegutters-track-order-puts-a-route-that-contains-another-further-out-and-lets-disjoint-spans-share-a-track}
 
@@ -32962,6 +35099,7 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.lane-layout`                | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
 
 ### routeLaneGutters &gt; vertical: the gutter runs above or below the lanes {#routelanegutters-vertical-the-gutter-runs-above-or-below-the-lanes}
@@ -32978,9 +35116,11 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing` | `composes` | inbound   |
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.lane-layout-and-gutter-routing` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.lane-layout`                     | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`      | `composes` | inbound   |
 
 ### routeNavigationEdge Avoids Obstacles {#routenavigationedge-avoids-obstacles}
 
@@ -33020,6 +35160,7 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 | Type        | Related Element                                                      | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`        | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers` | `composes` | inbound   |
 
 ### sanitizeLayeredGraphExplorerSnapshot &gt; checks the view, labels and stack camera {#sanitizelayeredgraphexplorersnapshot-checks-the-view-labels-and-stack-camera}
@@ -33093,6 +35234,7 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.layered-graph-state-hooks` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-snapshot-sanitization` | `composes` | inbound   |
 
 ### semantic tokens: Chip, FormCallout, ActivityTimeline, VersionPill &gt; dark canvas: every semantic and status token has a dark value {#semantic-tokens-chip-formcallout-activitytimeline-versionpill-dark-canvas-every-semantic-and-status-token-has-a-dark-value}
@@ -33309,9 +35451,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; depthSort is painter order (far first) and stable {#stack-geometry-depthsort-is-painter-order-far-first-and-stable}
 
@@ -33327,9 +35470,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; fitTitleColumn: a column off the bottom moves back up, a taller one spreads evenly {#stack-geometry-fittitlecolumn-a-column-off-the-bottom-moves-back-up-a-taller-one-spreads-evenly}
 
@@ -33345,9 +35489,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; fitTitleColumn: a column that fits is only pushed apart {#stack-geometry-fittitlecolumn-a-column-that-fits-is-only-pushed-apart}
 
@@ -33363,9 +35508,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; fitZoom fits the projected stack in the viewport with the margin {#stack-geometry-fitzoom-fits-the-projected-stack-in-the-viewport-with-the-margin}
 
@@ -33381,9 +35527,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; insidePolygon: inside, outside and on a projected quad {#stack-geometry-insidepolygon-inside-outside-and-on-a-projected-quad}
 
@@ -33399,9 +35546,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; leftmostPoint, screenBounds, svgPoints and titleRail {#stack-geometry-leftmostpoint-screenbounds-svgpoints-and-titlerail}
 
@@ -33417,9 +35565,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; planes share one square extent {#stack-geometry-planes-share-one-square-extent}
 
@@ -33435,9 +35584,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; presetLayerGap keeps the preset gap up to five layers and the five-layer height beyond {#stack-geometry-presetlayergap-keeps-the-preset-gap-up-to-five-layers-and-the-five-layer-height-beyond}
 
@@ -33453,9 +35603,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; ringPoints closes the circle at the given radius {#stack-geometry-ringpoints-closes-the-circle-at-the-given-radius}
 
@@ -33471,9 +35622,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; several focus entries add up, so a switch between layers blends {#stack-geometry-several-focus-entries-add-up-so-a-switch-between-layers-blends}
 
@@ -33489,9 +35641,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### stack geometry &gt; stackPlaneY spreads ranks evenly about 0, rank 0 on top {#stack-geometry-stackplaney-spreads-ranks-evenly-about-0-rank-0-on-top}
 
@@ -33507,9 +35660,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-stack-3d-projection` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`         | `composes` | inbound   |
 
 ### static sites: link variants &gt; clicking a Sidebar link calls onSelectItem and follows the link {#static-sites-link-variants-clicking-a-sidebar-link-calls-onselectitem-and-follows-the-link}
 
@@ -33683,9 +35837,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Attributes
 
-| Name   | Value |
-| ------ | ----- |
-| status | draft |
+| Name                 | Value       |
+| -------------------- | ----------- |
+| implementationFormat | manual      |
+| status               | implemented |
 
 #### Relationships
 
@@ -33708,9 +35863,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate  | Direction |
-| ----------- | --------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.tween-animation-hooks` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layer-stack-projection`    | `composes` | inbound   |
 
 ### tween math &gt; interpolateValues moves only the keys in `to` {#tween-math-interpolatevalues-moves-only-the-keys-in-to}
 
@@ -33728,6 +35884,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                     | Predicate  | Direction |
 | ----------- | --------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.tweened-animation` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layer-stack-projection` | `composes` | inbound   |
 
 ### useControllable &gt; holds its own state, seeded from the default, when uncontrolled {#usecontrollable-holds-its-own-state-seeded-from-the-default-when-uncontrolled}
@@ -33744,9 +35901,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
+| Type        | Related Element                                                    | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.controlled-or-uncontrolled-state` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis`        | `composes` | inbound   |
 
 ### useControllable &gt; returns the controlled value and only reports changes {#usecontrollable-returns-the-controlled-value-and-only-reports-changes}
 
@@ -33762,9 +35920,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
+| Type        | Related Element                                                    | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.controlled-or-uncontrolled-state` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis`        | `composes` | inbound   |
 
 ### useLayeredGraph asynchronous layout &gt; is opt-in: synchronous by default, as before {#uselayeredgraph-asynchronous-layout-is-opt-in-synchronous-by-default-as-before}
 
@@ -33780,9 +35939,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                       | Predicate  | Direction |
+| ----------- | ----------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`     | `composes` | inbound   |
 
 ### useLayeredGraph asynchronous layout &gt; opted in, is pending with no layout from the threshold up until the run lands {#uselayeredgraph-asynchronous-layout-opted-in-is-pending-with-no-layout-from-the-threshold-up-until-the-run-lands}
 
@@ -33798,9 +35958,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                       | Predicate  | Direction |
+| ----------- | ----------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`     | `composes` | inbound   |
 
 ### useLayeredGraph asynchronous layout, rendered &gt; a failed run reaches an error boundary {#uselayeredgraph-asynchronous-layout-rendered-a-failed-run-reaches-an-error-boundary}
 
@@ -33870,9 +36031,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### useLayeredGraph asynchronous layout, rendered &gt; lands under StrictMode (double effects) {#uselayeredgraph-asynchronous-layout-rendered-lands-under-strictmode-double-effects}
 
@@ -33942,9 +36104,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                   | Predicate  | Direction |
-| ----------- | ------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-async-layout` | `composes` | inbound   |
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layer-plane-layout` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-async-layout`    | `composes` | inbound   |
 
 ### useLayeredGraph &gt; derives index, layout and reach from controlled state {#uselayeredgraph-derives-index-layout-and-reach-from-controlled-state}
 
@@ -33962,6 +36125,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`      | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-graph-index-and-reach` | `composes` | inbound   |
 
 ### useLayeredGraph &gt; drops a selection that is not in the graph and uses defaults when uncontrolled {#uselayeredgraph-drops-a-selection-that-is-not-in-the-graph-and-uses-defaults-when-uncontrolled}
@@ -33980,6 +36144,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`      | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-graph-index-and-reach` | `composes` | inbound   |
 
 ### useLayeredGraph node labels &gt; defaults on, is controllable and is in the snapshot {#uselayeredgraph-node-labels-defaults-on-is-controllable-and-is-in-the-snapshot}
@@ -33998,6 +36163,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph restore and setFilters (review cycle 2) &gt; applies whichever selection field the caller changed {#uselayeredgraph-restore-and-setfilters-review-cycle-2-applies-whichever-selection-field-the-caller-changed}
@@ -34016,6 +36182,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph restore and setFilters (review cycle 2) &gt; restore(\{\}) changes nothing; restore(\{ selectedId: null \}) clears and reports {#uselayeredgraph-restore-and-setfilters-review-cycle-2-restore-changes-nothing-restore-selectedid-null-clears-and-reports}
@@ -34034,6 +36201,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph restore and setFilters (review cycle 2) &gt; restore with filters and a selection reports the visible primary of the restored state {#uselayeredgraph-restore-and-setfilters-review-cycle-2-restore-with-filters-and-a-selection-reports-the-visible-primary-of-the-restored-state}
@@ -34052,6 +36220,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph restore and setFilters (review cycle 2) &gt; setFilters reports a visible-primary change, and composes with selection actions {#uselayeredgraph-restore-and-setfilters-review-cycle-2-setfilters-reports-a-visible-primary-change-and-composes-with-selection-actions}
@@ -34070,6 +36239,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; a controlled selectedId alone reports changes through onSelect {#uselayeredgraph-selection-a-controlled-selectedid-alone-reports-changes-through-onselect}
@@ -34088,6 +36258,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; hiding a layer drops the selected nodes on it {#uselayeredgraph-selection-hiding-a-layer-drops-the-selected-nodes-on-it}
@@ -34106,6 +36277,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; leaves out ids not in the graph or on a hidden layer {#uselayeredgraph-selection-leaves-out-ids-not-in-the-graph-or-on-a-hidden-layer}
@@ -34124,6 +36296,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; multi-select: the primary is the first id, and reach is the union {#uselayeredgraph-selection-multi-select-the-primary-is-the-first-id-and-reach-is-the-union}
@@ -34142,6 +36315,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; onSelect reports the visible primary, skipping ids hidden or not in the graph {#uselayeredgraph-selection-onselect-reports-the-visible-primary-skipping-ids-hidden-or-not-in-the-graph}
@@ -34160,6 +36334,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection, rendered &gt; an inline followCategories array keeps reach and emphasis stable across renders {#uselayeredgraph-selection-rendered-an-inline-followcategories-array-keeps-reach-and-emphasis-stable-across-renders}
@@ -34178,6 +36353,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection, rendered &gt; setNodeLabels updates the shared state {#uselayeredgraph-selection-rendered-setnodelabels-updates-the-shared-state}
@@ -34196,6 +36372,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection, rendered &gt; toggleLayer reports the primary change once, rendered {#uselayeredgraph-selection-rendered-togglelayer-reports-the-primary-change-once-rendered}
@@ -34214,6 +36391,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection, rendered &gt; toggleSelected and setSelectedIds update selectedIds and the union reach {#uselayeredgraph-selection-rendered-toggleselected-and-setselectedids-update-selectedids-and-the-union-reach}
@@ -34232,6 +36410,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection, rendered &gt; useControllable: uncontrolled updates, setter identity, and switching modes {#uselayeredgraph-selection-rendered-usecontrollable-uncontrolled-updates-setter-identity-and-switching-modes}
@@ -34248,9 +36427,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
+| Type        | Related Element                                                    | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.controlled-or-uncontrolled-state` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis`        | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; restore: a changed selectedId over a carried-along selectedIds wins, and onSelect fires {#uselayeredgraph-selection-restore-a-changed-selectedid-over-a-carried-along-selectedids-wins-and-onselect-fires}
 
@@ -34268,6 +36448,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; restore uses selectedIds when it agrees with selectedId or that is left out {#uselayeredgraph-selection-restore-uses-selectedids-when-it-agrees-with-selectedid-or-that-is-left-out}
@@ -34286,6 +36467,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; select replaces the selection and always reports the primary {#uselayeredgraph-selection-select-replaces-the-selection-and-always-reports-the-primary}
@@ -34304,6 +36486,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; single select: selectedIds mirrors selectedId {#uselayeredgraph-selection-single-select-selectedids-mirrors-selectedid}
@@ -34322,6 +36505,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph selection &gt; toggleSelected and setSelectedIds compose, and report the primary only when it changes {#uselayeredgraph-selection-toggleselected-and-setselectedids-compose-and-report-the-primary-only-when-it-changes}
@@ -34340,6 +36524,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                             | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`       | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-selection-and-emphasis` | `composes` | inbound   |
 
 ### useLayeredGraph &gt; treats a selection on a hidden layer as no selection {#uselayeredgraph-treats-a-selection-on-a-hidden-layer-as-no-selection}
@@ -34358,6 +36543,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-state`      | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.layered-graph-index-and-reach` | `composes` | inbound   |
 
 ### uxNavLayout &gt; handles complex multi-parent view scenario {#uxnavlayout-handles-complex-multi-parent-view-scenario}
@@ -34797,6 +36983,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### visibleNavigationEdgeIds &gt; hovering a collapsed page: shows routes from page and child views {#visiblenavigationedgeids-hovering-a-collapsed-page-shows-routes-from-page-and-child-views}
@@ -34816,6 +37003,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### visibleNavigationEdgeIds &gt; hovering a node that is the target of an edge: shows edges where hovered node is target {#visiblenavigationedgeids-hovering-a-node-that-is-the-target-of-an-edge-shows-edges-where-hovered-node-is-target}
@@ -34835,6 +37023,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### visibleNavigationEdgeIds &gt; hovering a view: shows only that view routes {#visiblenavigationedgeids-hovering-a-view-shows-only-that-view-routes}
@@ -34854,6 +37043,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### visibleNavigationEdgeIds &gt; hovering an expanded page: shows only page routes, not child view routes {#visiblenavigationedgeids-hovering-an-expanded-page-shows-only-page-routes-not-child-view-routes}
@@ -34873,6 +37063,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### visibleNavigationEdgeIds &gt; no hover: no navigation routes are visible {#visiblenavigationedgeids-no-hover-no-navigation-routes-are-visible}
@@ -34892,6 +37083,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### visibleNavigationEdgeIds &gt; only edges matching isNavigationRoute predicate are considered {#visiblenavigationedgeids-only-edges-matching-isnavigationroute-predicate-are-considered}
@@ -34911,6 +37103,7 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `tests`    | outbound  |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`       | `composes` | inbound   |
 
 ### yieldToPaint &gt; never runs once cancelled, at any stage {#yieldtopaint-never-runs-once-cancelled-at-any-stage}
@@ -34927,9 +37120,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.yield-to-paint` | `composes` | inbound   |
+| Type        | Related Element                                  | Predicate  | Direction |
+| ----------- | ------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.yield-to-paint` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.yield-to-paint`      | `composes` | inbound   |
 
 ### yieldToPaint &gt; runs only after an animation frame and one more macrotask {#yieldtopaint-runs-only-after-an-animation-frame-and-one-more-macrotask}
 
@@ -34945,9 +37139,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.yield-to-paint` | `composes` | inbound   |
+| Type        | Related Element                                  | Predicate  | Direction |
+| ----------- | ------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.yield-to-paint` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.yield-to-paint`      | `composes` | inbound   |
 
 ### yieldToPaint &gt; still runs when no frame arrives (a background tab pauses rAF) {#yieldtopaint-still-runs-when-no-frame-arrives-a-background-tab-pauses-raf}
 
@@ -34963,9 +37158,10 @@ With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run b
 
 #### Relationships
 
-| Type        | Related Element                             | Predicate  | Direction |
-| ----------- | ------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.yield-to-paint` | `composes` | inbound   |
+| Type        | Related Element                                  | Predicate  | Direction |
+| ----------- | ------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.yield-to-paint` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.yield-to-paint`      | `composes` | inbound   |
 
 ### Heimdall Graph Layout Test Coverage {#heimdall-graph-layout-test-coverage}
 
@@ -35579,7 +37775,6 @@ Playwright spec tests/charts-showcase.spec.ts.
 | inter-layer | `ux.librarycomponent.status-timeline`                                                                                                 | `covers`   | outbound  |
 | intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `composes` | inbound   |
 | intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                 | `composes` | inbound   |
-| intra-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-bar-h-feature-renders-wider-than-standard`                                       | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-bar-h-standard-renders-with-bars-and-labels`                                     | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-bar-v-bar-rects-have-non-zero-height`                                            | `composes` | outbound  |
@@ -35589,7 +37784,7 @@ Playwright spec tests/charts-showcase.spec.ts.
 | intra-layer | `testing.testcasesketch.integration-chart-components-donut-paths-have-valid-d-attributes-no-na-n`                                     | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-donut-single-full-circle-slice-renders-visible-path`                             | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-donut-standard-shows-center-value-text`                                          | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-chart-components-heatmap-cell-fills-are-non-empty-hex-colors`                                     | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-heatmap-feature-renders-with-axis-labels`                                        | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-heatmap-show-values-does-not-render-na-n-values`                                 | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-heatmap-show-values-renders-numeric-values-in-cells`                             | `composes` | outbound  |
@@ -38495,10 +40690,33 @@ Playwright spec tests/pane-rail.spec.ts: a source-style rail with toned marks an
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| inter-layer | `ux.librarycomponent.pane-rail`                       | `covers`   | outbound  |
-| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage` | `composes` | inbound   |
+| Type        | Related Element                                                                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`                                                                                                      | `covers`   | outbound  |
+| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                | `composes` | inbound   |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-a-neighbours-hit-area-does-not-cover-a-visible-mark`           | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks`              | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-duplicate-mark-ids-render-every-mark-without-a-react-635fb30f` | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-each-mark-has-a-24px-hit-area-around-its-bar`                  | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5`     | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-leaving-the-toolbar-puts-the-tab-stop-back-on-the-c3fea6a3`    | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-vertical-toolbar`        | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-marks-centre-line-and-notch-use-system-colours-in-150f88d8`    | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978` | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand`                    | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand`                                     | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave`               | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19`  | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand`                              | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane`               | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position`                          | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container`                           | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks`                                                 | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-toolbar-and-no-notch-without-marks-or-3b05cbc3`     | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned`              | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label`                        | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot`                                      | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot`                                     | `composes` | outbound  |
 
 ### Pane Rail Marks {#pane-rail-marks}
 
@@ -38517,10 +40735,28 @@ Vitest unit test src/components/paneRailMarks.test.ts.
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| inter-layer | `ux.librarycomponent.pane-rail`                       | `covers`   | outbound  |
-| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage` | `composes` | inbound   |
+| Type        | Related Element                                                                                             | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`                                                                             | `covers`   | outbound  |
+| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                       | `composes` | inbound   |
+| intra-layer | `testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1`                              | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1`                                | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0`                           | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection`                  | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks`                                | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection`          | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails`                       | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end`                      | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends` | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged`              | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position`             | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label`                                         | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks`                                     | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom`                                    | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.pane-rail-mark-keys-gives-duplicate-ids-distinct-keys-in-position-order`            | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.pane-rail-mark-keys-keys-marks-with-unique-ids-by-their-id`                         | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.pane-rail-mark-keys-returns-no-keys-for-no-marks`                                   | `composes` | outbound  |
+| intra-layer | `testing.testcasesketch.pane-rail-mark-keys-stays-unique-when-an-id-looks-like-a-generated-key`             | `composes` | outbound  |
 
 ### Primitive Components {#primitive-components}
 
@@ -39208,4 +41444,4 @@ Vitest unit test src/utils/__tests__/yieldToPaint.test.ts.
 
 ---
 
-Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0
+Generated: 2026-11-26T13:40:58.223Z | Model Version: 0.1.0

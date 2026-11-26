@@ -1,0 +1,30 @@
+- type: update
+  elementId: product.milestone.branch-map-poc
+  layerName: product
+  before:
+    id: 5c5fc3fc-cfa7-4e0e-8592-9356a4a04434
+    path: product.milestone.branch-map-poc
+    spec_node_id: product.milestone
+    type: milestone
+    layer_id: product
+    name: Branch Map POC
+    description: "The Metro bands branch map proof of concept: generic model, hardened layout, BranchMap view, House adapter, test page and visual spec. Mirrors the House milestone of the same name on the Heimdall project."
+    attributes:
+      status: active
+    metadata: &a1
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  after:
+    id: 5c5fc3fc-cfa7-4e0e-8592-9356a4a04434
+    path: product.milestone.branch-map-poc
+    spec_node_id: product.milestone
+    type: milestone
+    layer_id: product
+    name: Branch Map POC
+    description: "The Metro bands branch map proof of concept: generic model, hardened layout, BranchMap view, House adapter, test page and visual spec. Mirrors the House milestone of the same name on the Heimdall project."
+    attributes:
+      status: completed
+    metadata: *a1
+  timestamp: 2026-11-26T14:25:17.738Z
+  sequenceNumber: 0

@@ -1,0 +1,15 @@
+id: changeset-1795649554996-xeo4y2vbr
+name: close-testing-layer-gaps
+description: "Close the testing-layer drift codebase_verify reported before the branch map: sketch the 42 tests that had none (paneRailMarks.test.ts, pane-rail.spec.ts, the renamed Heatmap fill test), retire the two sketches whose test was renamed, give the two draft check sketches their source, and add the tests links the analyzer infers where the test really exercises the element. Done when the testing layer is in step or each remaining difference is explained."
+created: 2026-11-25T23:32:35.011Z
+modified: 2026-11-26T13:40:58.195Z
+status: committed
+baseSnapshot: v2:sha256:dbdcfa6f458158e5c51b49b006eaf08dadcd2b5c0e28cd952f4ccf469d71f7bd
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 807
+  modifications: 3
+  deletions: 9
+lastSequence: 818

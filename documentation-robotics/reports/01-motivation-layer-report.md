@@ -18,8 +18,8 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | ------------------------- | ----- |
 | Elements                  | 42    |
 | Intra-Layer Relationships | 51    |
-| Inter-Layer Relationships | 287   |
-| Inbound Relationships     | 287   |
+| Inter-Layer Relationships | 290   |
+| Inbound Relationships     | 290   |
 | Outbound Relationships    | 0     |
 
 **Cross-Layer References**:
@@ -192,7 +192,6 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.channel-router-route-navigation-edges-applies-nudge-pass-to-spread-overlapping-segments`                      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.channel-router-route-navigation-edges-nudges-overlapping-segments-while-maintaining-orthogonality`            | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
-| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.force-layout-keeps-default-sized-chip-nodes-non-overlapping-in-a-simple-chain`                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles`                               | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
@@ -201,6 +200,10 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-live-drag-287-settles-with-no-overlapping-bodies-the-dropped-node-exactly-on-its-pin-its-e250ab4d`     | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap`                         | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does`                               | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1`                   | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`                            | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`                        | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-cards-mode-renders-without-overlaps-after-collapse`                 | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-maintains-zero-overlap-guarantee-for-galaxy-f1dd0343`      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expand-after-collapse-maintains-zero-overlap-guarantee`             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
@@ -916,16 +919,19 @@ Every color the library paints must be reachable from one override file that ups
 
 #### Relationships
 
-| Type        | Related Element                                                                      | Predicate         | Direction |
-| ----------- | ------------------------------------------------------------------------------------ | ----------------- | --------- |
-| inter-layer | `product.feature.theme-slot`                                                         | `satisfies`       | inbound   |
-| inter-layer | `product.softwarecapability.ui-primitives`                                           | `satisfies`       | inbound   |
-| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                             | `satisfies`       | inbound   |
-| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`             | `satisfies`       | inbound   |
-| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`                       | `satisfies`       | inbound   |
-| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `realizes`        | outbound  |
-| intra-layer | `motivation.principle.every-component-color-comes-from-a-token`                      | `realizes`        | outbound  |
-| intra-layer | `motivation.stakeholder.mirror-maintainer`                                           | `associated-with` | inbound   |
+| Type        | Related Element                                                                                                     | Predicate         | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `product.feature.theme-slot`                                                                                        | `satisfies`       | inbound   |
+| inter-layer | `product.softwarecapability.ui-primitives`                                                                          | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                            | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-heatmap-cell-fill-is-the-base-color-fill-opacity-is-in-0-12-1` | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-line-chart-feature-renders-multi-series-with-markers`          | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-status-timeline-feature-renders-amber-event-marker`            | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.integration-chart-components-status-timeline-segment-rects-use-semantic-status-colors`      | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                      | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`                                | `realizes`        | outbound  |
+| intra-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                     | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.mirror-maintainer`                                                                          | `associated-with` | inbound   |
 
 ### Branch Map Groups Stay Within a Lane Budget {#branch-map-groups-stay-within-a-lane-budget}
 
@@ -1608,4 +1614,4 @@ A downstream team that keeps a mirror of this repo (not a GitHub fork) with its 
 
 ---
 
-Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0
+Generated: 2026-11-26T13:40:58.223Z | Model Version: 0.1.0
