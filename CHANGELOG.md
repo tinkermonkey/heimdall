@@ -6,6 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0]
+
+A branch map of project organization. No breaking changes: everything here is new.
+
+### Added
+
+- **`BranchMap` (proof of concept; its API may change).** A vertical branch map, drawn as Metro
+  bands: one column per group, each with a trunk running down from a start marker; lines fork off
+  at 45°, run along their own lane and rejoin at the station they deliver to; stations sit in
+  dependency-rank bands with their labels beside them; links cross between groups. It interprets
+  the metro map metaphor for project plans (Nesbitt, IV 2004; Stott et al., IV 2005) and
+  `git log --graph` lane assignment. The model is vocabulary-free: groups, stations (`stop` or
+  `decision`), lines and links (`dependency` or `provides`); mapping a tracker onto
+  `BranchMapData` is the app's job. Selection, hover and expansion can be controlled
+  (`selectedId`/`onSelect`, `hoveredId`/`onHoverChange`, `expanded`/`onExpandedChange`), with
+  keyboard access, pan and zoom, and a `renderTooltip` slot.
+  - **Defaults:** each group fits in 8 lanes (`maxLanes`); past that, lines with the same fork and
+    destination bundle, the lightest collapse into one "N more" line, and a bundle, "N more" or
+    whole group expands on activation. The trunk is the heaviest chain of stations, through any
+    waypoints named in `group.trunk`. Line width is flat (`width: 'off'`); `'weight'` thins the
+    trunk where work forks off and thickens it where work rejoins. Labels wrap to two lines at
+    `maxLabelWidth` (180) and are measured in the map's fonts, or with `measureText`.
+  - **Headless stages:** `layoutBranchMap(data, options)` places groups, stations, lines, bundles
+    and label boxes and reports `issues` (duplicate ids, dangling references, cycles, invalid
+    trunks) instead of throwing; `routeBranchMap(layout)` adds the geometry from the layout alone;
+    `branchMapScene` runs both. `resolveBranchMapOptions` fills in `BRANCH_MAP_DEFAULTS`.
+  - Exports `BranchMap`, `BranchMapProps`, `BranchMapItem`, the four functions and
+    `BRANCH_MAP_DEFAULTS`, and the `BranchMap*` model, option, layout and scene types. Documented in
+    the `heimdall-graph` skill and the docs site's BranchMap page.
+
 ## [0.15.0]
 
 ### Changed

@@ -59,7 +59,7 @@ mkdir -p .claude/skills && for d in node_modules/@tinkermonkey/heimdall-ui/agent
 | `heimdall-charts` | ChartWrapper, Sparkline, LineChart, BarChart, BarV, BarH, StackedBar, Donut, Heatmap, StatusTimeline, ProgressBar, MetricRow |
 | `heimdall-page-patterns` | PageHeader, FilterBar, ActivityTimeline, AlertStrip, QuickAccessGrid, QuickAccessTile, ConfigTile, PipelineCard, FormCallout, RowMenu |
 | `heimdall-chat` | ChatMessage, ToolBlock, ThinkingBlock, ChatDivider, ChatSuggestions, ChatComposer, ChatContainer, ChatMarkdownContent |
-| `heimdall-graph` | GraphCanvas and its parts, the headless layout engines, HierarchyTree, DetailDrawer |
+| `heimdall-graph` | GraphCanvas and its parts, the headless layout engines, HierarchyTree, DetailDrawer, the layered graph views (LayerStack, AdjacencyMatrix, HivePlot, LayeredGraphExplorer), BranchMap |
 | `heimdall-observability` | TraceViewer (with OTLP and X-Ray adapters), LogStream, DiffViewer, HashSetDiff, SideBySideDiff, VersionTimeline, LineageRail |
 | `heimdall-planning` | Calendar, MiniCalendar, KanbanBoard |
 
